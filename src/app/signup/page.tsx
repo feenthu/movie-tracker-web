@@ -4,11 +4,11 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/providers/auth-provider'
-import { LoginForm } from '@/components/login-form'
+import { SignupForm } from '@/components/signup-form'
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
-export default function HomePage() {
+export default function SignupPage() {
   const { isAuthenticated, isLoading } = useAuth()
   const router = useRouter()
 
@@ -36,24 +36,24 @@ export default function HomePage() {
     <PageWrapper maxWidth="sm">
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-8">
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold">Movie Tracker</h1>
+          <h1 className="text-3xl font-bold">Create Account</h1>
           <p className="text-muted-foreground">
-            Track your favorite movies and build your watchlist
+            Join Movie Tracker to start building your movie collection
           </p>
         </div>
         <Card className="w-full">
           <CardHeader>
-            <CardTitle>Welcome Back</CardTitle>
+            <CardTitle>Sign Up</CardTitle>
             <CardDescription>
-              Sign in to your account to continue
+              Create your new account
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <LoginForm />
+            <SignupForm />
             <div className="text-center text-sm">
-              Don't have an account?{' '}
-              <Link href="/signup" className="text-primary hover:underline">
-                Sign up here
+              Already have an account?{' '}
+              <Link href="/" className="text-primary hover:underline">
+                Sign in here
               </Link>
             </div>
           </CardContent>

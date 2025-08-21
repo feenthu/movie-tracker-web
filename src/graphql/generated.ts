@@ -1,8 +1,41 @@
 import { gql } from '@apollo/client'
 
+// Types
+export interface LoginInput {
+  email: string
+  password: string
+}
+
+export interface RegisterInput {
+  email: string
+  username: string
+  password: string
+  firstName?: string
+  lastName?: string
+}
+
+export interface User {
+  id: string
+  email: string
+  username: string
+}
+
+export interface AuthPayload {
+  token: string
+  user: User
+}
+
+export interface LoginMutation {
+  login: AuthPayload
+}
+
+export interface RegisterMutation {
+  register: AuthPayload
+}
+
 export const LOGIN = gql`
-  mutation LOGIN($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
+  mutation LOGIN($input: LoginInput!) {
+    login(input: $input) {
       token
       user {
         id

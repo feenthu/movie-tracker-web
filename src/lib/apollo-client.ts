@@ -5,7 +5,7 @@ import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
 
 const httpLink = createHttpLink({
-  uri: process.env.NEXT_PUBLIC_GRAPHQL_URL || 'https://movie-tracker-api-production.up.railway.app/graphql',
+  uri: process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:8081/graphql',
 })
 
 const authLink = setContext((_, { headers }) => {
