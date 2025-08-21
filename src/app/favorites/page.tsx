@@ -26,14 +26,14 @@ export default function FavoritesPage() {
           <CardContent className="space-y-4">
             <p className="text-muted-foreground">
               Your favorites collection will showcase the movies you love most. 
-              Once you start using the app, you'll be able to:
+              Once you start using the app, you&apos;ll be able to:
             </p>
             <ul className="list-disc list-inside space-y-2 text-muted-foreground">
               <li>Mark movies as favorites with a simple heart click</li>
               <li>View all your favorite movies in one place</li>
               <li>Sort favorites by rating, genre, or date added</li>
               <li>Get recommendations based on your favorites</li>
-              <li>Create custom favorite lists (e.g., "Best Comedies", "Guilty Pleasures")</li>
+              <li>Create custom favorite lists (e.g., &quot;Best Comedies&quot;, &quot;Guilty Pleasures&quot;)</li>
             </ul>
             <div className="pt-4 space-x-4">
               <Link href="/movies">

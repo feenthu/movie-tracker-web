@@ -25,8 +25,8 @@ export default function WatchlistPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-muted-foreground">
-              Your personal watchlist will help you keep track of movies you're interested in watching. 
-              Once the movie browsing feature is available, you'll be able to:
+              Your personal watchlist will help you keep track of movies you&apos;re interested in watching. 
+              Once the movie browsing feature is available, you&apos;ll be able to:
             </p>
             <ul className="list-disc list-inside space-y-2 text-muted-foreground">
               <li>Add movies from search results to your watchlist</li>

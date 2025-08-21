@@ -25,14 +25,14 @@ export default function MoviesPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-muted-foreground">
-              We're working hard to bring you an amazing movie discovery experience. 
+              We&apos;re working hard to bring you an amazing movie discovery experience. 
               This feature will include:
             </p>
             <ul className="list-disc list-inside space-y-2 text-muted-foreground">
               <li>Search for movies by title, genre, or actor</li>
               <li>View detailed movie information and trailers</li>
               <li>Add movies to your personal watchlist</li>
-              <li>Rate and review movies you've watched</li>
+              <li>Rate and review movies you&apos;ve watched</li>
               <li>Get personalized movie recommendations</li>
             </ul>
             <div className="pt-4">
