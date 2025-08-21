@@ -11,6 +11,7 @@ import { useAuth } from '@/providers/auth-provider'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Loading } from '@/components/ui/loading'
+import { OAuth2Buttons } from '@/components/oauth-buttons'
 import type { LoginMutation } from '@/graphql/generated'
 
 const loginSchema = z.object({
@@ -110,6 +111,8 @@ export function LoginForm() {
           'Sign In'
         )}
       </Button>
+      
+      <OAuth2Buttons />
     </form>
   )
 }

@@ -11,6 +11,7 @@ import { useAuth } from '@/providers/auth-provider'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Loading } from '@/components/ui/loading'
+import { OAuth2Buttons } from '@/components/oauth-buttons'
 import type { RegisterMutation } from '@/graphql/generated'
 
 const signupSchema = z.object({
@@ -158,6 +159,8 @@ export function SignupForm() {
           'Create Account'
         )}
       </Button>
+      
+      <OAuth2Buttons />
     </form>
   )
 }

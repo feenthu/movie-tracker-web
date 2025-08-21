@@ -27,3 +27,10 @@ query ME {
     username
   }
 }
+
+mutation GET_OAUTH2_LOGIN_URL($provider: OAuth2Provider!) {
+  getOAuth2LoginUrl(provider: $provider) {
+    provider
+    loginUrl
+  }
+}
