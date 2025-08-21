@@ -33,6 +33,21 @@ export interface RegisterMutation {
   register: AuthPayload
 }
 
+export enum OAuth2Provider {
+  GOOGLE = 'GOOGLE',
+  FACEBOOK = 'FACEBOOK',
+  APPLE = 'APPLE'
+}
+
+export interface OAuth2LoginUrl {
+  provider: OAuth2Provider
+  loginUrl: string
+}
+
+export interface GetOAuth2LoginUrlMutation {
+  getOAuth2LoginUrl: OAuth2LoginUrl
+}
+
 export const LOGIN = gql`
   mutation LOGIN($input: LoginInput!) {
     login(input: $input) {
@@ -65,6 +80,15 @@ export const ME = gql`
       id
       email
       username
+    }
+  }
+`
+
+export const GET_OAUTH2_LOGIN_URL = gql`
+  mutation GET_OAUTH2_LOGIN_URL($provider: OAuth2Provider!) {
+    getOAuth2LoginUrl(provider: $provider) {
+      provider
+      loginUrl
     }
   }
 `
