@@ -12,15 +12,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/feenthu/movie-tracker-api.git"
+    "url": "git+https://github.com/feenthu/movie-tracker-web.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/feenthu/movie-tracker-api/issues"
+    "url": "https://github.com/feenthu/movie-tracker-web/issues"
   },
-  "homepage": "https://github.com/feenthu/movie-tracker-api#readme",
+  "homepage": "https://github.com/feenthu/movie-tracker-web#readme",
   "dependencies": {
     "@apollo/client": "^3.13.9",
     "@hookform/resolvers": "^3.10.0",
