@@ -1,0 +1,60 @@
+query GET_MOVIES($page: Int, $limit: Int, $search: String) {
+  movies(page: $page, limit: $limit, search: $search) {
+    id
+    title
+    overview
+    releaseDate
+    posterPath
+    backdropPath
+    voteAverage
+    voteCount
+    genres
+  }
+}
+
+query GET_MOVIE($id: ID!) {
+  movie(id: $id) {
+    id
+    title
+    overview
+    releaseDate
+    posterPath
+    backdropPath
+    voteAverage
+    voteCount
+    genres
+    runtime
+    budget
+    revenue
+  }
+}
+
+mutation ADD_TO_WATCHLIST($movieId: ID!) {
+  addToWatchlist(movieId: $movieId) {
+    id
+    movie {
+      id
+      title
+      posterPath
+    }
+  }
+}
+
+mutation REMOVE_FROM_WATCHLIST($movieId: ID!) {
+  removeFromWatchlist(movieId: $movieId)
+}
+
+query GET_WATCHLIST {
+  watchlist {
+    id
+    movie {
+      id
+      title
+      overview
+      releaseDate
+      posterPath
+      voteAverage
+    }
+    addedAt
+  }
+}
