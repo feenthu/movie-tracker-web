@@ -17,22 +17,30 @@ function AuthCallbackContent() {
   useEffect(() => {
     const handleCallback = async () => {
       try {
+        // Debug: Log all URL parameters
+        const urlParams = new URLSearchParams(window.location.search)
+        console.log('All URL params:', Object.fromEntries(urlParams))
+        console.log('Current URL:', window.location.href)
+        
         // Get parameters from URL
         const token = searchParams.get('token')
         const userParam = searchParams.get('user')
         const success = searchParams.get('success')
         const errorParam = searchParams.get('error')
 
+        console.log('Parsed params:', { token: token?.substring(0, 20) + '...', userParam, success, errorParam })
+
         if (errorParam) {
           throw new Error(decodeURIComponent(errorParam))
         }
 
         if (!token || success !== 'true' || !userParam) {
-          throw new Error('Missing authentication data')
+          throw new Error(`Missing authentication data - token: ${!!token}, success: ${success}, user: ${!!userParam}`)
         }
 
         // Parse user data from the backend
         const user = JSON.parse(decodeURIComponent(userParam))
+        console.log('Parsed user:', user)
 
         // Log the user in
         login(token, user)
