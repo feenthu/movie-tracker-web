@@ -17,28 +17,39 @@ function AuthCallbackContent() {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // Debug: Log all URL parameters
-        const urlParams = new URLSearchParams(window.location.search)
-        console.log('All URL params:', Object.fromEntries(urlParams))
-        console.log('Current URL:', window.location.href)
-        
-        // Get parameters from URL
-        const token = searchParams.get('token')
-        const userParam = searchParams.get('user')
+        // Check URL for success parameter and errors
         const success = searchParams.get('success')
         const errorParam = searchParams.get('error')
 
-        console.log('Parsed params:', { token: token?.substring(0, 20) + '...', userParam, success, errorParam })
+        console.log('OAuth2 callback - success:', success, 'error:', errorParam)
 
         if (errorParam) {
           throw new Error(decodeURIComponent(errorParam))
         }
 
-        if (!token || success !== 'true' || !userParam) {
-          throw new Error(`Missing authentication data - token: ${!!token}, success: ${success}, user: ${!!userParam}`)
+        if (success !== 'true') {
+          throw new Error('OAuth2 authentication was not successful')
         }
 
-        // Parse user data from the backend
+        // Helper function to get cookie value
+        const getCookie = (name: string): string | null => {
+          const value = `; ${document.cookie}`;
+          const parts = value.split(`; ${name}=`);
+          if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+          return null;
+        }
+
+        // Get authentication data from secure cookies
+        const token = getCookie('auth-token')
+        const userParam = getCookie('auth-user')
+
+        console.log('Auth data from cookies - token:', !!token, 'user:', !!userParam)
+
+        if (!token || !userParam) {
+          throw new Error(`Missing authentication data - token: ${!!token}, user: ${!!userParam}`)
+        }
+
+        // Parse user data from cookie
         const user = JSON.parse(decodeURIComponent(userParam))
         console.log('Parsed user:', user)
 
@@ -46,10 +57,11 @@ function AuthCallbackContent() {
         login(token, user)
         setStatus('success')
 
-        // Redirect to dashboard after a short delay
-        setTimeout(() => {
-          router.push('/dashboard')
-        }, 2000)
+        // Clean up cookies after successful login
+        document.cookie = 'auth-user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+        
+        // Immediate redirect to dashboard - no delay needed
+        router.push('/dashboard')
 
       } catch (err) {
         console.error('OAuth2 callback error:', err)
@@ -91,7 +103,7 @@ function AuthCallbackContent() {
             </CardHeader>
             <CardContent className="text-center space-y-4">
               <p className="text-muted-foreground">
-                You have been successfully signed in. Redirecting to your dashboard...
+                Successfully signed in! Redirecting to dashboard...
               </p>
               <Loading size="sm" />
             </CardContent>
