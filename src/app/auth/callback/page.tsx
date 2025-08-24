@@ -17,20 +17,21 @@ export default function AuthCallbackPage() {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // Get the token from URL parameters
+        // Get parameters from URL
         const token = searchParams.get('token')
         const userParam = searchParams.get('user')
+        const success = searchParams.get('success')
         const errorParam = searchParams.get('error')
 
         if (errorParam) {
           throw new Error(decodeURIComponent(errorParam))
         }
 
-        if (!token || !userParam) {
+        if (!token || success !== 'true' || !userParam) {
           throw new Error('Missing authentication data')
         }
 
-        // Parse user data
+        // Parse user data from the backend
         const user = JSON.parse(decodeURIComponent(userParam))
 
         // Log the user in
