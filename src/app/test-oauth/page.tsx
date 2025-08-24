@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'

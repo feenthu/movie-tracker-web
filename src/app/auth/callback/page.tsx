@@ -1,13 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/providers/auth-provider'
 import { PageWrapper } from '@/components/layout/page-wrapper'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loading } from '@/components/ui/loading'
 
-export default function AuthCallbackPage() {
+function AuthCallbackContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { login } = useAuth()
@@ -116,5 +116,29 @@ export default function AuthCallbackPage() {
         </Card>
       </div>
     </PageWrapper>
+  )
+}
+
+export default function AuthCallbackPage() {
+  return (
+    <Suspense fallback={
+      <PageWrapper maxWidth="sm">
+        <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-8">
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle className="text-center">Loading...</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col items-center space-y-4">
+              <Loading size="lg" />
+              <p className="text-muted-foreground text-center">
+                Please wait while we process your authentication.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </PageWrapper>
+    }>
+      <AuthCallbackContent />
+    </Suspense>
   )
 }
