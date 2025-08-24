@@ -39,17 +39,25 @@ function AuthCallbackContent() {
           return null;
         }
 
-        // Get authentication data from secure cookies
-        const token = getCookie('auth-token')
-        const userParam = getCookie('auth-user')
+        // Try to get authentication data from cookies first (new secure method)
+        let token = getCookie('auth-token')
+        let userParam = getCookie('auth-user')
 
         console.log('Auth data from cookies - token:', !!token, 'user:', !!userParam)
+
+        // Fallback to URL parameters (backward compatibility for current deployment)
+        if (!token || !userParam) {
+          console.log('Cookies not found, falling back to URL parameters')
+          token = searchParams.get('token')
+          userParam = searchParams.get('user')
+          console.log('Auth data from URL - token:', !!token, 'user:', !!userParam)
+        }
 
         if (!token || !userParam) {
           throw new Error(`Missing authentication data - token: ${!!token}, user: ${!!userParam}`)
         }
 
-        // Parse user data from cookie
+        // Parse user data (works for both cookie and URL parameter formats)
         const user = JSON.parse(decodeURIComponent(userParam))
         console.log('Parsed user:', user)
 
@@ -57,10 +65,12 @@ function AuthCallbackContent() {
         login(token, user)
         setStatus('success')
 
-        // Clean up cookies after successful login
-        document.cookie = 'auth-user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+        // Clean up cookies if they exist
+        if (getCookie('auth-user')) {
+          document.cookie = 'auth-user=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;'
+        }
         
-        // Immediate redirect to dashboard - no delay needed
+        // Immediate redirect to dashboard
         router.push('/dashboard')
 
       } catch (err) {
