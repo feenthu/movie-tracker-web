@@ -14,9 +14,35 @@ export function OAuth2Buttons({ className }: OAuth2ButtonsProps) {
   const [loadingProvider, setLoadingProvider] = useState<OAuth2Provider | null>(null)
 
   const [getOAuth2LoginUrl] = useMutation<GetOAuth2LoginUrlMutation>(GET_OAUTH2_LOGIN_URL, {
-    onCompleted: (data) => {
+    onCompleted: async (data) => {
       if (typeof window !== 'undefined') {
-        window.location.href = data.getOAuth2LoginUrl.loginUrl
+        try {
+          // Call the new secure OAuth2 endpoint to get authorization URL
+          const response = await fetch(data.getOAuth2LoginUrl.loginUrl, {
+            method: 'GET',
+            credentials: 'include', // Include cookies for session management
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+
+          if (!response.ok) {
+            throw new Error(`OAuth2 setup failed: ${response.status}`)
+          }
+
+          const result = await response.json()
+          
+          if (result.error) {
+            throw new Error(result.error)
+          }
+
+          // Redirect to OAuth provider with PKCE parameters
+          window.location.href = result.authorizationUrl
+          
+        } catch (error) {
+          console.error('OAuth2 setup error:', error)
+          setLoadingProvider(null)
+        }
       }
     },
     onError: (error) => {
