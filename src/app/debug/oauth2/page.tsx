@@ -249,7 +249,7 @@ export default function OAuth2DebugPage() {
             <p><strong>Problem:</strong> Getting `[authorization_request_not_found]` with `session: false`</p>
             <p><strong>Expected:</strong> New PKCE flow should have `session: true` in callback URL</p>
             <p><strong>This means:</strong> The old Spring OAuth2 flow is still being used instead of our new PKCE flow</p>
-            <p><strong>Debug Goal:</strong> Identify why the GraphQL endpoint isn't returning our new PKCE URL</p>
+            <p><strong>Debug Goal:</strong> Identify why the GraphQL endpoint isn&apos;t returning our new PKCE URL</p>
           </CardContent>
         </Card>
       </div>
