@@ -20,8 +20,17 @@ function AuthCallbackContent() {
         // Check URL for success parameter and errors
         const success = searchParams.get('success')
         const errorParam = searchParams.get('error')
+        const sessionId = searchParams.get('session')
 
-        console.log('OAuth2 callback - success:', success, 'error:', errorParam)
+        console.log('OAuth2 callback - success:', success, 'error:', errorParam, 'session:', !!sessionId)
+
+        // If we have a session ID, this is the new PKCE flow - redirect to callback-v2
+        if (sessionId) {
+          console.log('Detected new PKCE flow with session, redirecting to callback-v2')
+          const newUrl = `/auth/callback-v2${window.location.search}`
+          router.push(newUrl)
+          return
+        }
 
         if (errorParam) {
           const errorMessage = decodeURIComponent(errorParam)
