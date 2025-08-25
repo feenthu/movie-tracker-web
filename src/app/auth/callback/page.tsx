@@ -24,7 +24,15 @@ function AuthCallbackContent() {
         console.log('OAuth2 callback - success:', success, 'error:', errorParam)
 
         if (errorParam) {
-          throw new Error(decodeURIComponent(errorParam))
+          const errorMessage = decodeURIComponent(errorParam)
+          console.error('OAuth2 error from backend:', errorMessage)
+          
+          // Handle specific error types
+          if (errorMessage.includes('authorization_request_not_found')) {
+            throw new Error('OAuth2 session expired or invalid. Please try logging in again.')
+          }
+          
+          throw new Error(errorMessage)
         }
 
         if (success !== 'true') {
