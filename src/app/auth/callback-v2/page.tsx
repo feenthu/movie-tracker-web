@@ -37,7 +37,7 @@ function AuthCallbackV2Content() {
         }
 
         // Exchange session for authentication data using secure API
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8081'}/oauth2/session/exchange`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://movie-tracker-api-production.up.railway.app'}/oauth2/session/exchange`, {
           method: 'POST',
           credentials: 'include', // Include HTTP-only cookies
           headers: {
