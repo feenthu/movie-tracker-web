@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useEffect, useState, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/providers/auth-provider'
 import { PageWrapper } from '@/components/layout/page-wrapper'
@@ -13,8 +13,12 @@ function AuthCallbackContent() {
   const { login } = useAuth()
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
   const [error, setError] = useState<string>('')
+  const hasRunRef = useRef(false) // Prevent infinite loops
 
   useEffect(() => {
+    // Prevent running multiple times
+    if (hasRunRef.current) return
+    hasRunRef.current = true
     const handleCallback = async () => {
       try {
         // Check URL for success parameter and errors
@@ -98,7 +102,7 @@ function AuthCallbackContent() {
     }
 
     handleCallback()
-  }, [searchParams, login, router])
+  }, []) // Empty dependency array since we use hasRunRef to prevent multiple runs
 
   if (status === 'loading') {
     return (
