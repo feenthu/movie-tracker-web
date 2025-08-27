@@ -17,27 +17,18 @@ export function OAuth2Buttons({ className }: OAuth2ButtonsProps) {
     onCompleted: async (data) => {
       if (typeof window !== 'undefined') {
         try {
-          // Call the new secure OAuth2 endpoint to get authorization URL
-          const response = await fetch(data.getOAuth2LoginUrl.loginUrl, {
-            method: 'GET',
-            credentials: 'include', // Include cookies for session management
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
-
-          if (!response.ok) {
-            throw new Error(`OAuth2 setup failed: ${response.status}`)
-          }
-
-          const result = await response.json()
+          // TEMPORARY FIX: Direct redirect to Spring Security OAuth2 endpoint
+          // This bypasses the custom session system that's causing issues
+          const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://movie-tracker-api-production.up.railway.app'
+          const provider = data.getOAuth2LoginUrl.provider.toLowerCase()
           
-          if (result.error) {
-            throw new Error(result.error)
-          }
-
-          // Redirect to OAuth provider with PKCE parameters
-          window.location.href = result.authorizationUrl
+          // Use Spring Security's built-in OAuth2 authorization endpoint
+          const authUrl = `${apiBaseUrl}/oauth2/authorization/${provider}`
+          
+          console.log('Railway OAuth2 Fix: Using Spring Security endpoint:', authUrl)
+          
+          // Direct redirect - no session management needed
+          window.location.href = authUrl
           
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
