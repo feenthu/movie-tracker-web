@@ -13,11 +13,41 @@ const oauthMocks = Object.values(OAuth2Provider).map(provider => ({
     data: {
       getOAuth2LoginUrl: {
         provider,
-        loginUrl: `http://localhost:8081/oauth2/authorization/${provider.toLowerCase()}`,
+        loginUrl: `https://movie-tracker-api-production.up.railway.app/oauth2/authorize/${provider.toLowerCase()}`,
       },
     },
   },
 }))
+
+// Mock global alert for Railway error testing
+global.alert = jest.fn()
+
+// Mock successful OAuth2 fetch response
+const mockSuccessfulFetch = () => {
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve({ 
+        authorizationUrl: 'https://accounts.google.com/o/oauth2/v2/auth?client_id=test&redirect_uri=https://movie-tracker-api-production.up.railway.app/login/oauth2/code/google'
+      }),
+    })
+  ) as jest.Mock
+}
+
+// Mock Railway cookie domain error
+const mockRailwayCookieError = () => {
+  global.fetch = jest.fn(() =>
+    Promise.resolve({
+      ok: false,
+      status: 400,
+      json: () => Promise.resolve({ 
+        error: 'Failed to initiate OAuth2 flow: An invalid domain [.railway.app] was specified for this cookie',
+        provider: 'google',
+        timestamp: new Date().toISOString()
+      }),
+    })
+  ) as jest.Mock
+}
 
 describe('OAuth2Buttons', () => {
   beforeEach(() => {
@@ -49,7 +79,8 @@ describe('OAuth2Buttons', () => {
     expect(screen.getByText(/or continue with/i)).toBeInTheDocument()
   })
 
-  it('handles Google OAuth2 flow correctly', async () => {
+  it('handles Google OAuth2 flow correctly on Railway', async () => {
+    mockSuccessfulFetch()
     const user = userEvent.setup()
     renderOAuth2Buttons()
 
@@ -57,7 +88,16 @@ describe('OAuth2Buttons', () => {
     await user.click(googleButton)
 
     await waitFor(() => {
-      expect(window.location.href).toBe('http://localhost:8081/oauth2/authorization/google')
+      expect(global.fetch).toHaveBeenCalledWith(
+        'https://movie-tracker-api-production.up.railway.app/oauth2/authorize/google',
+        {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
     })
   })
 
@@ -111,7 +151,40 @@ describe('OAuth2Buttons', () => {
     expect(appleButton).toBeDisabled()
   })
 
-  it('handles OAuth2 errors gracefully', async () => {
+  it('handles Railway cookie domain errors gracefully', async () => {
+    mockRailwayCookieError()
+    const user = userEvent.setup()
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+    
+    renderOAuth2Buttons()
+
+    const googleButton = screen.getByRole('button', { name: /continue with google/i })
+    await user.click(googleButton)
+
+    await waitFor(() => {
+      expect(global.alert).toHaveBeenCalledWith(
+        expect.stringContaining('OAuth2 setup failed: Failed to initiate OAuth2 flow')
+      )
+    })
+
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Railway OAuth2 Error Details:',
+        expect.objectContaining({
+          error: expect.stringContaining('An invalid domain [.railway.app]'),
+          provider: OAuth2Provider.GOOGLE,
+          timestamp: expect.any(String),
+          userAgent: expect.any(String),
+          url: expect.any(String)
+        })
+      )
+    })
+
+    expect(googleButton).not.toBeDisabled()
+    consoleSpy.mockRestore()
+  })
+
+  it('handles GraphQL OAuth2 errors gracefully', async () => {
     const errorMocks = [
       {
         request: {
@@ -136,7 +209,13 @@ describe('OAuth2Buttons', () => {
     await user.click(googleButton)
 
     await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalledWith('OAuth2 login error:', expect.any(Error))
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Railway GraphQL OAuth2 Error:',
+        expect.objectContaining({
+          error: 'OAuth2 service unavailable',
+          timestamp: expect.any(String)
+        })
+      )
     })
 
     expect(googleButton).not.toBeDisabled()

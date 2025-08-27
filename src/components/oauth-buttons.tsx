@@ -40,13 +40,28 @@ export function OAuth2Buttons({ className }: OAuth2ButtonsProps) {
           window.location.href = result.authorizationUrl
           
         } catch (error) {
-          console.error('OAuth2 setup error:', error)
+          const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+          console.error('Railway OAuth2 Error Details:', {
+            error: errorMessage,
+            provider: data.getOAuth2LoginUrl.provider,
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent,
+            url: window.location.href
+          })
+          // TODO: Show user-friendly error toast/modal
+          alert(`OAuth2 setup failed: ${errorMessage}\n\nPlease try again or contact support if the issue persists.`)
           setLoadingProvider(null)
         }
       }
     },
     onError: (error) => {
-      console.error('OAuth2 login error:', error)
+      console.error('Railway GraphQL OAuth2 Error:', {
+        error: error.message,
+        graphQLErrors: error.graphQLErrors,
+        networkError: error.networkError,
+        timestamp: new Date().toISOString()
+      })
+      alert(`OAuth2 GraphQL error: ${error.message}\n\nPlease check your network connection and try again.`)
       setLoadingProvider(null)
     },
   })
@@ -58,7 +73,15 @@ export function OAuth2Buttons({ className }: OAuth2ButtonsProps) {
         variables: { provider },
       })
     } catch (error) {
-      console.error('OAuth2 login error:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+      const errorStack = error instanceof Error ? error.stack : undefined
+      console.error('Railway OAuth2 Login Error:', {
+        error: errorMessage,
+        provider,
+        timestamp: new Date().toISOString(),
+        stack: errorStack
+      })
+      alert(`OAuth2 login failed: ${errorMessage}`)
       setLoadingProvider(null)
     }
   }
