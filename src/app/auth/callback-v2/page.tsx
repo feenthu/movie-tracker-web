@@ -75,8 +75,9 @@ function AuthCallbackV2Content() {
         router.push('/dashboard')
 
       } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Authentication failed'
         const errorDetails = {
-          error: err instanceof Error ? err.message : 'Authentication failed',
+          error: errorMessage,
           timestamp: new Date().toISOString(),
           url: window.location.href,
           userAgent: navigator.userAgent,
@@ -87,7 +88,7 @@ function AuthCallbackV2Content() {
         // Store error details for debugging
         localStorage.setItem('oauth2-error-debug', JSON.stringify(errorDetails))
         
-        setError(err instanceof Error ? err.message : 'Authentication failed')
+        setError(errorMessage)
         setStatus('error')
       }
     }
