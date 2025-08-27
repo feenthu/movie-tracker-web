@@ -75,7 +75,18 @@ function AuthCallbackV2Content() {
         router.push('/dashboard')
 
       } catch (err) {
-        console.error('OAuth2 V2 callback error:', err)
+        const errorDetails = {
+          error: err instanceof Error ? err.message : 'Authentication failed',
+          timestamp: new Date().toISOString(),
+          url: window.location.href,
+          userAgent: navigator.userAgent,
+          searchParams: Object.fromEntries(searchParams.entries())
+        }
+        console.error('Railway OAuth2 V2 Callback Error Details:', errorDetails)
+        
+        // Store error details for debugging
+        localStorage.setItem('oauth2-error-debug', JSON.stringify(errorDetails))
+        
         setError(err instanceof Error ? err.message : 'Authentication failed')
         setStatus('error')
       }
