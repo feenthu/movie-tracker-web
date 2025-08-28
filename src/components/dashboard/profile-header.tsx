@@ -1,4 +1,4 @@
-import { UserAvatar } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 
 interface User {
@@ -21,13 +21,12 @@ export function ProfileHeader({ user }: ProfileHeaderProps) {
     <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-12">
       {/* Avatar and Basic Info */}
       <div className="flex items-center gap-6">
-        <UserAvatar 
-          src={user.avatar}
-          alt={user.username}
-          size="xl"
-          fallback={user.username}
-          className="ring-2 ring-letterboxd-border"
-        />
+        <Avatar className="w-24 h-24 ring-2 ring-letterboxd-border">
+          {user.avatar && <AvatarImage src={user.avatar} alt={user.username} />}
+          <AvatarFallback className="bg-slate-600 text-2xl">
+            {user.username.slice(0, 2).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
         <div className="space-y-3">
           <h1 className="text-3xl font-bold text-letterboxd-text-primary">
             {user.username}

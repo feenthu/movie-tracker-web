@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { ProfileSection } from './profile-section'
-import { TabNavigation } from './tab-navigation'
-import { MainContent } from './main-content'
-import { Sidebar } from './sidebar'
+import { ProfileSection } from '../profile-section'
+import { TabNavigation } from '../tab-navigation'
+import { MainContent } from '../main-content'
+import { Sidebar } from '../sidebar'
 
 interface User {
   id: string
@@ -79,18 +79,11 @@ export function DashboardLayout({
   return (
     <div className="min-h-screen bg-slate-900 text-white">
       <div className="container mx-auto px-4">
-        <ProfileSection user={user} />
+        <ProfileSection />
         <TabNavigation />
         <div className="flex gap-8 mt-8">
-          <MainContent 
-            favoriteMovies={favoriteMovies}
-            recentLikes={recentLikes}
-            onMovieClick={onMovieClick}
-          />
-          <Sidebar 
-            recentActivity={recentActivity}
-            stats={data?.stats}
-          />
+          <MainContent />
+          <Sidebar />
         </div>
       </div>
     </div>
