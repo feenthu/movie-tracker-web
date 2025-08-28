@@ -1,96 +1,87 @@
 'use client'
 
 import { useAuth } from '@/providers/auth-provider'
-import { PageWrapper } from '@/components/layout/page-wrapper'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
+import { DashboardLayout } from '@/components/dashboard/dashboard-layout'
+
+// Mock data - this would normally come from GraphQL queries
+const mockMovies = [
+  {
+    id: '1',
+    title: 'Dumb Money',
+    posterPath: '/rFS6KX7EM6bcuGbNjLJpVVBRsCl.jpg',
+    userRating: 4,
+    year: 2023
+  },
+  {
+    id: '2', 
+    title: 'Mickey 17',
+    posterPath: '/7bn2fLq7YfOIxzFDjuuGXMd5wbQ.jpg',
+    userRating: 5,
+    year: 2025
+  }
+]
+
+const mockActivity = [
+  {
+    id: '1',
+    type: 'watched' as const,
+    movie: mockMovies[0],
+    rating: 4,
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24) // 1 day ago
+  },
+  {
+    id: '2',
+    type: 'rated' as const,
+    movie: mockMovies[1], 
+    rating: 5,
+    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2) // 2 hours ago
+  }
+]
 
 export default function DashboardPage() {
   const { user } = useAuth()
 
-  return (
-    <PageWrapper>
-      <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold">Welcome back, {user?.username}!</h1>
-          <p className="text-muted-foreground mt-2">
-            Ready to discover and track your favorite movies?
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                🎬 <span className="ml-2">Browse Movies</span>
-              </CardTitle>
-              <CardDescription>
-                Discover new movies and add them to your watchlist
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link href="/movies">
-                <Button className="w-full">Browse Movies</Button>
-              </Link>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                📋 <span className="ml-2">My Watchlist</span>
-              </CardTitle>
-              <CardDescription>
-                View and manage your personal movie watchlist
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link href="/watchlist">
-                <Button className="w-full" variant="outline">View Watchlist</Button>
-              </Link>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                ❤️ <span className="ml-2">Favorites</span>
-              </CardTitle>
-              <CardDescription>
-                Quick access to your most loved movies
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Link href="/favorites">
-                <Button className="w-full" variant="outline">View Favorites</Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Quick Stats</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-              <div className="space-y-2">
-                <div className="text-2xl font-bold text-primary">0</div>
-                <div className="text-sm text-muted-foreground">Movies in Watchlist</div>
-              </div>
-              <div className="space-y-2">
-                <div className="text-2xl font-bold text-primary">0</div>
-                <div className="text-sm text-muted-foreground">Favorite Movies</div>
-              </div>
-              <div className="space-y-2">
-                <div className="text-2xl font-bold text-primary">0</div>
-                <div className="text-sm text-muted-foreground">Movies Watched</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
+        <div className="text-white">Loading...</div>
       </div>
-    </PageWrapper>
+    )
+  }
+
+  const dashboardData = {
+    user: {
+      id: user.id,
+      username: user.username,
+      avatar: undefined,
+      stats: {
+        moviesWatched: 42,
+        following: 15,
+        followers: 8
+      }
+    },
+    favoriteMovies: mockMovies,
+    recentActivity: mockActivity,
+    recentLikes: mockMovies,
+    stats: {
+      moviesWatched: 42,
+      moviesInWatchlist: 8,
+      favoriteMovies: mockMovies.length,
+      averageRating: 4.2,
+      thisMonthActivity: 12
+    }
+  }
+
+  const handleMovieClick = (movie: any) => {
+    console.log('Movie clicked:', movie)
+    // TODO: Navigate to movie details page
+  }
+
+  return (
+    <DashboardLayout
+      data={dashboardData}
+      loading={false}
+      onMovieClick={handleMovieClick}
+    />
   )
 }
