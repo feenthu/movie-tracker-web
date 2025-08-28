@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { ProfileHeader } from './profile-header'
 import { DashboardTabs } from './dashboard-tabs'
 import { StatsOverview } from './stats-overview'
@@ -114,7 +115,7 @@ export function DashboardLayout({
                   </h2>
                   {favoriteMovies.length === 0 && (
                     <p className="text-letterboxd-text-secondary text-sm">
-                      Don't forget to select your favorite films!
+                      Don&apos;t forget to select your favorite films!
                     </p>
                   )}
                 </div>
@@ -129,13 +130,14 @@ export function DashboardLayout({
                 <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
                   {favoriteMovies.slice(0, 6).map((movie) => (
                     <div key={movie.id} className="group cursor-pointer" onClick={() => onMovieClick?.(movie)}>
-                      <div className="aspect-[2/3] bg-letterboxd-card rounded-md overflow-hidden shadow-lg group-hover:shadow-2xl transition-all duration-300 group-hover:scale-105">
+                      <div className="aspect-[2/3] bg-letterboxd-card rounded-md overflow-hidden shadow-lg group-hover:shadow-2xl transition-all duration-300 group-hover:scale-105 relative">
                         {movie.posterPath ? (
-                          <img
+                          <Image
                             src={`https://image.tmdb.org/t/p/w342${movie.posterPath}`}
                             alt={movie.title}
-                            className="w-full h-full object-cover"
-                            loading="lazy"
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 640px) 50vw, (max-width: 768px) 25vw, 16vw"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-letterboxd-text-muted text-xs text-center p-2">
@@ -186,13 +188,14 @@ export function DashboardLayout({
                     <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
                       {recentLikes.slice(0, 8).map((movie) => (
                         <div key={movie.id} className="group cursor-pointer" onClick={() => onMovieClick?.(movie)}>
-                          <div className="aspect-[2/3] bg-letterboxd-card rounded-sm overflow-hidden shadow-md group-hover:shadow-lg transition-all duration-200 group-hover:scale-105">
+                          <div className="aspect-[2/3] bg-letterboxd-card rounded-sm overflow-hidden shadow-md group-hover:shadow-lg transition-all duration-200 group-hover:scale-105 relative">
                             {movie.posterPath ? (
-                              <img
+                              <Image
                                 src={`https://image.tmdb.org/t/p/w154${movie.posterPath}`}
                                 alt={movie.title}
-                                className="w-full h-full object-cover"
-                                loading="lazy"
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 640px) 25vw, (max-width: 768px) 16vw, 12vw"
                               />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center text-letterboxd-text-muted text-xs text-center p-1">
@@ -255,12 +258,14 @@ export function DashboardLayout({
                               {activity.timestamp.toLocaleDateString('en-US', { month: 'short' }).toUpperCase()}
                             </div>
                           </div>
-                          <div className="w-8 h-12 flex-shrink-0 cursor-pointer" onClick={() => onMovieClick?.(activity.movie)}>
+                          <div className="w-8 h-12 flex-shrink-0 cursor-pointer relative" onClick={() => onMovieClick?.(activity.movie)}>
                             {activity.movie.posterPath ? (
-                              <img
+                              <Image
                                 src={`https://image.tmdb.org/t/p/w92${activity.movie.posterPath}`}
                                 alt={activity.movie.title}
-                                className="w-full h-full object-cover rounded-sm"
+                                fill
+                                className="object-cover rounded-sm"
+                                sizes="32px"
                               />
                             ) : (
                               <div className="w-full h-full bg-letterboxd-darker rounded-sm flex items-center justify-center">

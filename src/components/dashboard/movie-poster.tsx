@@ -1,6 +1,7 @@
 'use client'
 
 import { clsx } from 'clsx'
+import Image from 'next/image'
 
 interface Movie {
   id: string
@@ -54,13 +55,14 @@ export function MoviePoster({
       onClick={handleClick}
     >
       {/* Movie Poster */}
-      <div className="w-full h-full bg-gray-800 rounded-lg overflow-hidden shadow-lg">
+      <div className="w-full h-full bg-gray-800 rounded-lg overflow-hidden shadow-lg relative">
         {movie.posterPath ? (
-          <img
+          <Image
             src={getMoviePosterUrl(movie.posterPath)}
             alt={movie.title}
-            className="w-full h-full object-cover transition-transform group-hover:scale-105"
-            loading="lazy"
+            fill
+            className="object-cover transition-transform group-hover:scale-105"
+            sizes="(max-width: 640px) 50vw, (max-width: 768px) 25vw, 16vw"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gray-700">

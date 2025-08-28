@@ -1,4 +1,5 @@
 import { clsx } from 'clsx'
+import Image from 'next/image'
 
 interface UserAvatarProps {
   src?: string
@@ -32,10 +33,12 @@ export function UserAvatar({
     )}>
       {src ? (
         <>
-          <img 
+          <Image 
             src={src} 
             alt={alt}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            sizes="96px"
             onError={(e) => {
               const target = e.target as HTMLImageElement
               target.style.display = 'none'
