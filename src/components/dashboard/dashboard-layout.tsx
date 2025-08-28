@@ -4,10 +4,9 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { ProfileHeader } from './profile-header'
 import { DashboardTabs } from './dashboard-tabs'
-import { StatsOverview } from './stats-overview'
-import { FavoriteFilms } from './favorite-films'
-import { RecentActivity } from './recent-activity'
-import { MovieGrid } from './movie-grid'
+import { Sidebar } from './sidebar'
+import { Heart, MoreHorizontal } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 interface User {
   id: string
@@ -69,6 +68,131 @@ const tabs = [
   { id: 'network', label: 'Network' }
 ]
 
+function ProfileSection({ user }: { user: User }) {
+  return (
+    <div className="flex items-center justify-between py-8">
+      <div className="flex items-center gap-6">
+        <div className="w-24 h-24 rounded-full bg-slate-600 flex items-center justify-center text-2xl">
+          👤
+        </div>
+
+        <div className="flex items-center gap-4">
+          <h1 className="text-2xl font-bold text-white">{user.username}</h1>
+          <Button 
+            variant="outline" 
+            className="border-slate-600 text-gray-300 hover:bg-slate-700 bg-transparent"
+          >
+            EDIT PROFILE
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="text-gray-400 hover:text-white"
+          >
+            <MoreHorizontal className="h-5 w-5" />
+          </Button>
+        </div>
+      </div>
+
+      <div className="flex gap-12">
+        <div className="text-center">
+          <div className="text-3xl font-bold text-white">{user.stats.moviesWatched}</div>
+          <div className="text-sm text-gray-400 uppercase tracking-wide">Films</div>
+        </div>
+        <div className="text-center">
+          <div className="text-3xl font-bold text-white">{user.stats.following}</div>
+          <div className="text-sm text-gray-400 uppercase tracking-wide">Following</div>
+        </div>
+        <div className="text-center">
+          <div className="text-3xl font-bold text-white">{user.stats.followers}</div>
+          <div className="text-sm text-gray-400 uppercase tracking-wide">Followers</div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function MainContent({ 
+  favoriteMovies, 
+  recentLikes, 
+  onMovieClick 
+}: { 
+  favoriteMovies: Movie[]
+  recentLikes: Movie[]
+  onMovieClick?: (movie: Movie) => void 
+}) {
+  return (
+    <div className="flex-1">
+      {/* Favorite Films Section */}
+      <section className="mb-12">
+        <h2 className="text-lg font-semibold text-gray-300 mb-4 uppercase tracking-wide">
+          Favorite Films
+        </h2>
+        {favoriteMovies.length === 0 ? (
+          <p className="text-gray-400">Don&apos;t forget to select your favorite films!</p>
+        ) : (
+          <div className="flex gap-4">
+            {favoriteMovies.slice(0, 4).map((movie) => (
+              <div key={movie.id} className="relative group cursor-pointer" onClick={() => onMovieClick?.(movie)}>
+                <div className="w-32 h-48 relative rounded-lg overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
+                  {movie.posterPath ? (
+                    <Image
+                      src={`https://image.tmdb.org/t/p/w342${movie.posterPath}`}
+                      alt={movie.title}
+                      fill
+                      className="object-cover"
+                      sizes="128px"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-slate-600 flex items-center justify-center text-xs text-gray-300 text-center p-2">
+                      {movie.title}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Recent Likes Section */}
+      <section>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg font-semibold text-gray-300 uppercase tracking-wide">
+            Recent Likes
+          </h2>
+          <div className="flex items-center gap-2 text-sm text-gray-400 hover:text-white cursor-pointer">
+            <Heart className="h-4 w-4" />
+            <span>ALL</span>
+          </div>
+        </div>
+
+        <div className="flex gap-4">
+          {recentLikes.slice(0, 4).map((movie) => (
+            <div key={movie.id} className="relative group cursor-pointer" onClick={() => onMovieClick?.(movie)}>
+              <div className="w-32 h-48 relative rounded-lg overflow-hidden shadow-lg group-hover:scale-105 transition-transform">
+                {movie.posterPath ? (
+                  <Image
+                    src={`https://image.tmdb.org/t/p/w342${movie.posterPath}`}
+                    alt={movie.title}
+                    fill
+                    className="object-cover"
+                    sizes="128px"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-slate-600 flex items-center justify-center text-xs text-gray-300 text-center p-2">
+                    {movie.title}
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  )
+}
+
 export function DashboardLayout({ 
   data, 
   loading = false, 
@@ -87,16 +211,7 @@ export function DashboardLayout({
     }
   }
 
-  const mockStats = {
-    moviesWatched: 0,
-    moviesInWatchlist: 0,
-    favoriteMovies: 0,
-    averageRating: 0,
-    thisMonthActivity: 0
-  }
-
   const user = data?.user || mockUser
-  const stats = data?.stats || mockStats
   const favoriteMovies = data?.favoriteMovies || []
   const recentActivity = data?.recentActivity || []
   const recentLikes = data?.recentLikes || []
@@ -105,211 +220,23 @@ export function DashboardLayout({
     switch (activeTab) {
       case 'profile':
         return (
-          <div className="space-y-12">
-            {/* Favorite Films - Hero Section */}
-            <section className="">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h2 className="text-sm font-medium text-letterboxd-text-muted uppercase tracking-widest mb-1">
-                    FAVORITE FILMS
-                  </h2>
-                  {favoriteMovies.length === 0 && (
-                    <p className="text-letterboxd-text-secondary text-sm">
-                      Don&apos;t forget to select your favorite films!
-                    </p>
-                  )}
-                </div>
-                {favoriteMovies.length > 0 && (
-                  <button className="text-sm text-letterboxd-text-secondary hover:text-letterboxd-accent transition-colors font-medium">
-                    ALL
-                  </button>
-                )}
-              </div>
-              
-              {favoriteMovies.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3">
-                  {favoriteMovies.slice(0, 6).map((movie) => (
-                    <div key={movie.id} className="group cursor-pointer" onClick={() => onMovieClick?.(movie)}>
-                      <div className="aspect-[2/3] bg-letterboxd-card rounded-md overflow-hidden shadow-lg group-hover:shadow-2xl transition-all duration-300 group-hover:scale-105 relative">
-                        {movie.posterPath ? (
-                          <Image
-                            src={`https://image.tmdb.org/t/p/w342${movie.posterPath}`}
-                            alt={movie.title}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 640px) 50vw, (max-width: 768px) 25vw, 16vw"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-letterboxd-text-muted text-xs text-center p-2">
-                            {movie.title}
-                          </div>
-                        )}
-                        {movie.userRating && (
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                            <div className="absolute bottom-2 left-2">
-                              <div className="flex items-center space-x-1 text-letterboxd-orange">
-                                {[...Array(5)].map((_, i) => (
-                                  <svg key={i} className={`w-3 h-3 fill-current ${
-                                    i < movie.userRating! ? 'text-letterboxd-orange' : 'text-gray-600'
-                                  }`} viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                  </svg>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="border-2 border-dashed border-letterboxd-border rounded-lg p-8 text-center">
-                  <p className="text-letterboxd-text-muted">No favorite films selected yet</p>
-                </div>
-              )}
-            </section>
-
-            {/* Two Column Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-              {/* Left Column - Recent Likes */}
-              <div className="lg:col-span-8">
-                <section>
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-sm font-medium text-letterboxd-text-muted uppercase tracking-widest">
-                      RECENT LIKES
-                    </h2>
-                    <button className="text-sm text-letterboxd-text-secondary hover:text-letterboxd-accent transition-colors font-medium flex items-center space-x-1">
-                      <span>♥ ALL</span>
-                    </button>
-                  </div>
-                  
-                  {recentLikes.length > 0 ? (
-                    <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2">
-                      {recentLikes.slice(0, 8).map((movie) => (
-                        <div key={movie.id} className="group cursor-pointer" onClick={() => onMovieClick?.(movie)}>
-                          <div className="aspect-[2/3] bg-letterboxd-card rounded-sm overflow-hidden shadow-md group-hover:shadow-lg transition-all duration-200 group-hover:scale-105 relative">
-                            {movie.posterPath ? (
-                              <Image
-                                src={`https://image.tmdb.org/t/p/w154${movie.posterPath}`}
-                                alt={movie.title}
-                                fill
-                                className="object-cover"
-                                sizes="(max-width: 640px) 25vw, (max-width: 768px) 16vw, 12vw"
-                              />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center text-letterboxd-text-muted text-xs text-center p-1">
-                                {movie.title}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-8">
-                      <p className="text-letterboxd-text-muted">No recent likes</p>
-                    </div>
-                  )}
-                </section>
-              </div>
-
-              {/* Right Column - Stats & Activity */}
-              <div className="lg:col-span-4 space-y-8">
-                {/* Compact Stats */}
-                <section>
-                  <div className="bg-letterboxd-card rounded-lg p-4">
-                    <div className="grid grid-cols-2 gap-4 text-center">
-                      <div>
-                        <div className="text-xl font-bold text-letterboxd-text-primary">{stats.moviesWatched}</div>
-                        <div className="text-xs text-letterboxd-text-muted uppercase tracking-wide">Films</div>
-                      </div>
-                      <div>
-                        <div className="text-xl font-bold text-letterboxd-text-primary">{stats.moviesInWatchlist}</div>
-                        <div className="text-xs text-letterboxd-text-muted uppercase tracking-wide">Watchlist</div>
-                      </div>
-                      <div>
-                        <div className="text-xl font-bold text-letterboxd-text-primary">{stats.averageRating.toFixed(1)}</div>
-                        <div className="text-xs text-letterboxd-text-muted uppercase tracking-wide">Avg Rating</div>
-                      </div>
-                      <div>
-                        <div className="text-xl font-bold text-letterboxd-text-primary">{stats.thisMonthActivity}</div>
-                        <div className="text-xs text-letterboxd-text-muted uppercase tracking-wide">This Month</div>
-                      </div>
-                    </div>
-                  </div>
-                </section>
-
-                {/* Recent Activity */}
-                <section>
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-sm font-medium text-letterboxd-text-muted uppercase tracking-widest">
-                      DIARY
-                    </h2>
-                  </div>
-                  
-                  {recentActivity.length > 0 ? (
-                    <div className="space-y-3">
-                      {recentActivity.slice(0, 3).map((activity) => (
-                        <div key={activity.id} className="bg-letterboxd-card rounded-lg p-3 flex items-center space-x-3">
-                          <div className="text-xs text-letterboxd-text-muted bg-letterboxd-darker px-2 py-1 rounded font-mono">
-                            {activity.timestamp.getDate().toString().padStart(2, '0')}
-                            <div className="text-[10px] opacity-75">
-                              {activity.timestamp.toLocaleDateString('en-US', { month: 'short' }).toUpperCase()}
-                            </div>
-                          </div>
-                          <div className="w-8 h-12 flex-shrink-0 cursor-pointer relative" onClick={() => onMovieClick?.(activity.movie)}>
-                            {activity.movie.posterPath ? (
-                              <Image
-                                src={`https://image.tmdb.org/t/p/w92${activity.movie.posterPath}`}
-                                alt={activity.movie.title}
-                                fill
-                                className="object-cover rounded-sm"
-                                sizes="32px"
-                              />
-                            ) : (
-                              <div className="w-full h-full bg-letterboxd-darker rounded-sm flex items-center justify-center">
-                                <span className="text-[8px] text-letterboxd-text-muted">?</span>
-                              </div>
-                            )}
-                          </div>
-                          <div className="flex-grow min-w-0">
-                            <button 
-                              onClick={() => onMovieClick?.(activity.movie)}
-                              className="font-medium text-letterboxd-text-primary hover:text-letterboxd-accent transition-colors text-sm block truncate w-full text-left"
-                            >
-                              {activity.movie.title}
-                            </button>
-                            {activity.rating && (
-                              <div className="flex items-center space-x-1 mt-1">
-                                {[...Array(5)].map((_, i) => (
-                                  <svg key={i} className={`w-2 h-2 fill-current ${
-                                    i < activity.rating! ? 'text-letterboxd-orange' : 'text-letterboxd-border'
-                                  }`} viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                  </svg>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-6">
-                      <p className="text-letterboxd-text-muted text-sm">No recent activity</p>
-                    </div>
-                  )}
-                </section>
-              </div>
-            </div>
+          <div className="flex gap-8 mt-8">
+            <MainContent 
+              favoriteMovies={favoriteMovies}
+              recentLikes={recentLikes}
+              onMovieClick={onMovieClick}
+            />
+            <Sidebar 
+              recentActivity={recentActivity}
+              stats={data?.stats}
+            />
           </div>
         )
       
       default:
         return (
           <div className="text-center py-12">
-            <p className="text-letterboxd-text-secondary">
+            <p className="text-gray-400">
               {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} content coming soon...
             </p>
           </div>
@@ -318,12 +245,12 @@ export function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-letterboxd-dark-bg text-letterboxd-text-primary">
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Profile Header */}
-        <ProfileHeader user={user} />
-
-        {/* Navigation Tabs */}
+    <div className="min-h-screen bg-slate-900 text-white">
+      <div className="container mx-auto px-4">
+        {/* Profile Section */}
+        <ProfileSection user={user} />
+        
+        {/* Tab Navigation */}
         <DashboardTabs
           activeTab={activeTab}
           onTabChange={setActiveTab}
@@ -331,9 +258,7 @@ export function DashboardLayout({
         />
 
         {/* Content */}
-        <div>
-          {renderContent()}
-        </div>
+        {renderContent()}
       </div>
     </div>
   )
