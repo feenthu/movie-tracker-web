@@ -1,4 +1,5 @@
 import { MovieGrid } from './movie-grid'
+import Image from 'next/image'
 
 interface Movie {
   id: string
@@ -49,14 +50,16 @@ function ActivityItem({ activity, onMovieClick }: {
   return (
     <div className="flex items-center space-x-3 p-3 rounded-lg bg-gray-800/50">
       <div 
-        className="w-12 h-16 flex-shrink-0 cursor-pointer"
+        className="w-12 h-16 flex-shrink-0 cursor-pointer relative"
         onClick={() => onMovieClick?.(activity.movie)}
       >
         {activity.movie.posterPath ? (
-          <img
+          <Image
             src={`https://image.tmdb.org/t/p/w154${activity.movie.posterPath}`}
             alt={activity.movie.title}
-            className="w-full h-full object-cover rounded"
+            fill
+            className="object-cover rounded"
+            sizes="48px"
           />
         ) : (
           <div className="w-full h-full bg-gray-700 rounded flex items-center justify-center">
