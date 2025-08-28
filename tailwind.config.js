@@ -41,12 +41,25 @@ module.exports = {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
+        letterboxd: {
+          dark: '#14181c',
+          card: '#2c3440',
+          accent: '#00d735',
+          orange: '#ff8c00'
+        }
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      gridTemplateColumns: {
+        'movies': 'repeat(auto-fill, minmax(120px, 1fr))',
+        'movies-lg': 'repeat(auto-fill, minmax(150px, 1fr))'
+      },
+      aspectRatio: {
+        'poster': '2/3'
+      }
     },
   },
   plugins: [],
