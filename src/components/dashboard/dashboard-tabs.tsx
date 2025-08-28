@@ -16,21 +16,21 @@ interface DashboardTabsProps {
 
 export function DashboardTabs({ activeTab, onTabChange, tabs }: DashboardTabsProps) {
   return (
-    <nav className="flex space-x-8 border-b border-gray-700 mb-8">
+    <nav className="flex space-x-8 border-b border-letterboxd-border mb-10">
       {tabs.map((tab) => (
         <button
           key={tab.id}
           onClick={() => onTabChange(tab.id)}
           className={clsx(
-            'pb-4 px-1 text-sm font-medium border-b-2 transition-colors',
+            'pb-4 px-1 text-sm font-medium border-b-2 transition-all duration-200 relative',
             activeTab === tab.id
-              ? 'text-green-400 border-green-400'
-              : 'text-gray-400 border-transparent hover:text-gray-300 hover:border-gray-600'
+              ? 'text-letterboxd-accent border-letterboxd-accent'
+              : 'text-letterboxd-text-muted border-transparent hover:text-letterboxd-text-secondary hover:border-letterboxd-border'
           )}
         >
           {tab.label}
           {tab.count !== undefined && (
-            <span className="ml-2 text-xs bg-gray-700 px-2 py-1 rounded-full">
+            <span className="ml-2 text-xs bg-letterboxd-card text-letterboxd-text-muted px-2 py-1 rounded-full">
               {tab.count}
             </span>
           )}

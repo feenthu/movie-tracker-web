@@ -42,10 +42,17 @@ module.exports = {
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         letterboxd: {
-          dark: '#14181c',
-          card: '#2c3440',
-          accent: '#00d735',
-          orange: '#ff8c00'
+          'dark-bg': '#14181c',
+          'darker': '#0e1115', 
+          'card': '#2c3440',
+          'card-hover': '#3c4450',
+          'accent': '#00d735',
+          'accent-hover': '#00c230',
+          'orange': '#ff8c00',
+          'text-primary': '#ffffff',
+          'text-secondary': '#9caea5',
+          'text-muted': '#678',
+          'border': '#456'
         }
       },
       borderRadius: {
