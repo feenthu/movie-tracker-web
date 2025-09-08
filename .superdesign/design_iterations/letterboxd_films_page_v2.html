@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Films - MovieTracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    
+    <style>
+        /* Letterboxd CSS Variables */
+        :root {
+            --letterboxd-background: #1a1a1a;
+            --letterboxd-background-secondary: #2c3440;
+            --letterboxd-background-card: #1f2933;
+            --letterboxd-text-primary: #ffffff;
+            --letterboxd-text-secondary: #9aa5b1;
+            --letterboxd-text-muted: #6b7c93;
+            --letterboxd-border: #2c3440;
+            --letterboxd-accent-green: #00d735;
+            --letterboxd-accent-orange: #f77f00;
+            --letterboxd-accent-yellow: #fcbf49;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--letterboxd-background);
+            color: var(--letterboxd-text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.5;
+        }
+
+        /* Header Styles */
+        .letterboxd-header {
+            background-color: var(--letterboxd-background-secondary);
+            border-bottom: 1px solid var(--letterboxd-border);
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .letterboxd-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .letterboxd-logo-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .letterboxd-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .letterboxd-dot-orange { background-color: var(--letterboxd-accent-orange); }
+        .letterboxd-dot-green { background-color: var(--letterboxd-accent-green); }
+        .letterboxd-dot-blue { background-color: #003049; }
+
+        .letterboxd-nav-link {
+            color: var(--letterboxd-text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: color 0.2s ease;
+            padding: 8px 0;
+        }
+
+        .letterboxd-nav-link:hover {
+            color: var(--letterboxd-text-primary);
+        }
+
+        .letterboxd-nav-link.active {
+            color: var(--letterboxd-accent-orange);
+            border-bottom: 2px solid var(--letterboxd-accent-orange);
+            padding-bottom: 6px;
+        }
+
+        /* Main Content Styles */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 40px;
+            padding: 40px 0;
+        }
+
+        /* Filter Styles */
+        .filters-section {
+            background: var(--letterboxd-background-card);
+            border-radius: 12px;
+            padding: 32px;
+            margin-bottom: 40px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+            background: var(--letterboxd-background);
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .filter-tab {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 6px;
+            background: transparent;
+            border: none;
+            color: var(--letterboxd-text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .filter-tab.active {
+            background: var(--letterboxd-accent-orange);
+            color: var(--letterboxd-background);
+        }
+
+        .filter-tab:hover:not(.active) {
+            background: var(--letterboxd-background-secondary);
+            color: var(--letterboxd-text-primary);
+        }
+
+        .filter-dropdowns {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            background: var(--letterboxd-background);
+            border: 1px solid var(--letterboxd-border);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: var(--letterboxd-text-primary);
+            font-size: 14px;
+            cursor: pointer;
+            min-width: 140px;
+        }
+
+        /* Films Grid */
+        .films-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 24px;
+        }
+
+        .film-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .film-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .film-poster {
+            aspect-ratio: 2/3;
+            background: var(--letterboxd-background-card);
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .film-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .film-card:hover .film-poster img {
+            transform: scale(1.05);
+        }
+
+        .film-actions {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: flex;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .film-card:hover .film-actions {
+            opacity: 1;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            background: rgba(0, 0, 0, 0.8);
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--letterboxd-accent-orange);
+        }
+
+        .film-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .film-year {
+            font-size: 12px;
+            color: var(--letterboxd-text-muted);
+            margin-bottom: 8px;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 2px;
+        }
+
+        .rating-star {
+            width: 12px;
+            height: 12px;
+            color: var(--letterboxd-accent-orange);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .sidebar-section {
+            background: var(--letterboxd-background-card);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .popular-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .popular-poster {
+            aspect-ratio: 2/3;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .popular-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .review-card {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            background: var(--letterboxd-background);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .reviewer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--letterboxd-accent-green);
+            flex-shrink: 0;
+        }
+
+        .review-content {
+            flex: 1;
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .review-text {
+            font-size: 12px;
+            color: var(--letterboxd-text-muted);
+            line-height: 1.4;
+        }
+
+        /* Load More Button */
+        .load-more {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .load-more-btn {
+            background: var(--letterboxd-accent-orange);
+            color: var(--letterboxd-background);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 32px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .load-more-btn:hover {
+            background: #e6720c;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 0 16px;
+            }
+            
+            .content-wrapper {
+                padding: 24px 0;
+                gap: 24px;
+            }
+            
+            .filters-section {
+                padding: 20px;
+            }
+            
+            .films-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 16px;
+            }
+            
+            .filter-dropdowns {
+                flex-direction: column;
+            }
+            
+            .filter-select {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header (matching existing design) -->
+    <header class="letterboxd-header">
+        <div class="main-container">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <!-- Logo -->
+                <a href="/dashboard" class="letterboxd-logo">
+                    <div class="letterboxd-logo-dots">
+                        <div class="letterboxd-dot letterboxd-dot-orange"></div>
+                        <div class="letterboxd-dot letterboxd-dot-green"></div>
+                        <div class="letterboxd-dot letterboxd-dot-blue"></div>
+                    </div>
+                    <span style="font-size: 20px; font-weight: 600; color: var(--letterboxd-text-primary);">MovieTracker</span>
+                </a>
+                
+                <!-- Navigation -->
+                <nav style="display: flex; align-items: center; gap: 32px;">
+                    <a href="#" class="letterboxd-nav-link active">Films</a>
+                    <a href="#" class="letterboxd-nav-link">Lists</a>
+                    <a href="#" class="letterboxd-nav-link">Members</a>
+                    <a href="#" class="letterboxd-nav-link">Journal</a>
+                    <a href="/" class="letterboxd-nav-link">Sign In</a>
+                    <a href="/signup" class="letterboxd-nav-link">Create Account</a>
+                </nav>
+                
+                <!-- Search Button -->
+                <button style="background: transparent; border: none; color: var(--letterboxd-text-secondary); padding: 8px; cursor: pointer;">
+                    <i data-lucide="search" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="content-wrapper">
+            <!-- Main Content -->
+            <main>
+                <!-- Filters Section -->
+                <section class="filters-section">
+                    <div class="filter-tabs">
+                        <button class="filter-tab active">Popular</button>
+                        <button class="filter-tab">New</button>
+                        <button class="filter-tab">Top Rated</button>
+                        <button class="filter-tab">Most Watched</button>
+                        <button class="filter-tab">Highly Rated</button>
+                    </div>
+                    
+                    <div class="filter-dropdowns">
+                        <select class="filter-select">
+                            <option>All Genres</option>
+                            <option>Action</option>
+                            <option>Comedy</option>
+                            <option>Drama</option>
+                            <option>Horror</option>
+                            <option>Sci-Fi</option>
+                            <option>Thriller</option>
+                        </select>
+                        
+                        <select class="filter-select">
+                            <option>All Years</option>
+                            <option>2024</option>
+                            <option>2023</option>
+                            <option>2022</option>
+                            <option>2021</option>
+                            <option>2020</option>
+                        </select>
+                        
+                        <select class="filter-select">
+                            <option>All Services</option>
+                            <option>Netflix</option>
+                            <option>Prime Video</option>
+                            <option>Hulu</option>
+                            <option>Disney+</option>
+                            <option>HBO Max</option>
+                        </select>
+                        
+                        <select class="filter-select">
+                            <option>All Ratings</option>
+                            <option>★★★★★ 5 stars</option>
+                            <option>★★★★☆ 4+ stars</option>
+                            <option>★★★☆☆ 3+ stars</option>
+                            <option>★★☆☆☆ 2+ stars</option>
+                        </select>
+                    </div>
+                </section>
+
+                <!-- Films Grid -->
+                <section class="films-grid">
+                    <!-- Film Cards -->
+                    <div class="film-card">
+                        <div class="film-poster">
+                            <img src="https://images.unsplash.com/photo-1489599316546-1c5d1b4b5c9e?w=400&h=600&fit=crop" alt="Dune: Part Two" loading="lazy">
+                            <div class="film-actions">
+                                <button class="action-btn" title="Add to Watchlist">
+                                    <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                                <button class="action-btn" title="Like">
+                                    <i data-lucide="heart" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="film-title">Dune: Part Two</h3>
+                        <p class="film-year">2024</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                        </div>
+                    </div>
+
+                    <div class="film-card">
+                        <div class="film-poster">
+                            <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&h=600&fit=crop" alt="Oppenheimer" loading="lazy">
+                            <div class="film-actions">
+                                <button class="action-btn" title="Add to Watchlist">
+                                    <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                                <button class="action-btn liked" title="Unlike">
+                                    <i data-lucide="heart" style="width: 16px; height: 16px; color: var(--letterboxd-accent-orange); fill: currentColor;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="film-title">Oppenheimer</h3>
+                        <p class="film-year">2023</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                        </div>
+                    </div>
+
+                    <div class="film-card">
+                        <div class="film-poster">
+                            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=600&fit=crop" alt="The Batman" loading="lazy">
+                            <div class="film-actions">
+                                <button class="action-btn" title="Add to Watchlist">
+                                    <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                                <button class="action-btn" title="Like">
+                                    <i data-lucide="heart" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="film-title">The Batman</h3>
+                        <p class="film-year">2022</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                        </div>
+                    </div>
+
+                    <div class="film-card">
+                        <div class="film-poster">
+                            <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=400&h=600&fit=crop" alt="Barbie" loading="lazy">
+                            <div class="film-actions">
+                                <button class="action-btn" title="Add to Watchlist">
+                                    <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                                <button class="action-btn" title="Like">
+                                    <i data-lucide="heart" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="film-title">Barbie</h3>
+                        <p class="film-year">2023</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                        </div>
+                    </div>
+
+                    <div class="film-card">
+                        <div class="film-poster">
+                            <img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?w=400&h=600&fit=crop" alt="Killers of the Flower Moon" loading="lazy">
+                            <div class="film-actions">
+                                <button class="action-btn" title="Add to Watchlist">
+                                    <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                                <button class="action-btn" title="Like">
+                                    <i data-lucide="heart" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="film-title">Killers of the Flower Moon</h3>
+                        <p class="film-year">2023</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                        </div>
+                    </div>
+
+                    <div class="film-card">
+                        <div class="film-poster">
+                            <img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=400&h=600&fit=crop" alt="Spider-Man: Across the Spider-Verse" loading="lazy">
+                            <div class="film-actions">
+                                <button class="action-btn" title="Add to Watchlist">
+                                    <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                                <button class="action-btn" title="Like">
+                                    <i data-lucide="heart" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="film-title">Spider-Man: Across the Spider-Verse</h3>
+                        <p class="film-year">2023</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                        </div>
+                    </div>
+
+                    <div class="film-card">
+                        <div class="film-poster">
+                            <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&h=600&fit=crop" alt="John Wick: Chapter 4" loading="lazy">
+                            <div class="film-actions">
+                                <button class="action-btn" title="Add to Watchlist">
+                                    <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                                <button class="action-btn" title="Like">
+                                    <i data-lucide="heart" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="film-title">John Wick: Chapter 4</h3>
+                        <p class="film-year">2023</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                        </div>
+                    </div>
+
+                    <div class="film-card">
+                        <div class="film-poster">
+                            <img src="https://images.unsplash.com/photo-1489599316546-1c5d1b4b5c9e?w=400&h=600&fit=crop" alt="Everything Everywhere All at Once" loading="lazy">
+                            <div class="film-actions">
+                                <button class="action-btn" title="Add to Watchlist">
+                                    <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                                <button class="action-btn" title="Like">
+                                    <i data-lucide="heart" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="film-title">Everything Everywhere All at Once</h3>
+                        <p class="film-year">2022</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                        </div>
+                    </div>
+
+                    <div class="film-card">
+                        <div class="film-poster">
+                            <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&h=600&fit=crop" alt="The Menu" loading="lazy">
+                            <div class="film-actions">
+                                <button class="action-btn" title="Add to Watchlist">
+                                    <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                                <button class="action-btn" title="Like">
+                                    <i data-lucide="heart" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="film-title">The Menu</h3>
+                        <p class="film-year">2022</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                        </div>
+                    </div>
+
+                    <div class="film-card">
+                        <div class="film-poster">
+                            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=600&fit=crop" alt="Nope" loading="lazy">
+                            <div class="film-actions">
+                                <button class="action-btn" title="Add to Watchlist">
+                                    <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                                <button class="action-btn" title="Like">
+                                    <i data-lucide="heart" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="film-title">Nope</h3>
+                        <p class="film-year">2022</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                        </div>
+                    </div>
+
+                    <div class="film-card">
+                        <div class="film-poster">
+                            <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=400&h=600&fit=crop" alt="Avatar: The Way of Water" loading="lazy">
+                            <div class="film-actions">
+                                <button class="action-btn" title="Add to Watchlist">
+                                    <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                                <button class="action-btn" title="Like">
+                                    <i data-lucide="heart" style="width: 16px; height: 16px; color: white;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h3 class="film-title">Avatar: The Way of Water</h3>
+                        <p class="film-year">2022</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Load More Button -->
+                <div class="load-more">
+                    <button class="load-more-btn">
+                        <i data-lucide="loader" style="width: 16px; height: 16px; margin-right: 8px;"></i>
+                        Load More Films
+                    </button>
+                </div>
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Popular This Week -->
+                <section class="sidebar-section">
+                    <h2 class="sidebar-title">
+                        <i data-lucide="trending-up" style="width: 18px; height: 18px; color: var(--letterboxd-accent-orange);"></i>
+                        Popular This Week
+                    </h2>
+                    <div class="popular-grid">
+                        <div class="popular-poster">
+                            <img src="https://images.unsplash.com/photo-1489599316546-1c5d1b4b5c9e?w=200&h=300&fit=crop" alt="Popular 1">
+                        </div>
+                        <div class="popular-poster">
+                            <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=200&h=300&fit=crop" alt="Popular 2">
+                        </div>
+                        <div class="popular-poster">
+                            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=200&h=300&fit=crop" alt="Popular 3">
+                        </div>
+                        <div class="popular-poster">
+                            <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=200&h=300&fit=crop" alt="Popular 4">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Recently Reviewed -->
+                <section class="sidebar-section">
+                    <h2 class="sidebar-title">
+                        <i data-lucide="message-square" style="width: 18px; height: 18px; color: var(--letterboxd-accent-green);"></i>
+                        Recently Reviewed
+                    </h2>
+                    
+                    <div class="review-card">
+                        <div class="reviewer-avatar"></div>
+                        <div class="review-content">
+                            <div class="reviewer-name">Sarah M.</div>
+                            <div class="rating-stars" style="margin-bottom: 4px;">
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                            </div>
+                            <p class="review-text">Loved the visuals in Dune: Part Two. Denis Villeneuve continues to impress.</p>
+                        </div>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="reviewer-avatar" style="background: var(--letterboxd-accent-orange);"></div>
+                        <div class="review-content">
+                            <div class="reviewer-name">Mike T.</div>
+                            <div class="rating-stars" style="margin-bottom: 4px;">
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            </div>
+                            <p class="review-text">Oppenheimer is a masterpiece. Nolan's best work to date.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Crew Picks -->
+                <section class="sidebar-section">
+                    <h2 class="sidebar-title">
+                        <i data-lucide="award" style="width: 18px; height: 18px; color: var(--letterboxd-accent-orange);"></i>
+                        Crew Picks
+                    </h2>
+                    <div style="display: flex; gap: 16px;">
+                        <div class="popular-poster" style="width: 80px;">
+                            <img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?w=200&h=300&fit=crop" alt="Crew Pick">
+                        </div>
+                        <div>
+                            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">Killers of the Flower Moon</h3>
+                            <p style="font-size: 12px; color: var(--letterboxd-text-muted); line-height: 1.4; margin-bottom: 8px;">Scorsese's latest epic explores a dark chapter of American history with his signature style.</p>
+                            <span style="font-size: 11px; background: var(--letterboxd-background); padding: 4px 8px; border-radius: 4px; color: var(--letterboxd-text-muted);">CURATOR: JAMES</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Popular Reviewers -->
+                <section class="sidebar-section">
+                    <h2 class="sidebar-title">
+                        <i data-lucide="users" style="width: 18px; height: 18px; color: var(--letterboxd-accent-green);"></i>
+                        Popular Reviewers
+                    </h2>
+                    
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <div class="reviewer-avatar"></div>
+                        <div>
+                            <div style="font-weight: 600; font-size: 14px;">FilmCritic2024</div>
+                            <div style="font-size: 12px; color: var(--letterboxd-text-muted);">247 films this year</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <div class="reviewer-avatar" style="background: var(--letterboxd-accent-orange);"></div>
+                        <div>
+                            <div style="font-weight: 600; font-size: 14px;">CinemaLover</div>
+                            <div style="font-size: 12px; color: var(--letterboxd-text-muted);">189 films this year</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div class="reviewer-avatar" style="background: #9333ea;"></div>
+                        <div>
+                            <div style="font-weight: 600; font-size: 14px;">MovieMaven</div>
+                            <div style="font-size: 12px; color: var(--letterboxd-text-muted);">156 films this year</div>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Interactive functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter tab switching
+            const filterTabs = document.querySelectorAll('.filter-tab');
+            filterTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    filterTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Watchlist/Like button interactions
+            const actionBtns = document.querySelectorAll('.action-btn');
+            actionBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const icon = this.querySelector('i');
+                    const iconType = icon.getAttribute('data-lucide');
+                    
+                    if (iconType === 'plus') {
+                        icon.setAttribute('data-lucide', 'check');
+                        this.style.background = 'var(--letterboxd-accent-green)';
+                    } else if (iconType === 'heart') {
+                        if (this.classList.contains('liked')) {
+                            this.classList.remove('liked');
+                            icon.style.color = 'white';
+                            icon.style.fill = 'none';
+                        } else {
+                            this.classList.add('liked');
+                            icon.style.color = 'var(--letterboxd-accent-orange)';
+                            icon.style.fill = 'currentColor';
+                        }
+                    }
+                    
+                    lucide.createIcons();
+                });
+            });
+            
+            // Load more functionality
+            const loadMoreBtn = document.querySelector('.load-more-btn');
+            loadMoreBtn.addEventListener('click', function() {
+                this.innerHTML = '<i data-lucide="loader-2" style="width: 16px; height: 16px; margin-right: 8px; animation: spin 1s linear infinite;"></i>Loading...';
+                lucide.createIcons();
+                
+                // Simulate loading delay
+                setTimeout(() => {
+                    this.innerHTML = '<i data-lucide="loader" style="width: 16px; height: 16px; margin-right: 8px;"></i>Load More Films';
+                    lucide.createIcons();
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

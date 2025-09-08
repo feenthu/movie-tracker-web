@@ -4,9 +4,9 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/providers/auth-provider'
-import { LoginForm } from '@/components/login-form'
-import { PageWrapper } from '@/components/layout/page-wrapper'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { MovieTrackerLoginForm } from '@/components/movietracker-login-form'
+import { MovieTrackerHeader } from '@/components/profile/movietracker-header'
+import "@/styles/movietracker.css"
 
 export default function HomePage() {
   const { isAuthenticated, isLoading } = useAuth()
@@ -20,11 +20,24 @@ export default function HomePage() {
 
   if (isLoading) {
     return (
-      <PageWrapper maxWidth="sm">
-        <div className="flex items-center justify-center min-h-[60vh]">
-          <div className="animate-spin rounded-full h-8 w-8 border-2 border-muted border-t-primary" />
-        </div>
-      </PageWrapper>
+      <div style={{ 
+        backgroundColor: 'var(--movietracker-background)', 
+        color: 'var(--movietracker-text-primary)', 
+        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <div style={{ 
+          width: '40px', 
+          height: '40px', 
+          border: '3px solid var(--movietracker-text-muted)', 
+          borderTop: '3px solid var(--movietracker-accent-orange)', 
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite'
+        }} />
+      </div>
     )
   }
 
@@ -33,32 +46,105 @@ export default function HomePage() {
   }
 
   return (
-    <PageWrapper maxWidth="sm">
-      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-8">
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold">Movie Tracker</h1>
-          <p className="text-muted-foreground">
-            Track your favorite movies and build your watchlist
-          </p>
-        </div>
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle>Welcome Back</CardTitle>
-            <CardDescription>
-              Sign in to your account to continue
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <LoginForm />
-            <div className="text-center text-sm">
+    <div style={{ 
+      backgroundColor: 'var(--movietracker-background)', 
+      color: 'var(--movietracker-text-primary)', 
+      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+      lineHeight: '1.5',
+      minHeight: '100vh'
+    }}>
+      <MovieTrackerHeader />
+      
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        minHeight: 'calc(100vh - 60px)',
+        padding: '24px'
+      }}>
+        <div style={{ 
+          maxWidth: '400px', 
+          width: '100%',
+          textAlign: 'center'
+        }}>
+          {/* Logo and Title */}
+          <div style={{ marginBottom: '48px' }}>
+            <div style={{ 
+              display: 'flex', 
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '12px',
+              marginBottom: '16px'
+            }}>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                <div style={{ width: '16px', height: '16px', borderRadius: '50%', backgroundColor: 'var(--movietracker-accent-orange)' }}></div>
+                <div style={{ width: '16px', height: '16px', borderRadius: '50%', backgroundColor: 'var(--movietracker-accent-green)' }}></div>
+                <div style={{ width: '16px', height: '16px', borderRadius: '50%', backgroundColor: '#003049' }}></div>
+              </div>
+              <h1 style={{ 
+                fontSize: '28px', 
+                fontWeight: '700', 
+                color: 'var(--movietracker-text-primary)',
+                margin: 0
+              }}>
+                MovieTracker
+              </h1>
+            </div>
+            <p style={{ 
+              fontSize: '16px',
+              color: 'var(--movietracker-text-secondary)',
+              margin: 0
+            }}>
+              Track your favorite movies and build your watchlist
+            </p>
+          </div>
+
+          {/* Login Card */}
+          <div className="movietracker-sidebar-card" style={{ 
+            maxWidth: 'none',
+            margin: '0 auto'
+          }}>
+            <div style={{ marginBottom: '24px' }}>
+              <h2 style={{ 
+                fontSize: '20px', 
+                fontWeight: '600', 
+                color: 'var(--movietracker-text-primary)',
+                marginBottom: '8px'
+              }}>
+                Welcome Back
+              </h2>
+              <p style={{ 
+                fontSize: '14px',
+                color: 'var(--movietracker-text-secondary)',
+                margin: 0
+              }}>
+                Sign in to your account to continue
+              </p>
+            </div>
+
+            <MovieTrackerLoginForm />
+
+            <div style={{ 
+              textAlign: 'center', 
+              fontSize: '14px',
+              marginTop: '24px',
+              color: 'var(--movietracker-text-secondary)'
+            }}>
               Don&apos;t have an account?{' '}
-              <Link href="/signup" className="text-primary hover:underline">
+              <Link 
+                href="/signup" 
+                style={{ 
+                  color: 'var(--movietracker-accent-orange)', 
+                  textDecoration: 'none',
+                  transition: 'color 0.2s ease'
+                }}
+              >
                 Sign up here
               </Link>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
-    </PageWrapper>
+    </div>
   )
 }

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Section V2 - Pills</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --letterboxd-background: #1a1a1a;
+            --letterboxd-background-card: #1f2933;
+            --letterboxd-text-primary: #ffffff;
+            --letterboxd-text-secondary: #9aa5b1;
+            --letterboxd-text-muted: #6b7c93;
+            --letterboxd-border: #2c3440;
+            --letterboxd-accent-orange: #f77f00;
+        }
+        
+        body {
+            background: var(--letterboxd-background);
+            color: var(--letterboxd-text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            padding: 40px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--letterboxd-background-card);
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .pill-button {
+            transition: all 0.2s ease;
+        }
+        
+        .pill-button:hover {
+            background: var(--letterboxd-accent-orange);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- V2: Pill-Style Filters -->
+        <div class="mb-5">
+            <h3 class="text-sm font-semibold text-gray-300 uppercase tracking-wider mb-3">Browse Films</h3>
+            <div class="flex flex-wrap gap-2 mb-4">
+                <button class="pill-button bg-gray-700 hover:bg-orange-600 text-white text-xs px-3 py-1.5 rounded-full border border-gray-600">Popular</button>
+                <button class="pill-button bg-gray-700 hover:bg-orange-600 text-white text-xs px-3 py-1.5 rounded-full border border-gray-600">New Releases</button>
+                <button class="pill-button bg-gray-700 hover:bg-orange-600 text-white text-xs px-3 py-1.5 rounded-full border border-gray-600">Top Rated</button>
+                <button class="pill-button bg-gray-700 hover:bg-orange-600 text-white text-xs px-3 py-1.5 rounded-full border border-gray-600">Trending</button>
+                <button class="pill-button bg-gray-700 hover:bg-orange-600 text-white text-xs px-3 py-1.5 rounded-full border border-gray-600">Watchlist</button>
+            </div>
+            
+            <div class="grid grid-cols-4 gap-3 mb-4">
+                <select class="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:border-orange-500 outline-none">
+                    <option>All Years</option>
+                    <option>2024</option>
+                    <option>2023</option>
+                </select>
+                <select class="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:border-orange-500 outline-none">
+                    <option>All Genres</option>
+                    <option>Action</option>
+                    <option>Comedy</option>
+                </select>
+                <select class="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:border-orange-500 outline-none">
+                    <option>All Ratings</option>
+                    <option>★★★★★</option>
+                    <option>★★★★☆</option>
+                </select>
+                <select class="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:border-orange-500 outline-none">
+                    <option>All Services</option>
+                    <option>Netflix</option>
+                    <option>Prime</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="relative">
+            <input 
+                type="text" 
+                placeholder="Search for films, directors, actors..." 
+                class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:border-orange-500 outline-none pr-10"
+            />
+            <svg class="w-4 h-4 absolute right-3 top-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+        </div>
+    </div>
+</body>
+</html>

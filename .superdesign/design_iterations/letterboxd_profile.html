@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tyshaneoneill - Letterboxd Style Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Your Color Palette */
+            --prussian-blue: #003049;
+            --fire-engine-red: #d62828;
+            --orange-wheel: #f77f00;
+            --xanthous: #fcbf49;
+            --vanilla: #eae2b7;
+            
+            /* Letterboxd-inspired Dark Theme */
+            --background: #1a1a1a;
+            --background-secondary: #2c3440;
+            --background-card: #1f2933;
+            --text-primary: #ffffff;
+            --text-secondary: #9aa5b1;
+            --text-muted: #6b7c93;
+            --border: #2c3440;
+            --accent-green: #00d735;
+            --accent-orange: var(--orange-wheel);
+            --accent-yellow: var(--xanthous);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+            background-color: var(--background) !important;
+            color: var(--text-primary) !important;
+            line-height: 1.5 !important;
+        }
+        
+        .header {
+            background-color: var(--background-secondary) !important;
+            border-bottom: 1px solid var(--border) !important;
+            padding: 12px 0 !important;
+        }
+        
+        .logo {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+        
+        .logo-dots {
+            display: flex !important;
+            gap: 4px !important;
+        }
+        
+        .dot {
+            width: 12px !important;
+            height: 12px !important;
+            border-radius: 50% !important;
+        }
+        
+        .dot-orange { background-color: var(--accent-orange) !important; }
+        .dot-green { background-color: var(--accent-green) !important; }
+        .dot-blue { background-color: var(--prussian-blue) !important; }
+        
+        .nav-link {
+            color: var(--text-secondary) !important;
+            text-decoration: none !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            transition: color 0.2s ease !important;
+        }
+        
+        .nav-link:hover {
+            color: var(--text-primary) !important;
+        }
+        
+        .profile-avatar {
+            width: 80px !important;
+            height: 80px !important;
+            border-radius: 50% !important;
+            background: linear-gradient(135deg, var(--prussian-blue), var(--background-secondary)) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        
+        .profile-header {
+            display: grid !important;
+            grid-template-columns: 80px 200px 40px 1fr 120px 120px 120px !important;
+            gap: 24px !important;
+            align-items: center !important;
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 24px !important;
+        }
+        
+        .username {
+            font-size: 24px !important;
+            font-weight: 600 !important;
+            color: var(--text-primary) !important;
+        }
+        
+        .stat {
+            text-align: center !important;
+        }
+        
+        .stat-number {
+            font-size: 20px !important;
+            font-weight: 700 !important;
+            color: var(--text-primary) !important;
+            line-height: 1 !important;
+        }
+        
+        .stat-label {
+            font-size: 11px !important;
+            color: var(--text-muted) !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            margin-top: 2px !important;
+        }
+        
+        .profile-tabs {
+            display: flex !important;
+            gap: 32px !important;
+            justify-content: center !important;
+            border-bottom: 1px solid var(--border) !important;
+            padding-bottom: 16px !important;
+            margin-bottom: 32px !important;
+        }
+        
+        .tab {
+            color: var(--text-muted) !important;
+            text-decoration: none !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            padding-bottom: 16px !important;
+            border-bottom: 2px solid transparent !important;
+            transition: all 0.2s ease !important;
+        }
+        
+        .tab.active {
+            color: var(--text-primary) !important;
+            border-bottom-color: var(--accent-orange) !important;
+        }
+        
+        .tab:hover {
+            color: var(--text-primary) !important;
+        }
+        
+        .main-content {
+            display: grid !important;
+            grid-template-columns: 1fr 300px !important;
+            gap: 40px !important;
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 0 24px !important;
+        }
+        
+        .section-title {
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            color: var(--text-primary) !important;
+            margin-bottom: 16px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+        
+        .movie-grid {
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 16px !important;
+        }
+        
+        .movie-poster {
+            aspect-ratio: 2/3 !important;
+            border-radius: 6px !important;
+            overflow: hidden !important;
+            position: relative !important;
+            transition: transform 0.2s ease !important;
+            cursor: pointer !important;
+        }
+        
+        .movie-poster:hover {
+            transform: scale(1.05) !important;
+        }
+        
+        .sidebar {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 32px !important;
+        }
+        
+        .sidebar-card {
+            background-color: var(--background-card) !important;
+            border-radius: 8px !important;
+            padding: 20px !important;
+        }
+        
+        .promo-card {
+            background: linear-gradient(135deg, var(--xanthous), var(--accent-orange)) !important;
+            color: var(--background) !important;
+            border-radius: 8px !important;
+            overflow: hidden !important;
+            position: relative !important;
+        }
+        
+        .diary-entry {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            margin-bottom: 16px !important;
+        }
+        
+        .diary-date {
+            background-color: var(--background-secondary) !important;
+            border-radius: 4px !important;
+            padding: 8px !important;
+            text-align: center !important;
+            min-width: 50px !important;
+        }
+        
+        .ratings-chart {
+            display: flex !important;
+            align-items: end !important;
+            gap: 4px !important;
+            height: 60px !important;
+            margin: 16px 0 !important;
+        }
+        
+        .rating-bar {
+            background-color: var(--accent-green) !important;
+            border-radius: 2px !important;
+            width: 12px !important;
+            transition: opacity 0.2s ease !important;
+        }
+        
+        .rating-bar:hover {
+            opacity: 0.8 !important;
+        }
+        
+        .activity-item {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            padding: 8px 0 !important;
+            border-bottom: 1px solid var(--border) !important;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none !important;
+        }
+        
+        .activity-avatar {
+            width: 24px !important;
+            height: 24px !important;
+            border-radius: 50% !important;
+            background-color: var(--background-secondary) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 10px !important;
+            font-weight: 600 !important;
+        }
+        
+        .activity-text {
+            flex: 1 !important;
+            font-size: 13px !important;
+            color: var(--text-secondary) !important;
+        }
+        
+        .stars {
+            color: var(--accent-green) !important;
+            font-size: 12px !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
+            <div class="logo">
+                <div class="logo-dots">
+                    <div class="dot dot-orange"></div>
+                    <div class="dot dot-green"></div>
+                    <div class="dot dot-blue"></div>
+                </div>
+                <span class="text-xl font-semibold text-white">Letterboxd</span>
+            </div>
+            <nav class="flex items-center gap-8">
+                <a href="#" class="nav-link">Sign In</a>
+                <a href="#" class="nav-link">Create Account</a>
+                <a href="#" class="nav-link">Films</a>
+                <a href="#" class="nav-link">Lists</a>
+                <a href="#" class="nav-link">Members</a>
+                <a href="#" class="nav-link">Journal</a>
+            </nav>
+            <button class="p-2 text-text-secondary hover:text-white transition-colors">
+                <i data-lucide="search" class="w-5 h-5"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <!-- Column 1: Profile Picture -->
+        <div class="profile-avatar">
+            <i data-lucide="user" class="w-8 h-8 text-text-secondary"></i>
+        </div>
+        
+        <!-- Column 2: Username -->
+        <div class="username">tyshaneoneill</div>
+        
+        <!-- Column 3: Three Dots -->
+        <button class="text-text-muted hover:text-white transition-colors">
+            <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+        </button>
+        
+        <!-- Column 4: Blank Spacer -->
+        <div></div>
+        
+        <!-- Column 5: Films Count -->
+        <div class="stat">
+            <div class="stat-number">4</div>
+            <div class="stat-label">Films</div>
+        </div>
+        
+        <!-- Column 6: Following Count -->
+        <div class="stat">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Following</div>
+        </div>
+        
+        <!-- Column 7: Followers Count -->
+        <div class="stat">
+            <div class="stat-number">0</div>
+            <div class="stat-label">Followers</div>
+        </div>
+    </div>
+
+    <!-- Profile Navigation Tabs -->
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="profile-tabs">
+            <a href="#" class="tab active">Profile</a>
+            <a href="#" class="tab">Activity</a>
+            <a href="#" class="tab">Films</a>
+            <a href="#" class="tab">Diary</a>
+            <a href="#" class="tab">Watchlist</a>
+            <a href="#" class="tab">Likes</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content pb-12">
+        <!-- Recent Likes Section -->
+        <div>
+            <div class="section-title">
+                <i data-lucide="heart" class="w-4 h-4"></i>
+                Recent Likes
+                <div class="ml-auto">
+                    <a href="#" class="text-text-muted hover:text-white text-sm">ALL</a>
+                </div>
+            </div>
+            <div class="movie-grid">
+                <div class="movie-poster bg-gradient-to-b from-red-400 to-red-600">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-2 left-2 right-2 text-white text-xs font-medium">
+                        Strange World
+                    </div>
+                </div>
+                <div class="movie-poster bg-gradient-to-b from-teal-400 to-teal-600">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-2 left-2 right-2 text-white text-xs font-medium">
+                        The Menu
+                    </div>
+                </div>
+                <div class="movie-poster bg-gradient-to-b from-yellow-400 to-yellow-600">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-2 left-2 right-2 text-white text-xs font-medium">
+                        Mickey 17
+                    </div>
+                </div>
+                <div class="movie-poster bg-gradient-to-b from-orange-400 to-red-600">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                    <div class="absolute bottom-2 left-2 right-2 text-white text-xs font-medium">
+                        Dumb Money
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Promo Card -->
+            <div class="promo-card p-6 text-center">
+                <h3 class="font-bold text-lg mb-2">NEED AN UPGRADE?</h3>
+                <p class="text-sm mb-4 opacity-90">Profile stats, lifetime by favorite streaming services, watchlist alerts and no ads!</p>
+                <button class="bg-black text-white px-4 py-2 rounded text-sm font-medium">
+                    GET PRO
+                </button>
+            </div>
+
+            <!-- Diary -->
+            <div class="sidebar-card">
+                <div class="section-title">
+                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                    Diary
+                    <div class="ml-auto text-text-muted text-xs">1</div>
+                </div>
+                <div class="diary-entry">
+                    <div class="diary-date">
+                        <div class="text-xs text-text-muted">30</div>
+                    </div>
+                    <div>
+                        <div class="text-sm font-medium">Dumb Money</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ratings -->
+            <div class="sidebar-card">
+                <div class="section-title">
+                    <i data-lucide="star" class="w-4 h-4"></i>
+                    Ratings
+                    <div class="ml-auto text-text-muted text-xs">4</div>
+                </div>
+                <div class="ratings-chart">
+                    <div class="rating-bar" style="height: 20%"></div>
+                    <div class="rating-bar" style="height: 40%"></div>
+                    <div class="rating-bar" style="height: 80%"></div>
+                    <div class="rating-bar" style="height: 60%"></div>
+                    <div class="rating-bar" style="height: 100%"></div>
+                </div>
+                <div class="flex justify-between text-xs text-text-muted">
+                    <span>★</span>
+                    <span>★★★★★</span>
+                </div>
+            </div>
+
+            <!-- Activity -->
+            <div class="sidebar-card">
+                <div class="section-title">
+                    <i data-lucide="activity" class="w-4 h-4"></i>
+                    Activity
+                </div>
+                <div class="space-y-2">
+                    <div class="activity-item">
+                        <div class="activity-avatar">T</div>
+                        <div class="activity-text">
+                            <strong>tyshaneoneill</strong> rated Strange World
+                            <div class="stars">★★★</div>
+                        </div>
+                        <div class="text-xs text-text-muted">2d</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-avatar">T</div>
+                        <div class="activity-text">
+                            <strong>tyshaneoneill</strong> liked Strange World
+                        </div>
+                        <div class="text-xs text-text-muted">2d</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-avatar">T</div>
+                        <div class="activity-text">
+                            <strong>tyshaneoneill</strong> liked F1
+                        </div>
+                        <div class="text-xs text-text-muted">2d</div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-avatar">T</div>
+                        <div class="activity-text">
+                            <strong>tyshaneoneill</strong> rated F1 ★★★★★
+                        </div>
+                        <div class="text-xs text-text-muted">2d</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

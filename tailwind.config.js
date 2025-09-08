@@ -7,7 +7,60 @@ module.exports = {
   ],
   theme: {
     extend: {
+      borderRadius: {
+        md: "var(--radius-md)", lg: "var(--radius-lg)", xl: "var(--radius-xl)"
+      },
+      boxShadow: {
+        xs: "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+        tokenHover: "var(--elevation-hover)",
+        tokenActive: "var(--elevation-active)"
+      },
       colors: {
+        /* Semantic Surface Colors */
+        surface: {
+          primary: 'hsl(var(--surface-primary))',
+          secondary: 'hsl(var(--surface-secondary))',
+          tertiary: 'hsl(var(--surface-tertiary))',
+          elevated: 'hsl(var(--surface-elevated))',
+          overlay: 'hsl(var(--surface-overlay))',
+        },
+        /* Semantic Content Colors */
+        content: {
+          primary: 'hsl(var(--content-primary))',
+          secondary: 'hsl(var(--content-secondary))',
+          tertiary: 'hsl(var(--content-tertiary))',
+          inverse: 'hsl(var(--content-inverse))',
+          disabled: 'hsl(var(--content-disabled))',
+        },
+        /* Brand Colors */
+        brand: {
+          primary: 'hsl(var(--brand-primary))',
+          secondary: 'hsl(var(--brand-secondary))',
+          'primary-hover': 'hsl(var(--brand-primary-hover))',
+          'secondary-hover': 'hsl(var(--brand-secondary-hover))',
+        },
+        /* Feedback Colors */
+        feedback: {
+          success: 'hsl(var(--feedback-success))',
+          warning: 'hsl(var(--feedback-warning))',
+          error: 'hsl(var(--feedback-error))',
+          info: 'hsl(var(--feedback-info))',
+        },
+        /* Border Colors */
+        'border-semantic': {
+          primary: 'hsl(var(--border-primary))',
+          secondary: 'hsl(var(--border-secondary))',
+          focus: 'hsl(var(--border-focus))',
+          error: 'hsl(var(--border-error))',
+        },
+        /* Rating Colors */
+        rating: {
+          'star-filled': 'hsl(var(--rating-star-filled))',
+          'star-empty': 'hsl(var(--rating-star-empty))',
+          'heart-filled': 'hsl(var(--rating-heart-filled))',
+          'heart-empty': 'hsl(var(--rating-heart-empty))',
+        },
+        /* Legacy compatibility colors */
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         primary: {
@@ -41,19 +94,6 @@ module.exports = {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
-        letterboxd: {
-          'dark-bg': '#14181c',
-          'darker': '#0e1115', 
-          'card': '#2c3440',
-          'card-hover': '#3c4450',
-          'accent': '#00d735',
-          'accent-hover': '#00c230',
-          'orange': '#ff8c00',
-          'text-primary': '#ffffff',
-          'text-secondary': '#9caea5',
-          'text-muted': '#678',
-          'border': '#456'
-        }
       },
       borderRadius: {
         lg: 'var(--radius)',

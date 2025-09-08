@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity - Letterboxd</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Letterboxd Dark Theme Colors */
+            --letterboxd-background: #1a1a1a;
+            --letterboxd-background-secondary: #2c3440;
+            --letterboxd-background-card: #1f2933;
+            --letterboxd-text-primary: #ffffff;
+            --letterboxd-text-secondary: #9aa5b1;
+            --letterboxd-text-muted: #6b7c93;
+            --letterboxd-border: #2c3440;
+            --letterboxd-accent-green: #00d735;
+            --letterboxd-accent-orange: #f77f00;
+            --letterboxd-accent-yellow: #fcbf49;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+            background-color: var(--letterboxd-background) !important;
+            color: var(--letterboxd-text-primary) !important;
+            line-height: 1.5 !important;
+        }
+        
+        /* Header Styles */
+        .header {
+            background-color: var(--letterboxd-background-secondary) !important;
+            border-bottom: 1px solid var(--letterboxd-border) !important;
+            padding: 12px 0 !important;
+        }
+        
+        .logo-section {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+        
+        .logo-dots {
+            display: flex !important;
+            gap: 4px !important;
+        }
+        
+        .dot {
+            width: 12px !important;
+            height: 12px !important;
+            border-radius: 50% !important;
+        }
+        
+        .dot-orange { background-color: var(--letterboxd-accent-orange) !important; }
+        .dot-green { background-color: var(--letterboxd-accent-green) !important; }
+        .dot-blue { background-color: #003049 !important; }
+        
+        .nav-link {
+            color: var(--letterboxd-text-secondary) !important;
+            text-decoration: none !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            transition: color 0.2s ease !important;
+        }
+        
+        .nav-link:hover {
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        /* Main Layout */
+        .main-container {
+            display: grid !important;
+            grid-template-columns: 300px 1fr !important;
+            gap: 40px !important;
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 24px !important;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 24px !important;
+        }
+        
+        .sidebar-card {
+            background-color: var(--letterboxd-background-card) !important;
+            border-radius: 8px !important;
+            padding: 20px !important;
+        }
+        
+        .sidebar-title {
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            color: var(--letterboxd-text-primary) !important;
+            margin-bottom: 16px !important;
+        }
+        
+        .filter-tabs {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 8px !important;
+        }
+        
+        .filter-tab {
+            padding: 8px 12px !important;
+            border-radius: 4px !important;
+            color: var(--letterboxd-text-secondary) !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            font-size: 14px !important;
+        }
+        
+        .filter-tab.active {
+            background-color: var(--letterboxd-background-secondary) !important;
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        .filter-tab:hover {
+            background-color: var(--letterboxd-background-secondary) !important;
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        .filter-options {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 8px !important;
+        }
+        
+        .filter-option {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            font-size: 14px !important;
+            color: var(--letterboxd-text-secondary) !important;
+        }
+        
+        .filter-checkbox {
+            width: 16px !important;
+            height: 16px !important;
+            border: 1px solid var(--letterboxd-border) !important;
+            border-radius: 3px !important;
+            background-color: var(--letterboxd-accent-orange) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+        
+        .stats-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 8px !important;
+        }
+        
+        .stat-item {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            font-size: 14px !important;
+        }
+        
+        .stat-label {
+            color: var(--letterboxd-text-secondary) !important;
+        }
+        
+        .stat-value {
+            color: var(--letterboxd-text-primary) !important;
+            font-weight: 600 !important;
+        }
+        
+        /* Activity Feed */
+        .activity-feed {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 16px !important;
+        }
+        
+        .activity-header {
+            font-size: 24px !important;
+            font-weight: 600 !important;
+            color: var(--letterboxd-text-primary) !important;
+            margin-bottom: 8px !important;
+        }
+        
+        .activity-item {
+            background-color: var(--letterboxd-background-card) !important;
+            border-radius: 8px !important;
+            padding: 16px !important;
+            display: flex !important;
+            gap: 12px !important;
+            align-items: flex-start !important;
+            transition: background-color 0.2s ease !important;
+        }
+        
+        .activity-item:hover {
+            background-color: var(--letterboxd-background-secondary) !important;
+        }
+        
+        .activity-avatar {
+            width: 32px !important;
+            height: 32px !important;
+            border-radius: 50% !important;
+            background: linear-gradient(135deg, var(--letterboxd-accent-orange), var(--letterboxd-accent-green)) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            color: white !important;
+            flex-shrink: 0 !important;
+        }
+        
+        .activity-content {
+            flex: 1 !important;
+            display: flex !important;
+            gap: 12px !important;
+        }
+        
+        .activity-text {
+            flex: 1 !important;
+        }
+        
+        .activity-description {
+            font-size: 14px !important;
+            color: var(--letterboxd-text-secondary) !important;
+            margin-bottom: 4px !important;
+        }
+        
+        .activity-description strong {
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        .activity-movie-title {
+            color: var(--letterboxd-text-primary) !important;
+            font-weight: 500 !important;
+        }
+        
+        .activity-rating {
+            color: var(--letterboxd-accent-green) !important;
+            font-size: 14px !important;
+            margin-top: 2px !important;
+        }
+        
+        .activity-timestamp {
+            font-size: 12px !important;
+            color: var(--letterboxd-text-muted) !important;
+        }
+        
+        .activity-poster {
+            width: 60px !important;
+            height: 90px !important;
+            border-radius: 4px !important;
+            overflow: hidden !important;
+            flex-shrink: 0 !important;
+            position: relative !important;
+        }
+        
+        .load-more {
+            background-color: var(--letterboxd-background-card) !important;
+            border: 1px solid var(--letterboxd-border) !important;
+            color: var(--letterboxd-text-primary) !important;
+            padding: 12px 24px !important;
+            border-radius: 6px !important;
+            cursor: pointer !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            transition: all 0.2s ease !important;
+            margin-top: 16px !important;
+        }
+        
+        .load-more:hover {
+            background-color: var(--letterboxd-background-secondary) !important;
+            border-color: var(--letterboxd-text-muted) !important;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr !important;
+                gap: 24px !important;
+                padding: 16px !important;
+            }
+            
+            .sidebar {
+                order: 2 !important;
+            }
+            
+            .activity-feed {
+                order: 1 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
+            <div class="logo-section">
+                <div class="logo-dots">
+                    <div class="dot dot-orange"></div>
+                    <div class="dot dot-green"></div>
+                    <div class="dot dot-blue"></div>
+                </div>
+                <span style="font-size: 20px; font-weight: 600; color: var(--letterboxd-text-primary);">Letterboxd</span>
+            </div>
+            <nav style="display: flex; align-items: center; gap: 32px;">
+                <a href="#" class="nav-link">Browse</a>
+                <a href="#" class="nav-link">Lists</a>
+                <a href="#" class="nav-link">Members</a>
+                <a href="#" class="nav-link">Journal</a>
+            </nav>
+            <div style="color: var(--letterboxd-text-secondary);">
+                <i data-lucide="search" style="width: 20px; height: 20px;"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Activity Filters -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">Activity</h3>
+                <div class="filter-tabs">
+                    <div class="filter-tab">Following</div>
+                    <div class="filter-tab active">You</div>
+                    <div class="filter-tab">Popular</div>
+                </div>
+            </div>
+
+            <!-- Filter Options -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">Show</h3>
+                <div class="filter-options">
+                    <div class="filter-option">
+                        <div class="filter-checkbox">
+                            <i data-lucide="check" style="width: 10px; height: 10px; color: white;"></i>
+                        </div>
+                        <span>Watches</span>
+                    </div>
+                    <div class="filter-option">
+                        <div class="filter-checkbox">
+                            <i data-lucide="check" style="width: 10px; height: 10px; color: white;"></i>
+                        </div>
+                        <span>Likes</span>
+                    </div>
+                    <div class="filter-option">
+                        <div class="filter-checkbox">
+                            <i data-lucide="check" style="width: 10px; height: 10px; color: white;"></i>
+                        </div>
+                        <span>Reviews</span>
+                    </div>
+                    <div class="filter-option">
+                        <div class="filter-checkbox">
+                            <i data-lucide="check" style="width: 10px; height: 10px; color: white;"></i>
+                        </div>
+                        <span>Lists</span>
+                    </div>
+                    <div class="filter-option">
+                        <div class="filter-checkbox">
+                            <i data-lucide="check" style="width: 10px; height: 10px; color: white;"></i>
+                        </div>
+                        <span>Ratings</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">Your Stats</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">Films watched</span>
+                        <span class="stat-value">42</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Lists created</span>
+                        <span class="stat-value">8</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Likes given</span>
+                        <span class="stat-value">89</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Reviews written</span>
+                        <span class="stat-value">15</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Activity Feed -->
+        <main class="activity-feed">
+            <h1 class="activity-header">Recent Activity</h1>
+
+            <!-- Activity Item 1 -->
+            <div class="activity-item">
+                <div class="activity-avatar">T</div>
+                <div class="activity-content">
+                    <div class="activity-text">
+                        <div class="activity-description">
+                            <strong>tyshaneoneill</strong> watched <span class="activity-movie-title">The Menu</span>
+                        </div>
+                        <div class="activity-timestamp">3 hours ago</div>
+                    </div>
+                    <div class="activity-poster" style="background: linear-gradient(to bottom, #dc2626, #991b1b);">
+                        <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Item 2 -->
+            <div class="activity-item">
+                <div class="activity-avatar">T</div>
+                <div class="activity-content">
+                    <div class="activity-text">
+                        <div class="activity-description">
+                            <strong>tyshaneoneill</strong> liked <span class="activity-movie-title">Strange World</span>
+                        </div>
+                        <div class="activity-timestamp">1 day ago</div>
+                    </div>
+                    <div class="activity-poster" style="background: linear-gradient(to bottom, #059669, #047857);">
+                        <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Item 3 -->
+            <div class="activity-item">
+                <div class="activity-avatar">T</div>
+                <div class="activity-content">
+                    <div class="activity-text">
+                        <div class="activity-description">
+                            <strong>tyshaneoneill</strong> rated <span class="activity-movie-title">Dumb Money</span>
+                        </div>
+                        <div class="activity-rating">★★★★☆</div>
+                        <div class="activity-timestamp">2 days ago</div>
+                    </div>
+                    <div class="activity-poster" style="background: linear-gradient(to bottom, #f59e0b, #d97706);">
+                        <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Item 4 -->
+            <div class="activity-item">
+                <div class="activity-avatar">T</div>
+                <div class="activity-content">
+                    <div class="activity-text">
+                        <div class="activity-description">
+                            <strong>tyshaneoneill</strong> added <span class="activity-movie-title">Mickey 17</span> to watchlist
+                        </div>
+                        <div class="activity-timestamp">3 days ago</div>
+                    </div>
+                    <div class="activity-poster" style="background: linear-gradient(to bottom, #7c3aed, #5b21b6);">
+                        <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Item 5 -->
+            <div class="activity-item">
+                <div class="activity-avatar">T</div>
+                <div class="activity-content">
+                    <div class="activity-text">
+                        <div class="activity-description">
+                            <strong>tyshaneoneill</strong> reviewed <span class="activity-movie-title">Oppenheimer</span>
+                        </div>
+                        <div class="activity-rating">★★★★★</div>
+                        <div class="activity-timestamp">1 week ago</div>
+                    </div>
+                    <div class="activity-poster" style="background: linear-gradient(to bottom, #1f2937, #111827);">
+                        <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Load More Button -->
+            <button class="load-more">Load More Activities</button>
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

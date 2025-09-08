@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watchlist - Letterboxd</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Letterboxd Dark Theme Colors */
+            --letterboxd-background: #1a1a1a;
+            --letterboxd-background-secondary: #2c3440;
+            --letterboxd-background-card: #1f2933;
+            --letterboxd-text-primary: #ffffff;
+            --letterboxd-text-secondary: #9aa5b1;
+            --letterboxd-text-muted: #6b7c93;
+            --letterboxd-border: #2c3440;
+            --letterboxd-accent-green: #00d735;
+            --letterboxd-accent-orange: #f77f00;
+            --letterboxd-accent-yellow: #fcbf49;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+            background-color: var(--letterboxd-background) !important;
+            color: var(--letterboxd-text-primary) !important;
+            line-height: 1.5 !important;
+        }
+        
+        /* Header Styles */
+        .header {
+            background-color: var(--letterboxd-background-secondary) !important;
+            border-bottom: 1px solid var(--letterboxd-border) !important;
+            padding: 12px 0 !important;
+        }
+        
+        .logo-section {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+        
+        .logo-dots {
+            display: flex !important;
+            gap: 4px !important;
+        }
+        
+        .dot {
+            width: 12px !important;
+            height: 12px !important;
+            border-radius: 50% !important;
+        }
+        
+        .dot-orange { background-color: var(--letterboxd-accent-orange) !important; }
+        .dot-green { background-color: var(--letterboxd-accent-green) !important; }
+        .dot-blue { background-color: #003049 !important; }
+        
+        .nav-link {
+            color: var(--letterboxd-text-secondary) !important;
+            text-decoration: none !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            transition: color 0.2s ease !important;
+        }
+        
+        .nav-link:hover {
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        /* Main Layout */
+        .main-container {
+            display: grid !important;
+            grid-template-columns: 1fr 280px !important;
+            gap: 40px !important;
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 32px 24px !important;
+        }
+        
+        /* Watchlist Grid */
+        .watchlist-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
+            gap: 16px !important;
+            margin-bottom: 32px !important;
+        }
+        
+        .watchlist-poster {
+            aspect-ratio: 2/3 !important;
+            border-radius: 6px !important;
+            overflow: hidden !important;
+            position: relative !important;
+            transition: all 0.2s ease !important;
+            cursor: pointer !important;
+            background: var(--letterboxd-background-card) !important;
+        }
+        
+        .watchlist-poster:hover {
+            transform: scale(1.05) !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+        }
+        
+        .watchlist-badge {
+            position: absolute !important;
+            top: 8px !important;
+            right: 8px !important;
+            background: rgba(0, 0, 0, 0.8) !important;
+            color: var(--letterboxd-accent-orange) !important;
+            padding: 4px 6px !important;
+            border-radius: 3px !important;
+            font-size: 10px !important;
+            font-weight: 600 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 2px !important;
+        }
+        
+        .poster-overlay {
+            position: absolute !important;
+            inset: 0 !important;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%) !important;
+            display: flex !important;
+            align-items: flex-end !important;
+            padding: 12px !important;
+            opacity: 0 !important;
+            transition: opacity 0.2s ease !important;
+        }
+        
+        .watchlist-poster:hover .poster-overlay {
+            opacity: 1 !important;
+        }
+        
+        .film-info {
+            color: white !important;
+        }
+        
+        .film-title {
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            margin-bottom: 2px !important;
+            line-height: 1.2 !important;
+        }
+        
+        .film-year {
+            font-size: 10px !important;
+            opacity: 0.8 !important;
+        }
+        
+        /* Load More */
+        .load-more {
+            text-align: center !important;
+            margin-top: 32px !important;
+        }
+        
+        .load-more-btn {
+            background-color: var(--letterboxd-background-card) !important;
+            border: 1px solid var(--letterboxd-border) !important;
+            color: var(--letterboxd-text-primary) !important;
+            padding: 12px 32px !important;
+            border-radius: 6px !important;
+            cursor: pointer !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            transition: all 0.2s ease !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+        }
+        
+        .load-more-btn:hover {
+            background-color: var(--letterboxd-background-secondary) !important;
+            border-color: var(--letterboxd-text-muted) !important;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 24px !important;
+        }
+        
+        .sidebar-card {
+            background-color: var(--letterboxd-background-card) !important;
+            border-radius: 8px !important;
+            padding: 20px !important;
+        }
+        
+        .sidebar-title {
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            color: var(--letterboxd-text-primary) !important;
+            margin-bottom: 16px !important;
+        }
+        
+        .filter-group {
+            margin-bottom: 16px !important;
+        }
+        
+        .filter-group:last-child {
+            margin-bottom: 0 !important;
+        }
+        
+        .filter-label {
+            font-size: 12px !important;
+            color: var(--letterboxd-text-muted) !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            margin-bottom: 8px !important;
+            font-weight: 600 !important;
+        }
+        
+        .filter-options {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 6px !important;
+        }
+        
+        .filter-option {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            font-size: 14px !important;
+            color: var(--letterboxd-text-secondary) !important;
+            cursor: pointer !important;
+            padding: 4px 0 !important;
+            transition: color 0.2s ease !important;
+        }
+        
+        .filter-option:hover {
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        .filter-checkbox {
+            width: 14px !important;
+            height: 14px !important;
+            border: 1px solid var(--letterboxd-border) !important;
+            border-radius: 3px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: all 0.2s ease !important;
+        }
+        
+        .filter-checkbox.checked {
+            background-color: var(--letterboxd-accent-orange) !important;
+            border-color: var(--letterboxd-accent-orange) !important;
+        }
+        
+        .stats-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 12px !important;
+        }
+        
+        .stat-row {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+        }
+        
+        .stat-label {
+            color: var(--letterboxd-text-secondary) !important;
+            font-size: 14px !important;
+        }
+        
+        .stat-value {
+            color: var(--letterboxd-text-primary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+        }
+        
+        .add-films-section {
+            margin-bottom: 16px !important;
+        }
+        
+        .search-input {
+            width: 100% !important;
+            padding: 8px 12px !important;
+            background-color: var(--letterboxd-background-secondary) !important;
+            border: 1px solid var(--letterboxd-border) !important;
+            color: var(--letterboxd-text-primary) !important;
+            border-radius: 4px !important;
+            font-size: 14px !important;
+            margin-bottom: 8px !important;
+        }
+        
+        .search-input::placeholder {
+            color: var(--letterboxd-text-muted) !important;
+        }
+        
+        .add-film-btn {
+            width: 100% !important;
+            padding: 8px 16px !important;
+            background-color: var(--letterboxd-accent-orange) !important;
+            color: var(--letterboxd-background) !important;
+            border: none !important;
+            border-radius: 4px !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+        }
+        
+        .add-film-btn:hover {
+            background-color: #e6720c !important;
+        }
+        
+        .view-options {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 8px !important;
+        }
+        
+        .view-option {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            font-size: 14px !important;
+            color: var(--letterboxd-text-secondary) !important;
+            cursor: pointer !important;
+            padding: 4px 0 !important;
+            transition: color 0.2s ease !important;
+        }
+        
+        .view-option:hover {
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        .view-option.active {
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        .radio-button {
+            width: 14px !important;
+            height: 14px !important;
+            border: 1px solid var(--letterboxd-border) !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: all 0.2s ease !important;
+        }
+        
+        .radio-button.active {
+            border-color: var(--letterboxd-accent-orange) !important;
+        }
+        
+        .radio-button.active::after {
+            content: '' !important;
+            width: 6px !important;
+            height: 6px !important;
+            border-radius: 50% !important;
+            background-color: var(--letterboxd-accent-orange) !important;
+        }
+        
+        .sort-select {
+            background-color: var(--letterboxd-background-secondary) !important;
+            border: 1px solid var(--letterboxd-border) !important;
+            color: var(--letterboxd-text-primary) !important;
+            padding: 8px 12px !important;
+            border-radius: 4px !important;
+            font-size: 14px !important;
+            width: 100% !important;
+            cursor: pointer !important;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr !important;
+                gap: 24px !important;
+                padding: 20px 16px !important;
+            }
+            
+            .watchlist-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+                gap: 12px !important;
+            }
+            
+            .sidebar {
+                order: -1 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
+            <div class="logo-section">
+                <div class="logo-dots">
+                    <div class="dot dot-orange"></div>
+                    <div class="dot dot-green"></div>
+                    <div class="dot dot-blue"></div>
+                </div>
+                <span style="font-size: 20px; font-weight: 600; color: var(--letterboxd-text-primary);">Letterboxd</span>
+            </div>
+            <nav style="display: flex; align-items: center; gap: 32px;">
+                <a href="#" class="nav-link">Browse</a>
+                <a href="#" class="nav-link">Lists</a>
+                <a href="#" class="nav-link">Members</a>
+                <a href="#" class="nav-link">Journal</a>
+            </nav>
+            <div style="color: var(--letterboxd-text-secondary);">
+                <i data-lucide="search" style="width: 20px; height: 20px;"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Watchlist Section -->
+        <main>
+            <div class="watchlist-grid">
+                <!-- Watchlist Item 1 -->
+                <div class="watchlist-poster">
+                    <div style="background: linear-gradient(to bottom, #dc2626, #991b1b); width: 100%; height: 100%; position: relative;">
+                        <div class="watchlist-badge">
+                            <i data-lucide="bookmark" style="width: 10px; height: 10px;"></i>
+                        </div>
+                        <div class="poster-overlay">
+                            <div class="film-info">
+                                <div class="film-title">Killers of the Flower Moon</div>
+                                <div class="film-year">2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Watchlist Item 2 -->
+                <div class="watchlist-poster">
+                    <div style="background: linear-gradient(to bottom, #059669, #047857); width: 100%; height: 100%; position: relative;">
+                        <div class="watchlist-badge">
+                            <i data-lucide="bookmark" style="width: 10px; height: 10px;"></i>
+                        </div>
+                        <div class="poster-overlay">
+                            <div class="film-info">
+                                <div class="film-title">Past Lives</div>
+                                <div class="film-year">2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Watchlist Item 3 -->
+                <div class="watchlist-poster">
+                    <div style="background: linear-gradient(to bottom, #f59e0b, #d97706); width: 100%; height: 100%; position: relative;">
+                        <div class="watchlist-badge">
+                            <i data-lucide="bookmark" style="width: 10px; height: 10px;"></i>
+                        </div>
+                        <div class="poster-overlay">
+                            <div class="film-info">
+                                <div class="film-title">The Zone of Interest</div>
+                                <div class="film-year">2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Watchlist Item 4 -->
+                <div class="watchlist-poster">
+                    <div style="background: linear-gradient(to bottom, #7c3aed, #5b21b6); width: 100%; height: 100%; position: relative;">
+                        <div class="watchlist-badge">
+                            <i data-lucide="bookmark" style="width: 10px; height: 10px;"></i>
+                        </div>
+                        <div class="poster-overlay">
+                            <div class="film-info">
+                                <div class="film-title">Anatomy of a Fall</div>
+                                <div class="film-year">2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Watchlist Item 5 -->
+                <div class="watchlist-poster">
+                    <div style="background: linear-gradient(to bottom, #1f2937, #111827); width: 100%; height: 100%; position: relative;">
+                        <div class="watchlist-badge">
+                            <i data-lucide="bookmark" style="width: 10px; height: 10px;"></i>
+                        </div>
+                        <div class="poster-overlay">
+                            <div class="film-info">
+                                <div class="film-title">Poor Things</div>
+                                <div class="film-year">2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Watchlist Item 6 -->
+                <div class="watchlist-poster">
+                    <div style="background: linear-gradient(to bottom, #ea580c, #c2410c); width: 100%; height: 100%; position: relative;">
+                        <div class="watchlist-badge">
+                            <i data-lucide="bookmark" style="width: 10px; height: 10px;"></i>
+                        </div>
+                        <div class="poster-overlay">
+                            <div class="film-info">
+                                <div class="film-title">The Holdovers</div>
+                                <div class="film-year">2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional watchlist items following same pattern -->
+                <div class="watchlist-poster">
+                    <div style="background: linear-gradient(to bottom, #be123c, #9f1239); width: 100%; height: 100%; position: relative;">
+                        <div class="watchlist-badge">
+                            <i data-lucide="bookmark" style="width: 10px; height: 10px;"></i>
+                        </div>
+                        <div class="poster-overlay">
+                            <div class="film-info">
+                                <div class="film-title">May December</div>
+                                <div class="film-year">2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="watchlist-poster">
+                    <div style="background: linear-gradient(to bottom, #065f46, #064e3b); width: 100%; height: 100%; position: relative;">
+                        <div class="watchlist-badge">
+                            <i data-lucide="bookmark" style="width: 10px; height: 10px;"></i>
+                        </div>
+                        <div class="poster-overlay">
+                            <div class="film-info">
+                                <div class="film-title">American Fiction</div>
+                                <div class="film-year">2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="watchlist-poster">
+                    <div style="background: linear-gradient(to bottom, #6366f1, #4f46e5); width: 100%; height: 100%; position: relative;">
+                        <div class="watchlist-badge">
+                            <i data-lucide="bookmark" style="width: 10px; height: 10px;"></i>
+                        </div>
+                        <div class="poster-overlay">
+                            <div class="film-info">
+                                <div class="film-title">Asteroid City</div>
+                                <div class="film-year">2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="watchlist-poster">
+                    <div style="background: linear-gradient(to bottom, #0891b2, #0e7490); width: 100%; height: 100%; position: relative;">
+                        <div class="watchlist-badge">
+                            <i data-lucide="bookmark" style="width: 10px; height: 10px;"></i>
+                        </div>
+                        <div class="poster-overlay">
+                            <div class="film-info">
+                                <div class="film-title">The Color Purple</div>
+                                <div class="film-year">2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="watchlist-poster">
+                    <div style="background: linear-gradient(to bottom, #db2777, #be185d); width: 100%; height: 100%; position: relative;">
+                        <div class="watchlist-badge">
+                            <i data-lucide="bookmark" style="width: 10px; height: 10px;"></i>
+                        </div>
+                        <div class="poster-overlay">
+                            <div class="film-info">
+                                <div class="film-title">Saltburn</div>
+                                <div class="film-year">2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="watchlist-poster">
+                    <div style="background: linear-gradient(to bottom, #a855f7, #9333ea); width: 100%; height: 100%; position: relative;">
+                        <div class="watchlist-badge">
+                            <i data-lucide="bookmark" style="width: 10px; height: 10px;"></i>
+                        </div>
+                        <div class="poster-overlay">
+                            <div class="film-info">
+                                <div class="film-title">Priscilla</div>
+                                <div class="film-year">2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Load More -->
+            <div class="load-more">
+                <button class="load-more-btn">Load More Films</button>
+            </div>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Add Films -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">Add Films</h3>
+                
+                <div class="add-films-section">
+                    <input type="text" placeholder="Search for movies..." class="search-input">
+                    <button class="add-film-btn">Add to Watchlist</button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">Filters</h3>
+                
+                <div class="filter-group">
+                    <div class="filter-label">Decade</div>
+                    <div class="filter-options">
+                        <div class="filter-option">
+                            <div class="filter-checkbox checked">
+                                <i data-lucide="check" style="width: 8px; height: 8px; color: white;"></i>
+                            </div>
+                            <span>2020s</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-checkbox">
+                            </div>
+                            <span>2010s</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-checkbox">
+                            </div>
+                            <span>2000s</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-label">Genre</div>
+                    <div class="filter-options">
+                        <div class="filter-option">
+                            <div class="filter-checkbox checked">
+                                <i data-lucide="check" style="width: 8px; height: 8px; color: white;"></i>
+                            </div>
+                            <span>Drama</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-checkbox">
+                            </div>
+                            <span>Comedy</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-checkbox">
+                            </div>
+                            <span>Thriller</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View Options -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">View</h3>
+                
+                <div class="view-options">
+                    <div class="view-option active">
+                        <div class="radio-button active"></div>
+                        <span>Small posters</span>
+                    </div>
+                    <div class="view-option">
+                        <div class="radio-button"></div>
+                        <span>Large posters</span>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 16px;">
+                    <div class="filter-label">Sort by</div>
+                    <select class="sort-select">
+                        <option>Date added (newest first)</option>
+                        <option>Date added (oldest first)</option>
+                        <option>Film title (A-Z)</option>
+                        <option>Film title (Z-A)</option>
+                        <option>Release date (newest first)</option>
+                        <option>Release date (oldest first)</option>
+                        <option>Popular</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">Watchlist Stats</h3>
+                <div class="stats-grid">
+                    <div class="stat-row">
+                        <span class="stat-label">Want to watch</span>
+                        <span class="stat-value">15</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Added this year</span>
+                        <span class="stat-value">8</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">From 2023</span>
+                        <span class="stat-value">12</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Dramas</span>
+                        <span class="stat-value">9</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        
+        // Add interactivity
+        document.querySelectorAll('.filter-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const checkbox = option.querySelector('.filter-checkbox');
+                checkbox.classList.toggle('checked');
+                
+                if (checkbox.classList.contains('checked')) {
+                    checkbox.innerHTML = '<i data-lucide="check" style="width: 8px; height: 8px; color: white;"></i>';
+                } else {
+                    checkbox.innerHTML = '';
+                }
+                lucide.createIcons();
+            });
+        });
+        
+        document.querySelectorAll('.view-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.view-option').forEach(opt => {
+                    opt.classList.remove('active');
+                    opt.querySelector('.radio-button').classList.remove('active');
+                });
+                option.classList.add('active');
+                option.querySelector('.radio-button').classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

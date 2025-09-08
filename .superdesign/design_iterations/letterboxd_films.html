@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Films - Letterboxd</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Letterboxd Dark Theme Colors */
+            --letterboxd-background: #1a1a1a;
+            --letterboxd-background-secondary: #2c3440;
+            --letterboxd-background-card: #1f2933;
+            --letterboxd-text-primary: #ffffff;
+            --letterboxd-text-secondary: #9aa5b1;
+            --letterboxd-text-muted: #6b7c93;
+            --letterboxd-border: #2c3440;
+            --letterboxd-accent-green: #00d735;
+            --letterboxd-accent-orange: #f77f00;
+            --letterboxd-accent-yellow: #fcbf49;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+            background-color: var(--letterboxd-background) !important;
+            color: var(--letterboxd-text-primary) !important;
+            line-height: 1.5 !important;
+        }
+        
+        /* Header Styles */
+        .header {
+            background-color: var(--letterboxd-background-secondary) !important;
+            border-bottom: 1px solid var(--letterboxd-border) !important;
+            padding: 12px 0 !important;
+        }
+        
+        .logo-section {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+        
+        .logo-dots {
+            display: flex !important;
+            gap: 4px !important;
+        }
+        
+        .dot {
+            width: 12px !important;
+            height: 12px !important;
+            border-radius: 50% !important;
+        }
+        
+        .dot-orange { background-color: var(--letterboxd-accent-orange) !important; }
+        .dot-green { background-color: var(--letterboxd-accent-green) !important; }
+        .dot-blue { background-color: #003049 !important; }
+        
+        .nav-link {
+            color: var(--letterboxd-text-secondary) !important;
+            text-decoration: none !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            transition: color 0.2s ease !important;
+        }
+        
+        .nav-link:hover {
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: var(--letterboxd-background) !important;
+            padding: 16px 0 !important;
+            border-bottom: 1px solid var(--letterboxd-border) !important;
+        }
+        
+        .breadcrumb-container {
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 0 24px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+        
+        .breadcrumb-link {
+            color: var(--letterboxd-text-secondary) !important;
+            text-decoration: none !important;
+            font-size: 14px !important;
+            transition: color 0.2s ease !important;
+        }
+        
+        .breadcrumb-link:hover {
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        .breadcrumb-current {
+            color: var(--letterboxd-text-primary) !important;
+            font-weight: 500 !important;
+            font-size: 14px !important;
+        }
+        
+        /* Main Layout */
+        .main-container {
+            display: grid !important;
+            grid-template-columns: 1fr 280px !important;
+            gap: 40px !important;
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 32px 24px !important;
+        }
+        
+        /* Films Grid */
+        .films-header {
+            margin-bottom: 24px !important;
+        }
+        
+        .films-title {
+            font-size: 24px !important;
+            font-weight: 600 !important;
+            color: var(--letterboxd-text-primary) !important;
+            margin-bottom: 8px !important;
+        }
+        
+        .films-count {
+            color: var(--letterboxd-text-secondary) !important;
+            font-size: 14px !important;
+        }
+        
+        .films-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
+            gap: 16px !important;
+            margin-bottom: 32px !important;
+        }
+        
+        .film-poster {
+            aspect-ratio: 2/3 !important;
+            border-radius: 6px !important;
+            overflow: hidden !important;
+            position: relative !important;
+            transition: all 0.2s ease !important;
+            cursor: pointer !important;
+            background: var(--letterboxd-background-card) !important;
+        }
+        
+        .film-poster:hover {
+            transform: scale(1.05) !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+        }
+        
+        .film-poster-image {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+        }
+        
+        .film-overlay {
+            position: absolute !important;
+            inset: 0 !important;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%) !important;
+            display: flex !important;
+            align-items: flex-end !important;
+            padding: 12px !important;
+            opacity: 0 !important;
+            transition: opacity 0.2s ease !important;
+        }
+        
+        .film-poster:hover .film-overlay {
+            opacity: 1 !important;
+        }
+        
+        .film-info {
+            color: white !important;
+        }
+        
+        .film-title {
+            font-size: 12px !important;
+            font-weight: 600 !important;
+            margin-bottom: 2px !important;
+            line-height: 1.2 !important;
+        }
+        
+        .film-year {
+            font-size: 10px !important;
+            opacity: 0.8 !important;
+        }
+        
+        .film-rating {
+            position: absolute !important;
+            top: 8px !important;
+            right: 8px !important;
+            background: rgba(0, 0, 0, 0.7) !important;
+            color: var(--letterboxd-accent-green) !important;
+            padding: 2px 6px !important;
+            border-radius: 3px !important;
+            font-size: 10px !important;
+            font-weight: 600 !important;
+        }
+        
+        /* Load More */
+        .load-more {
+            text-align: center !important;
+            margin-top: 32px !important;
+        }
+        
+        .load-more-btn {
+            background-color: var(--letterboxd-background-card) !important;
+            border: 1px solid var(--letterboxd-border) !important;
+            color: var(--letterboxd-text-primary) !important;
+            padding: 12px 32px !important;
+            border-radius: 6px !important;
+            cursor: pointer !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            transition: all 0.2s ease !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+        }
+        
+        .load-more-btn:hover {
+            background-color: var(--letterboxd-background-secondary) !important;
+            border-color: var(--letterboxd-text-muted) !important;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 24px !important;
+        }
+        
+        .sidebar-card {
+            background-color: var(--letterboxd-background-card) !important;
+            border-radius: 8px !important;
+            padding: 20px !important;
+        }
+        
+        .sidebar-title {
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            color: var(--letterboxd-text-primary) !important;
+            margin-bottom: 16px !important;
+        }
+        
+        .filter-group {
+            margin-bottom: 16px !important;
+        }
+        
+        .filter-group:last-child {
+            margin-bottom: 0 !important;
+        }
+        
+        .filter-label {
+            font-size: 12px !important;
+            color: var(--letterboxd-text-muted) !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            margin-bottom: 8px !important;
+            font-weight: 600 !important;
+        }
+        
+        .filter-options {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 6px !important;
+        }
+        
+        .filter-option {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            font-size: 14px !important;
+            color: var(--letterboxd-text-secondary) !important;
+            cursor: pointer !important;
+            padding: 4px 0 !important;
+            transition: color 0.2s ease !important;
+        }
+        
+        .filter-option:hover {
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        .filter-checkbox {
+            width: 14px !important;
+            height: 14px !important;
+            border: 1px solid var(--letterboxd-border) !important;
+            border-radius: 3px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: all 0.2s ease !important;
+        }
+        
+        .filter-checkbox.checked {
+            background-color: var(--letterboxd-accent-orange) !important;
+            border-color: var(--letterboxd-accent-orange) !important;
+        }
+        
+        .stats-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 12px !important;
+        }
+        
+        .stat-row {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+        }
+        
+        .stat-label {
+            color: var(--letterboxd-text-secondary) !important;
+            font-size: 14px !important;
+        }
+        
+        .stat-value {
+            color: var(--letterboxd-text-primary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+        }
+        
+        .view-options {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 8px !important;
+        }
+        
+        .view-option {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            font-size: 14px !important;
+            color: var(--letterboxd-text-secondary) !important;
+            cursor: pointer !important;
+            padding: 4px 0 !important;
+            transition: color 0.2s ease !important;
+        }
+        
+        .view-option:hover {
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        .view-option.active {
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        .radio-button {
+            width: 14px !important;
+            height: 14px !important;
+            border: 1px solid var(--letterboxd-border) !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: all 0.2s ease !important;
+        }
+        
+        .radio-button.active {
+            border-color: var(--letterboxd-accent-orange) !important;
+        }
+        
+        .radio-button.active::after {
+            content: '' !important;
+            width: 6px !important;
+            height: 6px !important;
+            border-radius: 50% !important;
+            background-color: var(--letterboxd-accent-orange) !important;
+        }
+        
+        .sort-select {
+            background-color: var(--letterboxd-background-secondary) !important;
+            border: 1px solid var(--letterboxd-border) !important;
+            color: var(--letterboxd-text-primary) !important;
+            padding: 8px 12px !important;
+            border-radius: 4px !important;
+            font-size: 14px !important;
+            width: 100% !important;
+            cursor: pointer !important;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr !important;
+                gap: 24px !important;
+                padding: 20px 16px !important;
+            }
+            
+            .films-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+                gap: 12px !important;
+            }
+            
+            .sidebar {
+                order: -1 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
+            <div class="logo-section">
+                <div class="logo-dots">
+                    <div class="dot dot-orange"></div>
+                    <div class="dot dot-green"></div>
+                    <div class="dot dot-blue"></div>
+                </div>
+                <span style="font-size: 20px; font-weight: 600; color: var(--letterboxd-text-primary);">Letterboxd</span>
+            </div>
+            <nav style="display: flex; align-items: center; gap: 32px;">
+                <a href="#" class="nav-link">Browse</a>
+                <a href="#" class="nav-link">Lists</a>
+                <a href="#" class="nav-link">Members</a>
+                <a href="#" class="nav-link">Journal</a>
+            </nav>
+            <div style="color: var(--letterboxd-text-secondary);">
+                <i data-lucide="search" style="width: 20px; height: 20px;"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <div class="breadcrumb-container">
+            <a href="#" class="breadcrumb-link">tyshaneoneill</a>
+            <i data-lucide="chevron-right" style="width: 16px; height: 16px; color: var(--letterboxd-text-muted);"></i>
+            <span class="breadcrumb-current">Films</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Films Section -->
+        <main>
+            <div class="films-header">
+                <h1 class="films-title">tyshaneoneill's films</h1>
+                <p class="films-count">42 films watched</p>
+            </div>
+
+            <div class="films-grid">
+                <!-- Film Item 1 -->
+                <div class="film-poster">
+                    <div style="background: linear-gradient(to bottom, #dc2626, #991b1b); width: 100%; height: 100%; position: relative;">
+                        <div class="film-rating">★★★★</div>
+                        <div class="film-overlay">
+                            <div class="film-info">
+                                <div class="film-title">The Menu</div>
+                                <div class="film-year">2022</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Film Item 2 -->
+                <div class="film-poster">
+                    <div style="background: linear-gradient(to bottom, #059669, #047857); width: 100%; height: 100%; position: relative;">
+                        <div class="film-rating">★★★★★</div>
+                        <div class="film-overlay">
+                            <div class="film-info">
+                                <div class="film-title">Strange World</div>
+                                <div class="film-year">2022</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Film Item 3 -->
+                <div class="film-poster">
+                    <div style="background: linear-gradient(to bottom, #f59e0b, #d97706); width: 100%; height: 100%; position: relative;">
+                        <div class="film-rating">★★★★</div>
+                        <div class="film-overlay">
+                            <div class="film-info">
+                                <div class="film-title">Dumb Money</div>
+                                <div class="film-year">2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Film Item 4 -->
+                <div class="film-poster">
+                    <div style="background: linear-gradient(to bottom, #7c3aed, #5b21b6); width: 100%; height: 100%; position: relative;">
+                        <div class="film-rating">★★★★★</div>
+                        <div class="film-overlay">
+                            <div class="film-info">
+                                <div class="film-title">Mickey 17</div>
+                                <div class="film-year">2024</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Film Item 5 -->
+                <div class="film-poster">
+                    <div style="background: linear-gradient(to bottom, #1f2937, #111827); width: 100%; height: 100%; position: relative;">
+                        <div class="film-rating">★★★★★</div>
+                        <div class="film-overlay">
+                            <div class="film-info">
+                                <div class="film-title">Oppenheimer</div>
+                                <div class="film-year">2023</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Film Item 6 -->
+                <div class="film-poster">
+                    <div style="background: linear-gradient(to bottom, #ea580c, #c2410c); width: 100%; height: 100%; position: relative;">
+                        <div class="film-rating">★★★</div>
+                        <div class="film-overlay">
+                            <div class="film-info">
+                                <div class="film-title">Avatar: The Way of Water</div>
+                                <div class="film-year">2022</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Film Item 7 -->
+                <div class="film-poster">
+                    <div style="background: linear-gradient(to bottom, #be123c, #9f1239); width: 100%; height: 100%; position: relative;">
+                        <div class="film-rating">★★★★</div>
+                        <div class="film-overlay">
+                            <div class="film-info">
+                                <div class="film-title">Top Gun: Maverick</div>
+                                <div class="film-year">2022</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Film Item 8 -->
+                <div class="film-poster">
+                    <div style="background: linear-gradient(to bottom, #065f46, #064e3b); width: 100%; height: 100%; position: relative;">
+                        <div class="film-rating">★★★★★</div>
+                        <div class="film-overlay">
+                            <div class="film-info">
+                                <div class="film-title">Everything Everywhere All at Once</div>
+                                <div class="film-year">2022</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional films following same pattern -->
+                <div class="film-poster">
+                    <div style="background: linear-gradient(to bottom, #6366f1, #4f46e5); width: 100%; height: 100%; position: relative;">
+                        <div class="film-rating">★★★</div>
+                        <div class="film-overlay">
+                            <div class="film-info">
+                                <div class="film-title">Black Panther: Wakanda Forever</div>
+                                <div class="film-year">2022</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="film-poster">
+                    <div style="background: linear-gradient(to bottom, #0891b2, #0e7490); width: 100%; height: 100%; position: relative;">
+                        <div class="film-rating">★★★★</div>
+                        <div class="film-overlay">
+                            <div class="film-info">
+                                <div class="film-title">The Batman</div>
+                                <div class="film-year">2022</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="film-poster">
+                    <div style="background: linear-gradient(to bottom, #db2777, #be185d); width: 100%; height: 100%; position: relative;">
+                        <div class="film-rating">★★★★</div>
+                        <div class="film-overlay">
+                            <div class="film-info">
+                                <div class="film-title">Spider-Man: No Way Home</div>
+                                <div class="film-year">2021</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="film-poster">
+                    <div style="background: linear-gradient(to bottom, #a855f7, #9333ea); width: 100%; height: 100%; position: relative;">
+                        <div class="film-rating">★★★★★</div>
+                        <div class="film-overlay">
+                            <div class="film-info">
+                                <div class="film-title">Dune</div>
+                                <div class="film-year">2021</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Load More -->
+            <div class="load-more">
+                <button class="load-more-btn">Load More Films</button>
+            </div>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Filters -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">Filters</h3>
+                
+                <div class="filter-group">
+                    <div class="filter-label">Decade</div>
+                    <div class="filter-options">
+                        <div class="filter-option">
+                            <div class="filter-checkbox checked">
+                                <i data-lucide="check" style="width: 8px; height: 8px; color: white;"></i>
+                            </div>
+                            <span>2020s</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-checkbox">
+                            </div>
+                            <span>2010s</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-checkbox">
+                            </div>
+                            <span>2000s</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-label">Genre</div>
+                    <div class="filter-options">
+                        <div class="filter-option">
+                            <div class="filter-checkbox checked">
+                                <i data-lucide="check" style="width: 8px; height: 8px; color: white;"></i>
+                            </div>
+                            <span>Drama</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-checkbox checked">
+                                <i data-lucide="check" style="width: 8px; height: 8px; color: white;"></i>
+                            </div>
+                            <span>Action</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-checkbox">
+                            </div>
+                            <span>Comedy</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-label">Rating</div>
+                    <div class="filter-options">
+                        <div class="filter-option">
+                            <div class="filter-checkbox checked">
+                                <i data-lucide="check" style="width: 8px; height: 8px; color: white;"></i>
+                            </div>
+                            <span>★★★★★</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-checkbox checked">
+                                <i data-lucide="check" style="width: 8px; height: 8px; color: white;"></i>
+                            </div>
+                            <span>★★★★</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-checkbox">
+                            </div>
+                            <span>★★★</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View Options -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">View</h3>
+                
+                <div class="view-options">
+                    <div class="view-option active">
+                        <div class="radio-button active"></div>
+                        <span>Small posters</span>
+                    </div>
+                    <div class="view-option">
+                        <div class="radio-button"></div>
+                        <span>Large posters</span>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 16px;">
+                    <div class="filter-label">Sort by</div>
+                    <select class="sort-select">
+                        <option>Date added (newest first)</option>
+                        <option>Date added (oldest first)</option>
+                        <option>Film title (A-Z)</option>
+                        <option>Film title (Z-A)</option>
+                        <option>Release date (newest first)</option>
+                        <option>Release date (oldest first)</option>
+                        <option>Rating (highest first)</option>
+                        <option>Rating (lowest first)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">Stats</h3>
+                <div class="stats-grid">
+                    <div class="stat-row">
+                        <span class="stat-label">Total films</span>
+                        <span class="stat-value">42</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">This year</span>
+                        <span class="stat-value">18</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Average rating</span>
+                        <span class="stat-value">3.8★</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Highest rated</span>
+                        <span class="stat-value">5★</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        
+        // Add interactivity
+        document.querySelectorAll('.filter-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const checkbox = option.querySelector('.filter-checkbox');
+                checkbox.classList.toggle('checked');
+                
+                if (checkbox.classList.contains('checked')) {
+                    checkbox.innerHTML = '<i data-lucide="check" style="width: 8px; height: 8px; color: white;"></i>';
+                } else {
+                    checkbox.innerHTML = '';
+                }
+                lucide.createIcons();
+            });
+        });
+        
+        document.querySelectorAll('.view-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.view-option').forEach(opt => {
+                    opt.classList.remove('active');
+                    opt.querySelector('.radio-button').classList.remove('active');
+                });
+                option.classList.add('active');
+                option.querySelector('.radio-button').classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

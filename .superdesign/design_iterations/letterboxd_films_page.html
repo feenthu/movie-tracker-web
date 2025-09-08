@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Films - MovieTracker</title>
+    <link rel="stylesheet" href="letterboxd_films_theme.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+        /* Additional component styles */
+        .film-card {
+            transition: all 0.3s ease;
+        }
+        
+        .film-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--letterboxd-shadow-lg);
+        }
+        
+        .film-poster {
+            aspect-ratio: 2/3;
+            background: var(--letterboxd-surface);
+            border-radius: var(--letterboxd-radius-sm);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .film-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        
+        .film-card:hover .film-poster img {
+            transform: scale(1.05);
+        }
+        
+        .rating-stars {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .rating-star {
+            width: 12px;
+            height: 12px;
+            color: var(--letterboxd-accent-orange);
+        }
+        
+        .filter-tab {
+            padding: 8px 16px;
+            border-radius: var(--letterboxd-radius-full);
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+        
+        .filter-tab.active {
+            background: var(--letterboxd-accent-orange);
+            color: var(--letterboxd-background);
+            transform: scale(1.05);
+        }
+        
+        .filter-tab:hover:not(.active) {
+            background: var(--letterboxd-surface-hover);
+        }
+        
+        .sidebar-section {
+            background: var(--letterboxd-surface);
+            border-radius: var(--letterboxd-radius-lg);
+            padding: var(--letterboxd-space-4);
+            margin-bottom: var(--letterboxd-space-4);
+        }
+        
+        .popular-poster {
+            width: 60px;
+            height: 90px;
+            border-radius: var(--letterboxd-radius-sm);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .review-card {
+            display: flex;
+            gap: var(--letterboxd-space-3);
+            padding: var(--letterboxd-space-3);
+            border-radius: var(--letterboxd-radius-md);
+            background: var(--letterboxd-surface-subtle);
+            margin-bottom: var(--letterboxd-space-2);
+        }
+        
+        .reviewer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--letterboxd-accent-green);
+            flex-shrink: 0;
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .films-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: var(--letterboxd-space-3);
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .main-content {
+                width: 100%;
+            }
+        }
+        
+        /* Loading skeleton animations */
+        @keyframes skeleton-pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 1; }
+            100% { opacity: 0.4; }
+        }
+        
+        .skeleton {
+            animation: skeleton-pulse 2s infinite;
+            background: var(--letterboxd-surface);
+        }
+        
+        /* Scroll animations */
+        @keyframes slide-up {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+        
+        .slide-up {
+            animation: slide-up 0.5s ease-out;
+        }
+    </style>
+</head>
+<body style="background: var(--letterboxd-background); color: var(--letterboxd-text-primary); font-family: var(--letterboxd-font-family); margin: 0; padding: 0; min-height: 100vh;">
+    
+    <!-- Header -->
+    <header style="background: var(--letterboxd-surface); border-bottom: 1px solid var(--letterboxd-border); padding: var(--letterboxd-space-3) 0; position: sticky; top: 0; z-index: 100;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 var(--letterboxd-space-4); display: flex; align-items: center; justify-content: space-between;">
+            <!-- Logo -->
+            <div style="display: flex; align-items: center; gap: var(--letterboxd-space-3);">
+                <div style="display: flex; gap: 4px;">
+                    <div style="width: 16px; height: 16px; border-radius: 50%; background: var(--letterboxd-accent-orange);"></div>
+                    <div style="width: 16px; height: 16px; border-radius: 50%; background: var(--letterboxd-accent-green);"></div>
+                    <div style="width: 16px; height: 16px; border-radius: 50%; background: #003049;"></div>
+                </div>
+                <span style="font-size: 20px; font-weight: 700;">MovieTracker</span>
+            </div>
+            
+            <!-- Navigation -->
+            <nav style="display: flex; align-items: center; gap: var(--letterboxd-space-6);">
+                <a href="#" style="color: var(--letterboxd-accent-orange); text-decoration: none; font-weight: 600; border-bottom: 2px solid var(--letterboxd-accent-orange); padding-bottom: 4px;">Films</a>
+                <a href="#" style="color: var(--letterboxd-text-secondary); text-decoration: none; transition: color 0.2s;">Lists</a>
+                <a href="#" style="color: var(--letterboxd-text-secondary); text-decoration: none; transition: color 0.2s;">Members</a>
+                <a href="#" style="color: var(--letterboxd-text-secondary); text-decoration: none; transition: color 0.2s;">Journal</a>
+            </nav>
+            
+            <!-- Search & User -->
+            <div style="display: flex; align-items: center; gap: var(--letterboxd-space-3);">
+                <div style="position: relative;">
+                    <input type="search" placeholder="Search films..." style="background: var(--letterboxd-background); border: 1px solid var(--letterboxd-border); border-radius: var(--letterboxd-radius-full); padding: 8px 40px 8px 16px; color: var(--letterboxd-text-primary); width: 200px;">
+                    <i data-lucide="search" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--letterboxd-text-muted);"></i>
+                </div>
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--letterboxd-accent-green); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <i data-lucide="user" style="width: 16px; height: 16px; color: var(--letterboxd-background);"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div style="max-width: 1200px; margin: 0 auto; padding: var(--letterboxd-space-6) var(--letterboxd-space-4); display: flex; gap: var(--letterboxd-space-6);">
+        
+        <!-- Main Content -->
+        <main class="main-content" style="flex: 1;">
+            
+            <!-- Filters Bar -->
+            <div style="background: var(--letterboxd-surface); border-radius: var(--letterboxd-radius-lg); padding: var(--letterboxd-space-4); margin-bottom: var(--letterboxd-space-6);">
+                <!-- Primary Filters -->
+                <div style="display: flex; gap: var(--letterboxd-space-2); margin-bottom: var(--letterboxd-space-4); flex-wrap: wrap;">
+                    <div class="filter-tab active">Popular</div>
+                    <div class="filter-tab">New</div>
+                    <div class="filter-tab">Top Rated</div>
+                    <div class="filter-tab">Most Watched</div>
+                    <div class="filter-tab">Highly Rated</div>
+                </div>
+                
+                <!-- Secondary Filters -->
+                <div style="display: flex; gap: var(--letterboxd-space-3); flex-wrap: wrap;">
+                    <div style="position: relative;">
+                        <select style="background: var(--letterboxd-background); border: 1px solid var(--letterboxd-border); border-radius: var(--letterboxd-radius-md); padding: 8px 32px 8px 12px; color: var(--letterboxd-text-primary); cursor: pointer;">
+                            <option>All Genres</option>
+                            <option>Action</option>
+                            <option>Comedy</option>
+                            <option>Drama</option>
+                            <option>Horror</option>
+                            <option>Sci-Fi</option>
+                        </select>
+                    </div>
+                    <div style="position: relative;">
+                        <select style="background: var(--letterboxd-background); border: 1px solid var(--letterboxd-border); border-radius: var(--letterboxd-radius-md); padding: 8px 32px 8px 12px; color: var(--letterboxd-text-primary); cursor: pointer;">
+                            <option>All Years</option>
+                            <option>2024</option>
+                            <option>2023</option>
+                            <option>2022</option>
+                            <option>2021</option>
+                            <option>2020</option>
+                        </select>
+                    </div>
+                    <div style="position: relative;">
+                        <select style="background: var(--letterboxd-background); border: 1px solid var(--letterboxd-border); border-radius: var(--letterboxd-radius-md); padding: 8px 32px 8px 12px; color: var(--letterboxd-text-primary); cursor: pointer;">
+                            <option>All Services</option>
+                            <option>Netflix</option>
+                            <option>Prime Video</option>
+                            <option>Hulu</option>
+                            <option>Disney+</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Films Grid -->
+            <div class="films-grid slide-up" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--letterboxd-space-4); margin-bottom: var(--letterboxd-space-6);">
+                
+                <!-- Film Card 1 -->
+                <div class="film-card">
+                    <div class="film-poster">
+                        <img src="https://images.unsplash.com/photo-1489599316546-1c5d1b4b5c9e?w=300&h=450&fit=crop" alt="Dune: Part Two" loading="lazy">
+                        <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                        </div>
+                    </div>
+                    <div style="padding: var(--letterboxd-space-2) 0;">
+                        <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 4px 0; line-height: 1.3;">Dune: Part Two</h3>
+                        <p style="font-size: 12px; color: var(--letterboxd-text-muted); margin: 0 0 6px 0;">(2024)</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Film Card 2 -->
+                <div class="film-card">
+                    <div class="film-poster">
+                        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=300&h=450&fit=crop" alt="Oppenheimer" loading="lazy">
+                        <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <i data-lucide="heart" style="width: 16px; height: 16px; color: var(--letterboxd-accent-orange); fill: currentColor;"></i>
+                        </div>
+                    </div>
+                    <div style="padding: var(--letterboxd-space-2) 0;">
+                        <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 4px 0; line-height: 1.3;">Oppenheimer</h3>
+                        <p style="font-size: 12px; color: var(--letterboxd-text-muted); margin: 0 0 6px 0;">(2023)</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Film Card 3 -->
+                <div class="film-card">
+                    <div class="film-poster">
+                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=300&h=450&fit=crop" alt="The Batman" loading="lazy">
+                        <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                        </div>
+                    </div>
+                    <div style="padding: var(--letterboxd-space-2) 0;">
+                        <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 4px 0; line-height: 1.3;">The Batman</h3>
+                        <p style="font-size: 12px; color: var(--letterboxd-text-muted); margin: 0 0 6px 0;">(2022)</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Film Card 4 -->
+                <div class="film-card">
+                    <div class="film-poster">
+                        <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=300&h=450&fit=crop" alt="Barbie" loading="lazy">
+                        <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                        </div>
+                    </div>
+                    <div style="padding: var(--letterboxd-space-2) 0;">
+                        <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 4px 0; line-height: 1.3;">Barbie</h3>
+                        <p style="font-size: 12px; color: var(--letterboxd-text-muted); margin: 0 0 6px 0;">(2023)</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Film Card 5 -->
+                <div class="film-card">
+                    <div class="film-poster">
+                        <img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?w=300&h=450&fit=crop" alt="Killers of the Flower Moon" loading="lazy">
+                        <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                        </div>
+                    </div>
+                    <div style="padding: var(--letterboxd-space-2) 0;">
+                        <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 4px 0; line-height: 1.3;">Killers of the Flower Moon</h3>
+                        <p style="font-size: 12px; color: var(--letterboxd-text-muted); margin: 0 0 6px 0;">(2023)</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Repeat for second row -->
+                <div class="film-card">
+                    <div class="film-poster">
+                        <img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=300&h=450&fit=crop" alt="Spider-Man: Across the Spider-Verse" loading="lazy">
+                        <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                        </div>
+                    </div>
+                    <div style="padding: var(--letterboxd-space-2) 0;">
+                        <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 4px 0; line-height: 1.3;">Spider-Man: Across the Spider-Verse</h3>
+                        <p style="font-size: 12px; color: var(--letterboxd-text-muted); margin: 0 0 6px 0;">(2023)</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="film-card">
+                    <div class="film-poster">
+                        <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=300&h=450&fit=crop" alt="John Wick: Chapter 4" loading="lazy">
+                        <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <i data-lucide="heart" style="width: 16px; height: 16px; color: var(--letterboxd-accent-orange); fill: currentColor;"></i>
+                        </div>
+                    </div>
+                    <div style="padding: var(--letterboxd-space-2) 0;">
+                        <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 4px 0; line-height: 1.3;">John Wick: Chapter 4</h3>
+                        <p style="font-size: 12px; color: var(--letterboxd-text-muted); margin: 0 0 6px 0;">(2023)</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="film-card">
+                    <div class="film-poster">
+                        <img src="https://images.unsplash.com/photo-1489599316546-1c5d1b4b5c9e?w=300&h=450&fit=crop" alt="Everything Everywhere All at Once" loading="lazy">
+                        <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                        </div>
+                    </div>
+                    <div style="padding: var(--letterboxd-space-2) 0;">
+                        <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 4px 0; line-height: 1.3;">Everything Everywhere All at Once</h3>
+                        <p style="font-size: 12px; color: var(--letterboxd-text-muted); margin: 0 0 6px 0;">(2022)</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="film-card">
+                    <div class="film-poster">
+                        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=300&h=450&fit=crop" alt="The Menu" loading="lazy">
+                        <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                        </div>
+                    </div>
+                    <div style="padding: var(--letterboxd-space-2) 0;">
+                        <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 4px 0; line-height: 1.3;">The Menu</h3>
+                        <p style="font-size: 12px; color: var(--letterboxd-text-muted); margin: 0 0 6px 0;">(2022)</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="film-card">
+                    <div class="film-poster">
+                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=300&h=450&fit=crop" alt="Nope" loading="lazy">
+                        <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <i data-lucide="plus" style="width: 16px; height: 16px; color: white;"></i>
+                        </div>
+                    </div>
+                    <div style="padding: var(--letterboxd-space-2) 0;">
+                        <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 4px 0; line-height: 1.3;">Nope</h3>
+                        <p style="font-size: 12px; color: var(--letterboxd-text-muted); margin: 0 0 6px 0;">(2022)</p>
+                        <div class="rating-stars">
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                            <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- Load More Button -->
+            <div style="text-align: center;">
+                <button style="background: var(--letterboxd-accent-orange); color: var(--letterboxd-background); border: none; border-radius: var(--letterboxd-radius-full); padding: 12px 32px; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
+                    Load More Films
+                </button>
+            </div>
+            
+        </main>
+        
+        <!-- Sidebar -->
+        <aside class="sidebar" style="width: 300px; flex-shrink: 0;">
+            
+            <!-- Popular This Week -->
+            <div class="sidebar-section">
+                <h3 style="font-size: 16px; font-weight: 600; margin: 0 0 var(--letterboxd-space-3) 0; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="trending-up" style="width: 18px; height: 18px; color: var(--letterboxd-accent-orange);"></i>
+                    Popular This Week
+                </h3>
+                <div style="display: flex; flex-wrap: wrap; gap: var(--letterboxd-space-2);">
+                    <div class="popular-poster">
+                        <img src="https://images.unsplash.com/photo-1489599316546-1c5d1b4b5c9e?w=120&h=180&fit=crop" alt="Popular 1" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="popular-poster">
+                        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=120&h=180&fit=crop" alt="Popular 2" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="popular-poster">
+                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=120&h=180&fit=crop" alt="Popular 3" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="popular-poster">
+                        <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=120&h=180&fit=crop" alt="Popular 4" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recently Reviewed -->
+            <div class="sidebar-section">
+                <h3 style="font-size: 16px; font-weight: 600; margin: 0 0 var(--letterboxd-space-3) 0; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="message-square" style="width: 18px; height: 18px; color: var(--letterboxd-accent-green);"></i>
+                    Recently Reviewed
+                </h3>
+                
+                <div class="review-card">
+                    <div class="reviewer-avatar"></div>
+                    <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                            <span style="font-weight: 600; font-size: 14px;">Sarah M.</span>
+                            <div class="rating-stars">
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: var(--letterboxd-text-muted); margin: 0;">Loved the visuals in Dune: Part Two...</p>
+                    </div>
+                </div>
+                
+                <div class="review-card">
+                    <div class="reviewer-avatar" style="background: var(--letterboxd-accent-orange);"></div>
+                    <div style="flex: 1;">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                            <span style="font-weight: 600; font-size: 14px;">Mike T.</span>
+                            <div class="rating-stars">
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            </div>
+                        </div>
+                        <p style="font-size: 12px; color: var(--letterboxd-text-muted); margin: 0;">Oppenheimer is a masterpiece...</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Crew Picks -->
+            <div class="sidebar-section">
+                <h3 style="font-size: 16px; font-weight: 600; margin: 0 0 var(--letterboxd-space-3) 0; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="award" style="width: 18px; height: 18px; color: var(--letterboxd-accent-orange);"></i>
+                    Crew Picks
+                </h3>
+                <div style="display: flex; gap: var(--letterboxd-space-3);">
+                    <div class="popular-poster">
+                        <img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?w=120&h=180&fit=crop" alt="Crew Pick" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div style="flex: 1;">
+                        <h4 style="font-size: 14px; font-weight: 600; margin: 0 0 4px 0;">Killers of the Flower Moon</h4>
+                        <p style="font-size: 12px; color: var(--letterboxd-text-muted); margin: 0 0 8px 0;">Scorsese's latest epic explores...</p>
+                        <span style="font-size: 11px; color: var(--letterboxd-text-muted); background: var(--letterboxd-surface); padding: 2px 6px; border-radius: 4px;">CURATOR: JAMES</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Popular Reviewers -->
+            <div class="sidebar-section">
+                <h3 style="font-size: 16px; font-weight: 600; margin: 0 0 var(--letterboxd-space-3) 0; display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="users" style="width: 18px; height: 18px; color: var(--letterboxd-accent-green);"></i>
+                    Popular Reviewers
+                </h3>
+                
+                <div style="display: flex; align-items: center; gap: var(--letterboxd-space-3); margin-bottom: var(--letterboxd-space-2);">
+                    <div class="reviewer-avatar"></div>
+                    <div>
+                        <h4 style="font-size: 14px; font-weight: 600; margin: 0;">FilmCritic2024</h4>
+                        <p style="font-size: 12px; color: var(--letterboxd-text-muted); margin: 0;">247 films this year</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: var(--letterboxd-space-3); margin-bottom: var(--letterboxd-space-2);">
+                    <div class="reviewer-avatar" style="background: var(--letterboxd-accent-orange);"></div>
+                    <div>
+                        <h4 style="font-size: 14px; font-weight: 600; margin: 0;">CinemaLover</h4>
+                        <p style="font-size: 12px; color: var(--letterboxd-text-muted); margin: 0;">189 films this year</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; align-items: center; gap: var(--letterboxd-space-3);">
+                    <div class="reviewer-avatar" style="background: #9333ea;"></div>
+                    <div>
+                        <h4 style="font-size: 14px; font-weight: 600; margin: 0;">MovieMaven</h4>
+                        <p style="font-size: 12px; color: var(--letterboxd-text-muted); margin: 0;">156 films this year</p>
+                    </div>
+                </div>
+            </div>
+            
+        </aside>
+        
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Add interactive behaviors
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter tab interactions
+            const filterTabs = document.querySelectorAll('.filter-tab');
+            filterTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    filterTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Film card hover effects
+            const filmCards = document.querySelectorAll('.film-card');
+            filmCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px)';
+                    this.style.boxShadow = 'var(--letterboxd-shadow-lg)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+            
+            // Watchlist/Like button interactions
+            const actionButtons = document.querySelectorAll('[data-lucide="plus"], [data-lucide="heart"]');
+            actionButtons.forEach(button => {
+                button.parentElement.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const icon = this.querySelector('i');
+                    if (icon.getAttribute('data-lucide') === 'plus') {
+                        icon.setAttribute('data-lucide', 'check');
+                        icon.style.color = 'var(--letterboxd-accent-green)';
+                    }
+                    lucide.createIcons();
+                });
+            });
+        });
+    </script>
+    
+</body>
+</html>

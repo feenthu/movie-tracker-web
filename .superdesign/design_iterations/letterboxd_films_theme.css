@@ -1,0 +1,377 @@
+/* Letterboxd Films Theme - Dark Mode Design System */
+/* Generated for Movie Tracker Web Application */
+
+:root {
+  /* === CORE COLORS === */
+  --letterboxd-background: #14181c;
+  --letterboxd-background-secondary: #1c2328;
+  --letterboxd-background-tertiary: #2c3440;
+  --letterboxd-surface: #1e252b;
+  --letterboxd-surface-hover: #242b32;
+  --letterboxd-surface-active: #2a3138;
+  
+  /* === TEXT COLORS === */
+  --letterboxd-text-primary: #ffffff;
+  --letterboxd-text-secondary: #9ab;
+  --letterboxd-text-muted: #678;
+  --letterboxd-text-disabled: #556;
+  --letterboxd-text-on-dark: #ffffff;
+  --letterboxd-text-on-orange: #000000;
+  --letterboxd-text-on-green: #000000;
+  
+  /* === ACCENT COLORS === */
+  --letterboxd-accent-orange: #ff8500;
+  --letterboxd-accent-orange-hover: #ff9500;
+  --letterboxd-accent-orange-active: #e67600;
+  --letterboxd-accent-orange-light: #ff8500;
+  --letterboxd-accent-orange-dark: #cc6a00;
+  
+  --letterboxd-accent-green: #00d735;
+  --letterboxd-accent-green-hover: #00e73c;
+  --letterboxd-accent-green-active: #00c230;
+  --letterboxd-accent-green-light: #00d735;
+  --letterboxd-accent-green-dark: #00b82e;
+  
+  /* === SEMANTIC COLORS === */
+  --letterboxd-success: #00d735;
+  --letterboxd-warning: #ff8500;
+  --letterboxd-error: #ff4444;
+  --letterboxd-info: #40bcf4;
+  
+  /* === BORDER COLORS === */
+  --letterboxd-border: #456;
+  --letterboxd-border-light: #567;
+  --letterboxd-border-dark: #345;
+  --letterboxd-border-focus: #ff8500;
+  --letterboxd-border-hover: #678;
+  
+  /* === TYPOGRAPHY === */
+  --letterboxd-font-family-primary: 'Graphik', 'Helvetica Neue', Arial, sans-serif;
+  --letterboxd-font-family-secondary: 'TiemposTextWeb', Georgia, serif;
+  --letterboxd-font-family-mono: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+  
+  /* Font Sizes */
+  --letterboxd-text-xs: 0.75rem;      /* 12px */
+  --letterboxd-text-sm: 0.875rem;     /* 14px */
+  --letterboxd-text-base: 1rem;       /* 16px */
+  --letterboxd-text-lg: 1.125rem;     /* 18px */
+  --letterboxd-text-xl: 1.25rem;      /* 20px */
+  --letterboxd-text-2xl: 1.5rem;      /* 24px */
+  --letterboxd-text-3xl: 1.875rem;    /* 30px */
+  --letterboxd-text-4xl: 2.25rem;     /* 36px */
+  
+  /* Font Weights */
+  --letterboxd-font-weight-light: 300;
+  --letterboxd-font-weight-normal: 400;
+  --letterboxd-font-weight-medium: 500;
+  --letterboxd-font-weight-semibold: 600;
+  --letterboxd-font-weight-bold: 700;
+  
+  /* Line Heights */
+  --letterboxd-line-height-tight: 1.2;
+  --letterboxd-line-height-normal: 1.5;
+  --letterboxd-line-height-relaxed: 1.75;
+  
+  /* === SPACING === */
+  --letterboxd-space-xs: 0.25rem;     /* 4px */
+  --letterboxd-space-sm: 0.5rem;      /* 8px */
+  --letterboxd-space-md: 1rem;        /* 16px */
+  --letterboxd-space-lg: 1.5rem;      /* 24px */
+  --letterboxd-space-xl: 2rem;        /* 32px */
+  --letterboxd-space-2xl: 3rem;       /* 48px */
+  --letterboxd-space-3xl: 4rem;       /* 64px */
+  
+  /* === BORDER RADIUS === */
+  --letterboxd-radius-none: 0;
+  --letterboxd-radius-sm: 0.125rem;   /* 2px */
+  --letterboxd-radius-md: 0.25rem;    /* 4px */
+  --letterboxd-radius-lg: 0.5rem;     /* 8px */
+  --letterboxd-radius-xl: 1rem;       /* 16px */
+  --letterboxd-radius-full: 9999px;
+  
+  /* === SHADOWS === */
+  --letterboxd-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --letterboxd-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --letterboxd-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+  --letterboxd-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  --letterboxd-shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  --letterboxd-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
+  
+  /* === FILM POSTER SPECIFIC === */
+  --letterboxd-poster-aspect-ratio: 150/225; /* 2:3 ratio */
+  --letterboxd-poster-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  --letterboxd-poster-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.7);
+  --letterboxd-poster-border-radius: var(--letterboxd-radius-md);
+  
+  /* === RATING COLORS === */
+  --letterboxd-rating-star: #ff8500;
+  --letterboxd-rating-star-empty: #456;
+  --letterboxd-rating-half: #ffb366;
+  
+  /* === GRID SYSTEM === */
+  --letterboxd-grid-cols-mobile: 3;
+  --letterboxd-grid-cols-tablet: 4;
+  --letterboxd-grid-cols-desktop: 6;
+  --letterboxd-grid-gap: var(--letterboxd-space-md);
+  --letterboxd-grid-gap-sm: var(--letterboxd-space-sm);
+  
+  /* === BREAKPOINTS === */
+  --letterboxd-breakpoint-sm: 640px;
+  --letterboxd-breakpoint-md: 768px;
+  --letterboxd-breakpoint-lg: 1024px;
+  --letterboxd-breakpoint-xl: 1280px;
+  --letterboxd-breakpoint-2xl: 1536px;
+  
+  /* === TRANSITIONS === */
+  --letterboxd-transition-fast: 150ms ease-out;
+  --letterboxd-transition-normal: 250ms ease-out;
+  --letterboxd-transition-slow: 350ms ease-out;
+  
+  /* === Z-INDEX === */
+  --letterboxd-z-dropdown: 1000;
+  --letterboxd-z-sticky: 1020;
+  --letterboxd-z-fixed: 1030;
+  --letterboxd-z-modal-backdrop: 1040;
+  --letterboxd-z-modal: 1050;
+  --letterboxd-z-popover: 1060;
+  --letterboxd-z-tooltip: 1070;
+  --letterboxd-z-toast: 1080;
+}
+
+/* === BASE STYLES === */
+body {
+  background-color: var(--letterboxd-background) !important;
+  color: var(--letterboxd-text-primary) !important;
+  font-family: var(--letterboxd-font-family-primary) !important;
+  font-size: var(--letterboxd-text-base) !important;
+  line-height: var(--letterboxd-line-height-normal) !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* === COMPONENT STYLES === */
+
+/* Film Cards */
+.letterboxd-film-card {
+  background-color: var(--letterboxd-surface);
+  border: 1px solid var(--letterboxd-border);
+  border-radius: var(--letterboxd-radius-lg);
+  box-shadow: var(--letterboxd-shadow-sm);
+  transition: all var(--letterboxd-transition-normal);
+  overflow: hidden;
+}
+
+.letterboxd-film-card:hover {
+  background-color: var(--letterboxd-surface-hover);
+  border-color: var(--letterboxd-border-light);
+  box-shadow: var(--letterboxd-shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Film Posters */
+.letterboxd-poster {
+  aspect-ratio: var(--letterboxd-poster-aspect-ratio);
+  border-radius: var(--letterboxd-poster-border-radius);
+  box-shadow: var(--letterboxd-poster-shadow);
+  transition: all var(--letterboxd-transition-normal);
+  overflow: hidden;
+}
+
+.letterboxd-poster:hover {
+  box-shadow: var(--letterboxd-poster-shadow-hover);
+  transform: scale(1.02);
+}
+
+.letterboxd-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Buttons */
+.letterboxd-btn-primary {
+  background-color: var(--letterboxd-accent-orange);
+  color: var(--letterboxd-text-on-orange);
+  border: none;
+  border-radius: var(--letterboxd-radius-md);
+  padding: var(--letterboxd-space-sm) var(--letterboxd-space-lg);
+  font-weight: var(--letterboxd-font-weight-medium);
+  transition: all var(--letterboxd-transition-fast);
+  cursor: pointer;
+}
+
+.letterboxd-btn-primary:hover {
+  background-color: var(--letterboxd-accent-orange-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--letterboxd-shadow-md);
+}
+
+.letterboxd-btn-primary:active {
+  background-color: var(--letterboxd-accent-orange-active);
+  transform: translateY(0);
+}
+
+.letterboxd-btn-secondary {
+  background-color: var(--letterboxd-accent-green);
+  color: var(--letterboxd-text-on-green);
+  border: none;
+  border-radius: var(--letterboxd-radius-md);
+  padding: var(--letterboxd-space-sm) var(--letterboxd-space-lg);
+  font-weight: var(--letterboxd-font-weight-medium);
+  transition: all var(--letterboxd-transition-fast);
+  cursor: pointer;
+}
+
+.letterboxd-btn-secondary:hover {
+  background-color: var(--letterboxd-accent-green-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--letterboxd-shadow-md);
+}
+
+/* Input Fields */
+.letterboxd-input {
+  background-color: var(--letterboxd-surface);
+  border: 1px solid var(--letterboxd-border);
+  border-radius: var(--letterboxd-radius-md);
+  color: var(--letterboxd-text-primary);
+  padding: var(--letterboxd-space-sm) var(--letterboxd-space-md);
+  font-family: var(--letterboxd-font-family-primary);
+  transition: all var(--letterboxd-transition-fast);
+}
+
+.letterboxd-input:focus {
+  outline: none;
+  border-color: var(--letterboxd-border-focus);
+  box-shadow: 0 0 0 3px rgba(255, 133, 0, 0.1);
+}
+
+.letterboxd-input::placeholder {
+  color: var(--letterboxd-text-muted);
+}
+
+/* Text Styles */
+.letterboxd-text-primary {
+  color: var(--letterboxd-text-primary);
+}
+
+.letterboxd-text-secondary {
+  color: var(--letterboxd-text-secondary);
+}
+
+.letterboxd-text-muted {
+  color: var(--letterboxd-text-muted);
+}
+
+/* Rating Stars */
+.letterboxd-rating {
+  display: flex;
+  gap: var(--letterboxd-space-xs);
+}
+
+.letterboxd-star {
+  color: var(--letterboxd-rating-star-empty);
+  transition: color var(--letterboxd-transition-fast);
+}
+
+.letterboxd-star.filled {
+  color: var(--letterboxd-rating-star);
+}
+
+.letterboxd-star.half {
+  color: var(--letterboxd-rating-half);
+}
+
+/* Grid Layouts */
+.letterboxd-grid {
+  display: grid;
+  gap: var(--letterboxd-grid-gap);
+  grid-template-columns: repeat(var(--letterboxd-grid-cols-mobile), 1fr);
+}
+
+@media (min-width: 640px) {
+  .letterboxd-grid {
+    grid-template-columns: repeat(var(--letterboxd-grid-cols-tablet), 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .letterboxd-grid {
+    grid-template-columns: repeat(var(--letterboxd-grid-cols-desktop), 1fr);
+  }
+}
+
+/* Utility Classes */
+.letterboxd-surface {
+  background-color: var(--letterboxd-surface);
+}
+
+.letterboxd-surface-secondary {
+  background-color: var(--letterboxd-background-secondary);
+}
+
+.letterboxd-border {
+  border-color: var(--letterboxd-border);
+}
+
+.letterboxd-shadow {
+  box-shadow: var(--letterboxd-shadow-md);
+}
+
+.letterboxd-rounded {
+  border-radius: var(--letterboxd-radius-md);
+}
+
+.letterboxd-transition {
+  transition: all var(--letterboxd-transition-normal);
+}
+
+/* Focus States for Accessibility */
+.letterboxd-focusable:focus {
+  outline: 2px solid var(--letterboxd-accent-orange);
+  outline-offset: 2px;
+}
+
+/* Hover Effects */
+.letterboxd-hover:hover {
+  background-color: var(--letterboxd-surface-hover);
+  transform: translateY(-1px);
+}
+
+/* Loading States */
+.letterboxd-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--letterboxd-surface) 0%,
+    var(--letterboxd-surface-hover) 50%,
+    var(--letterboxd-surface) 100%
+  );
+  background-size: 200% 100%;
+  animation: letterboxd-skeleton 1.5s ease-in-out infinite;
+}
+
+@keyframes letterboxd-skeleton {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--letterboxd-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--letterboxd-border);
+  border-radius: var(--letterboxd-radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--letterboxd-border-light);
+}

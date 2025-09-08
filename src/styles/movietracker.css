@@ -1,0 +1,1299 @@
+/* MovieTracker Profile Exact Styling - Extracted from HTML design */
+
+/* Reset for clean full-screen layout */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: #1a1a1a !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+:root {
+  /* MovieTracker-inspired Dark Theme Colors */
+  --movietracker-background: #1a1a1a;
+  --movietracker-background-secondary: #2c3440;
+  --movietracker-background-card: #1f2933;
+  --movietracker-text-primary: #ffffff;
+  --movietracker-text-secondary: #9aa5b1;
+  --movietracker-text-muted: #6b7c93;
+  --movietracker-border: #2c3440;
+  --movietracker-accent-green: #00d735;
+  --movietracker-accent-orange: #f77f00;
+  --movietracker-accent-yellow: #fcbf49;
+}
+
+.movietracker-header {
+  background-color: var(--movietracker-background-secondary) !important;
+  border-bottom: 1px solid var(--movietracker-border) !important;
+  padding: 12px 0 !important;
+}
+
+.movietracker-logo {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.movietracker-logo-dots {
+  display: flex !important;
+  gap: 4px !important;
+}
+
+.movietracker-dot {
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 50% !important;
+}
+
+.movietracker-dot-orange { background-color: var(--movietracker-accent-orange) !important; }
+.movietracker-dot-green { background-color: var(--movietracker-accent-green) !important; }
+.movietracker-dot-blue { background-color: #003049 !important; }
+
+.movietracker-nav-link {
+  color: var(--movietracker-text-secondary) !important;
+  text-decoration: none !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  transition: color 0.2s ease !important;
+}
+
+.movietracker-nav-link:hover {
+  color: var(--movietracker-text-primary) !important;
+}
+
+.movietracker-profile-avatar {
+  width: 80px !important;
+  height: 80px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #003049, var(--movietracker-background-secondary)) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.movietracker-profile-header {
+  display: grid !important;
+  grid-template-columns: 80px 200px 40px 1fr 120px 120px 120px !important;
+  gap: 24px !important;
+  align-items: center !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 24px !important;
+}
+
+.movietracker-username {
+  font-size: 24px !important;
+  font-weight: 600 !important;
+  color: var(--movietracker-text-primary) !important;
+}
+
+.movietracker-stat {
+  text-align: center !important;
+}
+
+.movietracker-stat-number {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: var(--movietracker-text-primary) !important;
+  line-height: 1 !important;
+}
+
+.movietracker-stat-label {
+  font-size: 11px !important;
+  color: var(--movietracker-text-muted) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  margin-top: 2px !important;
+}
+
+.movietracker-profile-tabs {
+  display: flex !important;
+  gap: 32px !important;
+  justify-content: center !important;
+  border-bottom: 1px solid var(--movietracker-border) !important;
+  padding-bottom: 16px !important;
+  margin-bottom: 32px !important;
+}
+
+.movietracker-tab {
+  color: var(--movietracker-text-muted) !important;
+  text-decoration: none !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  padding-bottom: 16px !important;
+  border-bottom: 2px solid transparent !important;
+  transition: all 0.2s ease !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.movietracker-tab.active {
+  color: var(--movietracker-text-primary) !important;
+  border-bottom-color: var(--movietracker-accent-orange) !important;
+}
+
+.movietracker-tab:hover {
+  color: var(--movietracker-text-primary) !important;
+}
+
+.movietracker-main-content {
+  display: grid !important;
+  grid-template-columns: 1fr 300px !important;
+  gap: 40px !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 0 24px !important;
+}
+
+.movietracker-section-title {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: var(--movietracker-text-primary) !important;
+  margin-bottom: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.movietracker-movie-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 16px !important;
+}
+
+.movietracker-movie-poster {
+  aspect-ratio: 2/3 !important;
+  border-radius: 6px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  transition: transform 0.2s ease !important;
+  cursor: pointer !important;
+}
+
+.movietracker-movie-poster:hover {
+  transform: scale(1.05) !important;
+}
+
+.movietracker-sidebar {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 32px !important;
+}
+
+.movietracker-sidebar-card {
+  background-color: var(--movietracker-background-card) !important;
+  border-radius: 8px !important;
+  padding: 20px !important;
+}
+
+.movietracker-promo-card {
+  background: linear-gradient(135deg, var(--movietracker-accent-yellow), var(--movietracker-accent-orange)) !important;
+  color: var(--movietracker-background) !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  padding: 24px !important;
+  text-align: center !important;
+}
+
+.movietracker-diary-entry {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin-bottom: 16px !important;
+}
+
+.movietracker-diary-date {
+  background-color: var(--movietracker-background-secondary) !important;
+  border-radius: 4px !important;
+  padding: 8px !important;
+  text-align: center !important;
+  min-width: 50px !important;
+}
+
+.movietracker-ratings-chart {
+  display: flex !important;
+  align-items: end !important;
+  gap: 4px !important;
+  height: 60px !important;
+  margin: 16px 0 !important;
+}
+
+.movietracker-rating-bar {
+  background-color: var(--movietracker-accent-green) !important;
+  border-radius: 2px !important;
+  width: 12px !important;
+  transition: opacity 0.2s ease !important;
+}
+
+.movietracker-rating-bar:hover {
+  opacity: 0.8 !important;
+}
+
+.movietracker-activity-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 8px 0 !important;
+  border-bottom: 1px solid var(--movietracker-border) !important;
+}
+
+.movietracker-activity-item:last-child {
+  border-bottom: none !important;
+}
+
+.movietracker-activity-avatar {
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 50% !important;
+  background-color: var(--movietracker-background-secondary) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+}
+
+.movietracker-activity-text {
+  flex: 1 !important;
+  font-size: 13px !important;
+  color: var(--movietracker-text-secondary) !important;
+}
+
+.movietracker-stars {
+  color: var(--movietracker-accent-green) !important;
+  font-size: 12px !important;
+}
+
+/* Spinner animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Activity Page Styles */
+.movietracker-activity-layout {
+  display: grid !important;
+  grid-template-columns: 300px 1fr !important;
+  gap: 40px !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 24px !important;
+}
+
+.movietracker-activity-sidebar {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+}
+
+.movietracker-activity-feed {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+}
+
+.movietracker-activity-item {
+  background-color: var(--movietracker-background-card) !important;
+  border-radius: 8px !important;
+  padding: 16px !important;
+  display: flex !important;
+  gap: 12px !important;
+  align-items: flex-start !important;
+  transition: background-color 0.2s ease !important;
+  cursor: pointer !important;
+}
+
+.movietracker-activity-item:hover {
+  background-color: var(--movietracker-background-secondary) !important;
+}
+
+.movietracker-activity-avatar {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, var(--movietracker-accent-orange), var(--movietracker-accent-green)) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: white !important;
+  flex-shrink: 0 !important;
+}
+
+.movietracker-activity-content {
+  flex: 1 !important;
+  display: flex !important;
+  gap: 12px !important;
+}
+
+.movietracker-activity-text {
+  flex: 1 !important;
+}
+
+.movietracker-activity-poster {
+  width: 60px !important;
+  height: 90px !important;
+  border-radius: 4px !important;
+  overflow: hidden !important;
+  flex-shrink: 0 !important;
+  position: relative !important;
+}
+
+.movietracker-filter-tab {
+  padding: 8px 12px !important;
+  border-radius: 4px !important;
+  color: var(--movietracker-text-secondary) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  font-size: 14px !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.movietracker-filter-tab.active {
+  background-color: var(--movietracker-background-secondary) !important;
+  color: var(--movietracker-text-primary) !important;
+}
+
+.movietracker-filter-tab:hover {
+  background-color: var(--movietracker-background-secondary) !important;
+  color: var(--movietracker-text-primary) !important;
+}
+
+.movietracker-load-more {
+  background-color: var(--movietracker-background-card) !important;
+  border: 1px solid var(--movietracker-border) !important;
+  color: var(--movietracker-text-primary) !important;
+  padding: 12px 24px !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  margin-top: 16px !important;
+}
+
+.movietracker-load-more:hover {
+  background-color: var(--movietracker-background-secondary) !important;
+  border-color: var(--movietracker-text-muted) !important;
+}
+
+/* Films Page Styles */
+.movietracker-films-layout {
+  display: grid !important;
+  grid-template-columns: 1fr 280px !important;
+  gap: 40px !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 32px 24px !important;
+}
+
+.movietracker-films-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
+  gap: 16px !important;
+  margin-bottom: 32px !important;
+}
+
+.movietracker-film-poster {
+  aspect-ratio: 2/3 !important;
+  border-radius: 6px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  background: var(--movietracker-background-card) !important;
+}
+
+.movietracker-film-poster:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+.movietracker-film-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%) !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  padding: 12px !important;
+  opacity: 0 !important;
+  transition: opacity 0.2s ease !important;
+}
+
+.movietracker-film-poster:hover .movietracker-film-overlay {
+  opacity: 1 !important;
+}
+
+.movietracker-film-rating {
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  color: var(--movietracker-accent-green) !important;
+  padding: 2px 6px !important;
+  border-radius: 3px !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+}
+
+.movietracker-breadcrumb {
+  background-color: var(--movietracker-background) !important;
+  padding: 16px 0 !important;
+  border-bottom: 1px solid var(--movietracker-border) !important;
+}
+
+.movietracker-breadcrumb-container {
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 0 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.movietracker-breadcrumb-link {
+  color: var(--movietracker-text-secondary) !important;
+  text-decoration: none !important;
+  font-size: 14px !important;
+  transition: color 0.2s ease !important;
+}
+
+.movietracker-breadcrumb-link:hover {
+  color: var(--movietracker-text-primary) !important;
+}
+
+.movietracker-breadcrumb-current {
+  color: var(--movietracker-text-primary) !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+}
+
+/* Diary Page Styles */
+.movietracker-diary-layout {
+  display: grid !important;
+  grid-template-columns: 1fr 280px !important;
+  gap: 40px !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 32px 24px !important;
+}
+
+.movietracker-diary-timeline {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 32px !important;
+}
+
+.movietracker-diary-month-section {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+}
+
+.movietracker-diary-month-header {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: var(--movietracker-text-primary) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1px solid var(--movietracker-border) !important;
+}
+
+.movietracker-diary-entries {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+}
+
+.movietracker-diary-entry {
+  display: flex !important;
+  gap: 16px !important;
+  padding: 16px !important;
+  background-color: var(--movietracker-background-card) !important;
+  border-radius: 8px !important;
+  transition: background-color 0.2s ease !important;
+  cursor: pointer !important;
+}
+
+.movietracker-diary-entry:hover {
+  background-color: var(--movietracker-background-secondary) !important;
+}
+
+.movietracker-diary-date {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  background-color: var(--movietracker-background-secondary) !important;
+  padding: 12px 8px !important;
+  border-radius: 6px !important;
+  min-width: 60px !important;
+  text-align: center !important;
+}
+
+.movietracker-diary-date-day {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: var(--movietracker-text-primary) !important;
+  line-height: 1 !important;
+}
+
+.movietracker-diary-date-month {
+  font-size: 10px !important;
+  color: var(--movietracker-text-muted) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  margin-top: 2px !important;
+}
+
+.movietracker-diary-poster {
+  width: 60px !important;
+  height: 90px !important;
+  border-radius: 4px !important;
+  overflow: hidden !important;
+  flex-shrink: 0 !important;
+  position: relative !important;
+  cursor: pointer !important;
+  transition: transform 0.2s ease !important;
+}
+
+.movietracker-diary-poster:hover {
+  transform: scale(1.05) !important;
+}
+
+.movietracker-diary-content {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.movietracker-diary-film-title {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: var(--movietracker-text-primary) !important;
+  margin-bottom: 4px !important;
+}
+
+.movietracker-diary-rating {
+  color: var(--movietracker-accent-green) !important;
+  font-size: 14px !important;
+  margin-bottom: 8px !important;
+}
+
+.movietracker-diary-review {
+  color: var(--movietracker-text-secondary) !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+
+.movietracker-diary-meta {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  margin-top: 8px !important;
+  font-size: 12px !important;
+  color: var(--movietracker-text-muted) !important;
+}
+
+.movietracker-year-filter {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 8px 12px !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  font-size: 14px !important;
+}
+
+.movietracker-year-filter.active {
+  background-color: var(--movietracker-background-secondary) !important;
+  color: var(--movietracker-text-primary) !important;
+}
+
+.movietracker-year-filter:not(.active) {
+  color: var(--movietracker-text-secondary) !important;
+}
+
+.movietracker-year-filter:hover {
+  background-color: var(--movietracker-background-secondary) !important;
+  color: var(--movietracker-text-primary) !important;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+  .movietracker-profile-header {
+    grid-template-columns: 1fr !important;
+    text-align: center !important;
+    gap: 16px !important;
+  }
+  
+  .movietracker-main-content {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+  
+  .movietracker-movie-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  .movietracker-profile-tabs {
+    overflow-x: auto !important;
+    justify-content: flex-start !important;
+    padding: 0 24px !important;
+  }
+
+  .movietracker-activity-layout {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    padding: 16px !important;
+  }
+
+  .movietracker-films-layout {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    padding: 20px 16px !important;
+  }
+
+  .movietracker-films-layout {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    padding: 20px 16px !important;
+  }
+
+  .movietracker-films-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+    gap: 12px !important;
+  }
+
+  .movietracker-diary-layout {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    padding: 20px 16px !important;
+  }
+
+  .movietracker-diary-entry {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .movietracker-diary-date {
+    align-self: flex-start !important;
+    min-width: auto !important;
+  }
+}
+
+/* Watchlist Page Styles */
+/* Main Layout */
+.main-container {
+  display: grid !important;
+  grid-template-columns: 1fr 280px !important;
+  gap: 40px !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  padding: 32px 24px !important;
+}
+
+/* Watchlist Grid */
+.watchlist-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
+  gap: 16px !important;
+  margin-bottom: 32px !important;
+}
+
+.watchlist-poster {
+  aspect-ratio: 2/3 !important;
+  border-radius: 6px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  background: var(--movietracker-card-background) !important;
+}
+
+.watchlist-poster:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+.watchlist-badge {
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  color: var(--movietracker-orange) !important;
+  padding: 4px 6px !important;
+  border-radius: 3px !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+}
+
+.poster-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%) !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  padding: 12px !important;
+  opacity: 0 !important;
+  transition: opacity 0.2s ease !important;
+}
+
+.watchlist-poster:hover .poster-overlay {
+  opacity: 1 !important;
+}
+
+.film-info {
+  color: white !important;
+}
+
+.film-title {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  margin-bottom: 2px !important;
+  line-height: 1.2 !important;
+}
+
+.film-year {
+  font-size: 10px !important;
+  opacity: 0.8 !important;
+}
+
+/* Load More */
+.load-more {
+  text-align: center !important;
+  margin-top: 32px !important;
+}
+
+.load-more-btn {
+  background-color: var(--movietracker-card-background) !important;
+  border: 1px solid var(--movietracker-border) !important;
+  color: var(--movietracker-text-primary) !important;
+  padding: 12px 32px !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.load-more-btn:hover {
+  background-color: var(--movietracker-background-secondary) !important;
+  border-color: var(--movietracker-text-muted) !important;
+}
+
+/* Sidebar */
+.sidebar {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 24px !important;
+}
+
+.sidebar-card {
+  background-color: var(--movietracker-card-background) !important;
+  border-radius: 8px !important;
+  padding: 20px !important;
+}
+
+.sidebar-title {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: var(--movietracker-text-primary) !important;
+  margin-bottom: 16px !important;
+}
+
+.filter-group {
+  margin-bottom: 16px !important;
+}
+
+.filter-group:last-child {
+  margin-bottom: 0 !important;
+}
+
+.filter-label {
+  font-size: 12px !important;
+  color: var(--movietracker-text-muted) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  margin-bottom: 8px !important;
+  font-weight: 600 !important;
+}
+
+.filter-options {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+.filter-option {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 14px !important;
+  color: var(--movietracker-text-secondary) !important;
+  cursor: pointer !important;
+  padding: 4px 0 !important;
+  transition: color 0.2s ease !important;
+}
+
+.filter-option:hover {
+  color: var(--movietracker-text-primary) !important;
+}
+
+.filter-checkbox {
+  width: 14px !important;
+  height: 14px !important;
+  border: 1px solid var(--movietracker-border) !important;
+  border-radius: 3px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+}
+
+.filter-checkbox.checked {
+  background-color: var(--movietracker-orange) !important;
+  border-color: var(--movietracker-orange) !important;
+}
+
+.stats-grid {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+
+.stat-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.stat-label {
+  color: var(--movietracker-text-secondary) !important;
+  font-size: 14px !important;
+}
+
+.stat-value {
+  color: var(--movietracker-text-primary) !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+}
+
+.add-films-section {
+  margin-bottom: 16px !important;
+}
+
+.search-input {
+  width: 100% !important;
+  padding: 8px 12px !important;
+  background-color: var(--movietracker-background-secondary) !important;
+  border: 1px solid var(--movietracker-border) !important;
+  color: var(--movietracker-text-primary) !important;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+  margin-bottom: 8px !important;
+}
+
+.search-input::placeholder {
+  color: var(--movietracker-text-muted) !important;
+}
+
+.add-film-btn {
+  width: 100% !important;
+  padding: 8px 16px !important;
+  background-color: var(--movietracker-orange) !important;
+  color: var(--movietracker-background) !important;
+  border: none !important;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.add-film-btn:hover {
+  background-color: #e6720c !important;
+}
+
+.view-options {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.view-option {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 14px !important;
+  color: var(--movietracker-text-secondary) !important;
+  cursor: pointer !important;
+  padding: 4px 0 !important;
+  transition: color 0.2s ease !important;
+}
+
+.view-option:hover {
+  color: var(--movietracker-text-primary) !important;
+}
+
+.view-option.active {
+  color: var(--movietracker-text-primary) !important;
+}
+
+.radio-button {
+  width: 14px !important;
+  height: 14px !important;
+  border: 1px solid var(--movietracker-border) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s ease !important;
+}
+
+.radio-button.active {
+  border-color: var(--movietracker-orange) !important;
+}
+
+.radio-button.active::after {
+  content: '' !important;
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 50% !important;
+  background-color: var(--movietracker-orange) !important;
+}
+
+.sort-select {
+  background-color: var(--movietracker-background-secondary) !important;
+  border: 1px solid var(--movietracker-border) !important;
+  color: var(--movietracker-text-primary) !important;
+  padding: 8px 12px !important;
+  border-radius: 4px !important;
+  font-size: 14px !important;
+  width: 100% !important;
+  cursor: pointer !important;
+}
+
+/* Likes Page Styles */
+/* Likes Header */
+.likes-header {
+  margin-bottom: 24px !important;
+}
+
+.likes-tabs {
+  display: flex !important;
+  gap: 24px !important;
+  border-bottom: 1px solid var(--movietracker-border) !important;
+  margin-bottom: 24px !important;
+}
+
+.likes-tab {
+  padding: 8px 0 !important;
+  color: var(--movietracker-text-secondary) !important;
+  background: transparent !important;
+  border: none !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  border-bottom: 2px solid transparent !important;
+  transition: all 0.2s ease !important;
+  position: relative !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.likes-tab:hover {
+  color: var(--movietracker-text-primary) !important;
+}
+
+.likes-tab.active {
+  color: var(--movietracker-text-primary) !important;
+  border-bottom-color: var(--movietracker-orange) !important;
+}
+
+.likes-tab-count {
+  background: var(--movietracker-background-secondary) !important;
+  color: var(--movietracker-text-muted) !important;
+  font-size: 11px !important;
+  padding: 2px 6px !important;
+  border-radius: 10px !important;
+  margin-left: 6px !important;
+}
+
+/* Controls Bar */
+.controls-bar {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  margin-bottom: 32px !important;
+  padding: 12px 16px !important;
+  background: var(--movietracker-card-background) !important;
+  border-radius: 6px !important;
+}
+
+.view-controls {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+}
+
+.view-toggle {
+  display: flex !important;
+  background: var(--movietracker-background-secondary) !important;
+  border-radius: 4px !important;
+  padding: 2px !important;
+}
+
+.view-btn {
+  padding: 6px 12px !important;
+  background: transparent !important;
+  border: none !important;
+  color: var(--movietracker-text-secondary) !important;
+  font-size: 12px !important;
+  border-radius: 3px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.view-btn.active {
+  background: var(--movietracker-card-background) !important;
+  color: var(--movietracker-text-primary) !important;
+}
+
+.sort-dropdown {
+  background: var(--movietracker-background-secondary) !important;
+  border: 1px solid var(--movietracker-border) !important;
+  color: var(--movietracker-text-primary) !important;
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  cursor: pointer !important;
+}
+
+/* Likes Grid */
+.likes-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)) !important;
+  gap: 12px !important;
+  margin-bottom: 32px !important;
+}
+
+.liked-film {
+  aspect-ratio: 2/3 !important;
+  border-radius: 4px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer !important;
+  background: var(--movietracker-card-background) !important;
+}
+
+.liked-film:hover {
+  transform: scale(1.05) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+.like-badge {
+  position: absolute !important;
+  top: 4px !important;
+  right: 4px !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  color: #dc2626 !important;
+  padding: 2px 4px !important;
+  border-radius: 2px !important;
+  font-size: 8px !important;
+  z-index: 2 !important;
+}
+
+.film-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;
+  padding: 6px !important;
+  opacity: 0 !important;
+  transition: opacity 0.2s ease !important;
+}
+
+.liked-film:hover .film-overlay {
+  opacity: 1 !important;
+}
+
+.film-info {
+  color: white !important;
+}
+
+.film-title {
+  color: white !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  margin-bottom: 1px !important;
+  line-height: 1.1 !important;
+}
+
+.film-year {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 8px !important;
+}
+
+.film-rating {
+  margin-top: 2px !important;
+  font-size: 8px !important;
+  color: var(--movietracker-green) !important;
+}
+
+/* Film Info Below Poster */
+.film-info-below {
+  margin-top: 4px !important;
+  text-align: center !important;
+}
+
+.film-rating-below {
+  font-size: 10px !important;
+  color: var(--movietracker-green) !important;
+  margin-bottom: 2px !important;
+}
+
+.liked-date {
+  font-size: 9px !important;
+  color: var(--movietracker-text-muted) !important;
+}
+
+/* Loading Animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Fade in animation for films page */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Films Page Responsive */
+.films-browse-container {
+  margin-bottom: 0;
+}
+
+@media (max-width: 1024px) {
+  .films-browse-container {
+    max-width: 100% !important;
+    padding: 64px 24px 0 24px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .films-browse-container {
+    padding: 48px 16px 0 16px !important;
+  }
+
+  .browse-header-responsive {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 20px !important;
+  }
+
+  .search-container-responsive {
+    width: 100% !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .search-container-responsive input {
+    width: 100% !important;
+    min-width: auto !important;
+  }
+
+  .filter-tabs-responsive {
+    flex-direction: column !important;
+    gap: 4px !important;
+  }
+
+  .filter-tabs-responsive button {
+    min-width: auto !important;
+    flex: none !important;
+  }
+
+  .dropdown-filters-responsive {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .dropdown-filters-responsive select {
+    min-width: 100% !important;
+  }
+
+  /* Mobile sidebar reorder */
+  aside {
+    order: -1 !important;
+  }
+
+  /* Mobile carousel adjustments */
+  .carousel-item {
+    flex: 0 0 calc(50% - 8px) !important;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-container {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    padding: 20px 16px !important;
+  }
+  
+  .watchlist-grid, .likes-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)) !important;
+    gap: 12px !important;
+  }
+  
+  .likes-grid {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)) !important;
+    gap: 8px !important;
+  }
+  
+  .sidebar {
+    order: -1 !important;
+  }
+  
+  .controls-bar {
+    flex-direction: column !important;
+    gap: 12px !important;
+    align-items: flex-start !important;
+  }
+}

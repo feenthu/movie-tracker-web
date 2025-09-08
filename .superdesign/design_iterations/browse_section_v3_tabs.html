@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Section V3 - Tabs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --letterboxd-background: #1a1a1a;
+            --letterboxd-background-card: #1f2933;
+            --letterboxd-text-primary: #ffffff;
+            --letterboxd-text-secondary: #9aa5b1;
+            --letterboxd-text-muted: #6b7c93;
+            --letterboxd-border: #2c3440;
+            --letterboxd-accent-orange: #f77f00;
+        }
+        
+        body {
+            background: var(--letterboxd-background);
+            color: var(--letterboxd-text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            padding: 40px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--letterboxd-background-card);
+            padding: 18px;
+            border-radius: 10px;
+        }
+        
+        .tab-active {
+            background: var(--letterboxd-accent-orange);
+            color: #1a1a1a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- V3: Tab-Based Layout -->
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold text-white">Browse Films</h2>
+            <div class="relative">
+                <input 
+                    type="text" 
+                    placeholder="Search..." 
+                    class="bg-gray-800 border border-gray-600 rounded px-3 py-1.5 text-sm text-white placeholder-gray-500 focus:border-orange-500 outline-none w-64"
+                />
+                <svg class="w-3 h-3 absolute right-2 top-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </div>
+        </div>
+        
+        <!-- Tab Navigation -->
+        <div class="bg-gray-800 rounded-lg p-1 mb-4">
+            <div class="flex gap-1">
+                <button class="tab-active px-4 py-2 text-sm font-medium rounded-md transition-all">Popular</button>
+                <button class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-700 rounded-md transition-all">New</button>
+                <button class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-700 rounded-md transition-all">Top Rated</button>
+                <button class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-700 rounded-md transition-all">Trending</button>
+                <button class="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-gray-700 rounded-md transition-all">Reviews</button>
+            </div>
+        </div>
+        
+        <!-- Filter Row -->
+        <div class="flex gap-3 items-center">
+            <span class="text-xs text-gray-400 font-medium">Filter by:</span>
+            <select class="bg-gray-800 border border-gray-600 rounded px-2.5 py-1.5 text-xs text-white focus:border-orange-500 outline-none">
+                <option>Year</option>
+                <option>2024</option>
+                <option>2023</option>
+            </select>
+            <select class="bg-gray-800 border border-gray-600 rounded px-2.5 py-1.5 text-xs text-white focus:border-orange-500 outline-none">
+                <option>Genre</option>
+                <option>Action</option>
+                <option>Comedy</option>
+            </select>
+            <select class="bg-gray-800 border border-gray-600 rounded px-2.5 py-1.5 text-xs text-white focus:border-orange-500 outline-none">
+                <option>Service</option>
+                <option>Netflix</option>
+                <option>Prime</option>
+            </select>
+            <select class="bg-gray-800 border border-gray-600 rounded px-2.5 py-1.5 text-xs text-white focus:border-orange-500 outline-none">
+                <option>Rating</option>
+                <option>★★★★★</option>
+                <option>★★★☆☆</option>
+            </select>
+        </div>
+    </div>
+</body>
+</html>

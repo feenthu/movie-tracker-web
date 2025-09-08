@@ -4,7 +4,7 @@ import './globals.css'
 import { ApolloWrapper } from '@/providers/apollo-provider'
 import { AuthProvider } from '@/providers/auth-provider'
 import { ToastProvider } from '@/providers/toast-provider'
-import { Navbar } from '@/components/layout/navbar'
+import { ConditionalLayout } from '@/components/layout/conditional-layout'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -19,15 +19,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" style={{ margin: 0, padding: 0 }}>
+      <body className={inter.className} style={{ margin: 0, padding: 0 }}>
         <ToastProvider>
           <ApolloWrapper>
             <AuthProvider>
-              <div className="min-h-screen bg-background">
-                <Navbar />
+              <ConditionalLayout>
                 {children}
-              </div>
+              </ConditionalLayout>
             </AuthProvider>
           </ApolloWrapper>
         </ToastProvider>

@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Film Diary - Letterboxd</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Letterboxd Dark Theme Colors */
+            --letterboxd-background: #1a1a1a;
+            --letterboxd-background-secondary: #2c3440;
+            --letterboxd-background-card: #1f2933;
+            --letterboxd-text-primary: #ffffff;
+            --letterboxd-text-secondary: #9aa5b1;
+            --letterboxd-text-muted: #6b7c93;
+            --letterboxd-border: #2c3440;
+            --letterboxd-accent-green: #00d735;
+            --letterboxd-accent-orange: #f77f00;
+            --letterboxd-accent-yellow: #fcbf49;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+            background-color: var(--letterboxd-background) !important;
+            color: var(--letterboxd-text-primary) !important;
+            line-height: 1.5 !important;
+        }
+        
+        /* Header Styles */
+        .header {
+            background-color: var(--letterboxd-background-secondary) !important;
+            border-bottom: 1px solid var(--letterboxd-border) !important;
+            padding: 12px 0 !important;
+        }
+        
+        .logo-section {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+        
+        .logo-dots {
+            display: flex !important;
+            gap: 4px !important;
+        }
+        
+        .dot {
+            width: 12px !important;
+            height: 12px !important;
+            border-radius: 50% !important;
+        }
+        
+        .dot-orange { background-color: var(--letterboxd-accent-orange) !important; }
+        .dot-green { background-color: var(--letterboxd-accent-green) !important; }
+        .dot-blue { background-color: #003049 !important; }
+        
+        .nav-link {
+            color: var(--letterboxd-text-secondary) !important;
+            text-decoration: none !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            transition: color 0.2s ease !important;
+        }
+        
+        .nav-link:hover {
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: var(--letterboxd-background) !important;
+            padding: 16px 0 !important;
+            border-bottom: 1px solid var(--letterboxd-border) !important;
+        }
+        
+        .breadcrumb-container {
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 0 24px !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+        
+        .breadcrumb-link {
+            color: var(--letterboxd-text-secondary) !important;
+            text-decoration: none !important;
+            font-size: 14px !important;
+            transition: color 0.2s ease !important;
+        }
+        
+        .breadcrumb-link:hover {
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        .breadcrumb-current {
+            color: var(--letterboxd-text-primary) !important;
+            font-weight: 500 !important;
+            font-size: 14px !important;
+        }
+        
+        /* Main Layout */
+        .main-container {
+            display: grid !important;
+            grid-template-columns: 1fr 280px !important;
+            gap: 40px !important;
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 32px 24px !important;
+        }
+        
+        /* Diary Timeline */
+        .diary-header {
+            margin-bottom: 24px !important;
+        }
+        
+        .diary-title {
+            font-size: 24px !important;
+            font-weight: 600 !important;
+            color: var(--letterboxd-text-primary) !important;
+            margin-bottom: 8px !important;
+        }
+        
+        .diary-count {
+            color: var(--letterboxd-text-secondary) !important;
+            font-size: 14px !important;
+        }
+        
+        .diary-timeline {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 32px !important;
+        }
+        
+        .diary-month-section {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 20px !important;
+        }
+        
+        .month-header {
+            font-size: 18px !important;
+            font-weight: 600 !important;
+            color: var(--letterboxd-text-primary) !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            padding-bottom: 8px !important;
+            border-bottom: 1px solid var(--letterboxd-border) !important;
+        }
+        
+        .diary-entries {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 16px !important;
+        }
+        
+        .diary-entry {
+            display: flex !important;
+            gap: 16px !important;
+            padding: 16px !important;
+            background-color: var(--letterboxd-background-card) !important;
+            border-radius: 8px !important;
+            transition: background-color 0.2s ease !important;
+        }
+        
+        .diary-entry:hover {
+            background-color: var(--letterboxd-background-secondary) !important;
+        }
+        
+        .diary-date {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            background-color: var(--letterboxd-background-secondary) !important;
+            padding: 12px 8px !important;
+            border-radius: 6px !important;
+            min-width: 60px !important;
+            text-align: center !important;
+        }
+        
+        .date-day {
+            font-size: 18px !important;
+            font-weight: 700 !important;
+            color: var(--letterboxd-text-primary) !important;
+            line-height: 1 !important;
+        }
+        
+        .date-month {
+            font-size: 10px !important;
+            color: var(--letterboxd-text-muted) !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            margin-top: 2px !important;
+        }
+        
+        .diary-poster {
+            width: 60px !important;
+            height: 90px !important;
+            border-radius: 4px !important;
+            overflow: hidden !important;
+            flex-shrink: 0 !important;
+            position: relative !important;
+            cursor: pointer !important;
+            transition: transform 0.2s ease !important;
+        }
+        
+        .diary-poster:hover {
+            transform: scale(1.05) !important;
+        }
+        
+        .diary-content {
+            flex: 1 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 8px !important;
+        }
+        
+        .diary-film-title {
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            color: var(--letterboxd-text-primary) !important;
+            margin-bottom: 4px !important;
+        }
+        
+        .diary-rating {
+            color: var(--letterboxd-accent-green) !important;
+            font-size: 14px !important;
+            margin-bottom: 8px !important;
+        }
+        
+        .diary-review {
+            color: var(--letterboxd-text-secondary) !important;
+            font-size: 14px !important;
+            line-height: 1.4 !important;
+        }
+        
+        .diary-meta {
+            display: flex !important;
+            align-items: center !important;
+            gap: 12px !important;
+            margin-top: 8px !important;
+            font-size: 12px !important;
+            color: var(--letterboxd-text-muted) !important;
+        }
+        
+        .diary-rewatch {
+            display: flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+        }
+        
+        .diary-like-count {
+            display: flex !important;
+            align-items: center !important;
+            gap: 4px !important;
+        }
+        
+        /* Load More */
+        .load-more {
+            text-align: center !important;
+            margin-top: 32px !important;
+        }
+        
+        .load-more-btn {
+            background-color: var(--letterboxd-background-card) !important;
+            border: 1px solid var(--letterboxd-border) !important;
+            color: var(--letterboxd-text-primary) !important;
+            padding: 12px 32px !important;
+            border-radius: 6px !important;
+            cursor: pointer !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            transition: all 0.2s ease !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+        }
+        
+        .load-more-btn:hover {
+            background-color: var(--letterboxd-background-secondary) !important;
+            border-color: var(--letterboxd-text-muted) !important;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 24px !important;
+        }
+        
+        .sidebar-card {
+            background-color: var(--letterboxd-background-card) !important;
+            border-radius: 8px !important;
+            padding: 20px !important;
+        }
+        
+        .sidebar-title {
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            color: var(--letterboxd-text-primary) !important;
+            margin-bottom: 16px !important;
+        }
+        
+        .year-filters {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 8px !important;
+        }
+        
+        .year-filter {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            padding: 8px 12px !important;
+            border-radius: 4px !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            font-size: 14px !important;
+        }
+        
+        .year-filter.active {
+            background-color: var(--letterboxd-background-secondary) !important;
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        .year-filter:not(.active) {
+            color: var(--letterboxd-text-secondary) !important;
+        }
+        
+        .year-filter:hover {
+            background-color: var(--letterboxd-background-secondary) !important;
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        .year-count {
+            font-size: 12px !important;
+            color: var(--letterboxd-text-muted) !important;
+        }
+        
+        .month-filters {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 4px !important;
+        }
+        
+        .month-filter {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            padding: 6px 0 !important;
+            font-size: 14px !important;
+            color: var(--letterboxd-text-secondary) !important;
+            cursor: pointer !important;
+            transition: color 0.2s ease !important;
+        }
+        
+        .month-filter:hover {
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        .month-checkbox {
+            width: 14px !important;
+            height: 14px !important;
+            border: 1px solid var(--letterboxd-border) !important;
+            border-radius: 3px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: all 0.2s ease !important;
+        }
+        
+        .month-checkbox.checked {
+            background-color: var(--letterboxd-accent-orange) !important;
+            border-color: var(--letterboxd-accent-orange) !important;
+        }
+        
+        .stats-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 12px !important;
+        }
+        
+        .stat-row {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+        }
+        
+        .stat-label {
+            color: var(--letterboxd-text-secondary) !important;
+            font-size: 14px !important;
+        }
+        
+        .stat-value {
+            color: var(--letterboxd-text-primary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr !important;
+                gap: 24px !important;
+                padding: 20px 16px !important;
+            }
+            
+            .diary-entry {
+                flex-direction: column !important;
+                gap: 12px !important;
+            }
+            
+            .diary-date {
+                align-self: flex-start !important;
+                min-width: auto !important;
+            }
+            
+            .sidebar {
+                order: -1 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
+            <div class="logo-section">
+                <div class="logo-dots">
+                    <div class="dot dot-orange"></div>
+                    <div class="dot dot-green"></div>
+                    <div class="dot dot-blue"></div>
+                </div>
+                <span style="font-size: 20px; font-weight: 600; color: var(--letterboxd-text-primary);">Letterboxd</span>
+            </div>
+            <nav style="display: flex; align-items: center; gap: 32px;">
+                <a href="#" class="nav-link">Browse</a>
+                <a href="#" class="nav-link">Lists</a>
+                <a href="#" class="nav-link">Members</a>
+                <a href="#" class="nav-link">Journal</a>
+            </nav>
+            <div style="color: var(--letterboxd-text-secondary);">
+                <i data-lucide="search" style="width: 20px; height: 20px;"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <div class="breadcrumb-container">
+            <a href="#" class="breadcrumb-link">tyshaneoneill</a>
+            <i data-lucide="chevron-right" style="width: 16px; height: 16px; color: var(--letterboxd-text-muted);"></i>
+            <a href="#" class="breadcrumb-link">Films</a>
+            <i data-lucide="chevron-right" style="width: 16px; height: 16px; color: var(--letterboxd-text-muted);"></i>
+            <span class="breadcrumb-current">Diary</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Diary Timeline -->
+        <main>
+            <div class="diary-header">
+                <h1 class="diary-title">tyshaneoneill's film diary</h1>
+                <p class="diary-count">42 diary entries</p>
+            </div>
+
+            <div class="diary-timeline">
+                <!-- January 2024 -->
+                <div class="diary-month-section">
+                    <h2 class="month-header">January 2024</h2>
+                    <div class="diary-entries">
+                        <!-- Entry 1 -->
+                        <div class="diary-entry">
+                            <div class="diary-date">
+                                <div class="date-day">30</div>
+                                <div class="date-month">JAN</div>
+                            </div>
+                            <div class="diary-poster" style="background: linear-gradient(to bottom, #dc2626, #991b1b);">
+                                <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);"></div>
+                            </div>
+                            <div class="diary-content">
+                                <h3 class="diary-film-title">The Menu</h3>
+                                <div class="diary-rating">★★★★☆</div>
+                                <p class="diary-review">
+                                    A deliciously twisted satire that serves up dark humor and social commentary with equal precision. Ralph Fiennes is absolutely magnetic as the obsessive chef, and the film's escalating tension keeps you on the edge throughout. The way it skewers both pretentious fine dining culture and entitled wealth is masterful.
+                                </p>
+                                <div class="diary-meta">
+                                    <div class="diary-like-count">
+                                        <i data-lucide="heart" style="width: 12px; height: 12px;"></i>
+                                        <span>5 likes</span>
+                                    </div>
+                                    <span>•</span>
+                                    <span>First watch</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Entry 2 -->
+                        <div class="diary-entry">
+                            <div class="diary-date">
+                                <div class="date-day">25</div>
+                                <div class="date-month">JAN</div>
+                            </div>
+                            <div class="diary-poster" style="background: linear-gradient(to bottom, #059669, #047857);">
+                                <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);"></div>
+                            </div>
+                            <div class="diary-content">
+                                <h3 class="diary-film-title">Strange World</h3>
+                                <div class="diary-rating">★★★★★</div>
+                                <p class="diary-review">
+                                    Disney's most adventurous film in years! The world-building is absolutely stunning and the environmental themes are handled with surprising nuance. Great family dynamics too.
+                                </p>
+                                <div class="diary-meta">
+                                    <div class="diary-like-count">
+                                        <i data-lucide="heart" style="width: 12px; height: 12px;"></i>
+                                        <span>12 likes</span>
+                                    </div>
+                                    <span>•</span>
+                                    <span>First watch</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Entry 3 -->
+                        <div class="diary-entry">
+                            <div class="diary-date">
+                                <div class="date-day">18</div>
+                                <div class="date-month">JAN</div>
+                            </div>
+                            <div class="diary-poster" style="background: linear-gradient(to bottom, #f59e0b, #d97706);">
+                                <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);"></div>
+                            </div>
+                            <div class="diary-content">
+                                <h3 class="diary-film-title">Dumb Money</h3>
+                                <div class="diary-rating">★★★★☆</div>
+                                <p class="diary-review">
+                                    A surprisingly engaging take on the GameStop saga. Paul Dano brings his usual intensity, and the ensemble cast makes the complex financial story accessible and entertaining.
+                                </p>
+                                <div class="diary-meta">
+                                    <div class="diary-rewatch">
+                                        <i data-lucide="rotate-cw" style="width: 12px; height: 12px;"></i>
+                                        <span>Rewatch</span>
+                                    </div>
+                                    <span>•</span>
+                                    <div class="diary-like-count">
+                                        <i data-lucide="heart" style="width: 12px; height: 12px;"></i>
+                                        <span>3 likes</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- December 2023 -->
+                <div class="diary-month-section">
+                    <h2 class="month-header">December 2023</h2>
+                    <div class="diary-entries">
+                        <!-- Entry 4 -->
+                        <div class="diary-entry">
+                            <div class="diary-date">
+                                <div class="date-day">15</div>
+                                <div class="date-month">DEC</div>
+                            </div>
+                            <div class="diary-poster" style="background: linear-gradient(to bottom, #1f2937, #111827);">
+                                <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);"></div>
+                            </div>
+                            <div class="diary-content">
+                                <h3 class="diary-film-title">Oppenheimer</h3>
+                                <div class="diary-rating">★★★★★</div>
+                                <p class="diary-review">
+                                    Nolan's masterpiece. A haunting and complex portrayal of one of history's most consequential figures. Cillian Murphy delivers a career-defining performance, and the film's exploration of moral responsibility in the atomic age is both timely and timeless.
+                                </p>
+                                <div class="diary-meta">
+                                    <div class="diary-like-count">
+                                        <i data-lucide="heart" style="width: 12px; height: 12px;"></i>
+                                        <span>28 likes</span>
+                                    </div>
+                                    <span>•</span>
+                                    <span>IMAX screening</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Entry 5 -->
+                        <div class="diary-entry">
+                            <div class="diary-date">
+                                <div class="date-day">08</div>
+                                <div class="date-month">DEC</div>
+                            </div>
+                            <div class="diary-poster" style="background: linear-gradient(to bottom, #7c3aed, #5b21b6);">
+                                <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);"></div>
+                            </div>
+                            <div class="diary-content">
+                                <h3 class="diary-film-title">Mickey 17</h3>
+                                <div class="diary-rating">★★★★★</div>
+                                <p class="diary-review">
+                                    Bong Joon-ho does it again! A brilliant blend of sci-fi concepts and dark comedy. Robert Pattinson is fantastic in multiple roles.
+                                </p>
+                                <div class="diary-meta">
+                                    <div class="diary-like-count">
+                                        <i data-lucide="heart" style="width: 12px; height: 12px;"></i>
+                                        <span>15 likes</span>
+                                    </div>
+                                    <span>•</span>
+                                    <span>First watch</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Load More -->
+            <div class="load-more">
+                <button class="load-more-btn">Load More Entries</button>
+            </div>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Year Filters -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">Year</h3>
+                <div class="year-filters">
+                    <div class="year-filter active">
+                        <span>2024</span>
+                        <span class="year-count">18</span>
+                    </div>
+                    <div class="year-filter">
+                        <span>2023</span>
+                        <span class="year-count">24</span>
+                    </div>
+                    <div class="year-filter">
+                        <span>2022</span>
+                        <span class="year-count">15</span>
+                    </div>
+                    <div class="year-filter">
+                        <span>2021</span>
+                        <span class="year-count">8</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Month Filters -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">Month</h3>
+                <div class="month-filters">
+                    <div class="month-filter">
+                        <div class="month-checkbox checked">
+                            <i data-lucide="check" style="width: 8px; height: 8px; color: white;"></i>
+                        </div>
+                        <span>January</span>
+                    </div>
+                    <div class="month-filter">
+                        <div class="month-checkbox checked">
+                            <i data-lucide="check" style="width: 8px; height: 8px; color: white;"></i>
+                        </div>
+                        <span>February</span>
+                    </div>
+                    <div class="month-filter">
+                        <div class="month-checkbox">
+                        </div>
+                        <span>March</span>
+                    </div>
+                    <div class="month-filter">
+                        <div class="month-checkbox">
+                        </div>
+                        <span>April</span>
+                    </div>
+                    <div class="month-filter">
+                        <div class="month-checkbox">
+                        </div>
+                        <span>May</span>
+                    </div>
+                    <div class="month-filter">
+                        <div class="month-checkbox">
+                        </div>
+                        <span>June</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">Diary Stats</h3>
+                <div class="stats-grid">
+                    <div class="stat-row">
+                        <span class="stat-label">Total entries</span>
+                        <span class="stat-value">42</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">This year</span>
+                        <span class="stat-value">18</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Average rating</span>
+                        <span class="stat-value">3.8★</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Rewatches</span>
+                        <span class="stat-value">5</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Reviews written</span>
+                        <span class="stat-value">15</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        
+        // Add interactivity
+        document.querySelectorAll('.year-filter').forEach(filter => {
+            filter.addEventListener('click', () => {
+                document.querySelectorAll('.year-filter').forEach(f => f.classList.remove('active'));
+                filter.classList.add('active');
+            });
+        });
+        
+        document.querySelectorAll('.month-filter').forEach(filter => {
+            filter.addEventListener('click', () => {
+                const checkbox = filter.querySelector('.month-checkbox');
+                checkbox.classList.toggle('checked');
+                
+                if (checkbox.classList.contains('checked')) {
+                    checkbox.innerHTML = '<i data-lucide="check" style="width: 8px; height: 8px; color: white;"></i>';
+                } else {
+                    checkbox.innerHTML = '';
+                }
+                lucide.createIcons();
+            });
+        });
+    </script>
+</body>
+</html>

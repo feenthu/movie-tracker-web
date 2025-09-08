@@ -14,7 +14,7 @@ export function Header() {
               <div className="w-3 h-3 rounded-full bg-green-500"></div>
               <div className="w-3 h-3 rounded-full bg-blue-500"></div>
             </div>
-            <span className="text-xl font-bold text-white">Letterboxd</span>
+            <span className="text-xl font-bold text-white">MovieTracker</span>
           </div>
 
           {/* Navigation */}

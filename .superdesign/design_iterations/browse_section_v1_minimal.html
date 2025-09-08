@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Section V1 - Minimal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --letterboxd-background: #1a1a1a;
+            --letterboxd-background-card: #1f2933;
+            --letterboxd-text-primary: #ffffff;
+            --letterboxd-text-secondary: #9aa5b1;
+            --letterboxd-text-muted: #6b7c93;
+            --letterboxd-border: #2c3440;
+            --letterboxd-accent-orange: #f77f00;
+        }
+        
+        body {
+            background: var(--letterboxd-background);
+            color: var(--letterboxd-text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            padding: 40px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--letterboxd-background-card);
+            padding: 16px 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- V1: Minimal Horizontal Bar -->
+        <div class="flex flex-wrap items-center gap-4 mb-4">
+            <span class="text-sm font-medium text-gray-400 uppercase tracking-wide">Browse:</span>
+            <select class="bg-gray-800 border border-gray-600 rounded px-3 py-1 text-sm text-white focus:border-orange-500 outline-none">
+                <option>Year</option>
+                <option>2024</option>
+                <option>2023</option>
+            </select>
+            <select class="bg-gray-800 border border-gray-600 rounded px-3 py-1 text-sm text-white focus:border-orange-500 outline-none">
+                <option>Genre</option>
+                <option>Action</option>
+                <option>Comedy</option>
+            </select>
+            <select class="bg-gray-800 border border-gray-600 rounded px-3 py-1 text-sm text-white focus:border-orange-500 outline-none">
+                <option>Rating</option>
+                <option>★★★★★</option>
+                <option>★★★★☆</option>
+            </select>
+            <select class="bg-gray-800 border border-gray-600 rounded px-3 py-1 text-sm text-white focus:border-orange-500 outline-none">
+                <option>Service</option>
+                <option>Netflix</option>
+                <option>Prime</option>
+            </select>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <label class="text-sm font-medium text-gray-400 uppercase tracking-wide">Find:</label>
+            <input 
+                type="text" 
+                placeholder="Search films..." 
+                class="bg-gray-800 border border-gray-600 rounded px-3 py-1 text-sm text-white placeholder-gray-500 focus:border-orange-500 outline-none flex-1 max-w-md"
+            />
+        </div>
+    </div>
+</body>
+</html>

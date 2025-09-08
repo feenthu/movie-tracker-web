@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Likes - Letterboxd</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Letterboxd Dark Theme Colors */
+            --letterboxd-background: #1a1a1a;
+            --letterboxd-background-secondary: #2c3440;
+            --letterboxd-background-card: #1f2933;
+            --letterboxd-text-primary: #ffffff;
+            --letterboxd-text-secondary: #9aa5b1;
+            --letterboxd-text-muted: #6b7c93;
+            --letterboxd-border: #2c3440;
+            --letterboxd-accent-green: #00d735;
+            --letterboxd-accent-orange: #f77f00;
+            --letterboxd-accent-red: #dc2626;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+            background-color: var(--letterboxd-background) !important;
+            color: var(--letterboxd-text-primary) !important;
+            line-height: 1.5 !important;
+        }
+        
+        /* Header Styles */
+        .header {
+            background-color: var(--letterboxd-background-secondary) !important;
+            border-bottom: 1px solid var(--letterboxd-border) !important;
+            padding: 12px 0 !important;
+        }
+        
+        .logo-section {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+        }
+        
+        .logo-dots {
+            display: flex !important;
+            gap: 4px !important;
+        }
+        
+        .dot {
+            width: 12px !important;
+            height: 12px !important;
+            border-radius: 50% !important;
+        }
+        
+        .dot-orange { background-color: var(--letterboxd-accent-orange) !important; }
+        .dot-green { background-color: var(--letterboxd-accent-green) !important; }
+        .dot-blue { background-color: #003049 !important; }
+        
+        .nav-link {
+            color: var(--letterboxd-text-secondary) !important;
+            text-decoration: none !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            transition: color 0.2s ease !important;
+        }
+        
+        .nav-link:hover {
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        /* Main Layout */
+        .main-container {
+            display: grid !important;
+            grid-template-columns: 1fr 280px !important;
+            gap: 40px !important;
+            max-width: 1200px !important;
+            margin: 0 auto !important;
+            padding: 32px 24px !important;
+        }
+        
+        /* Likes Header */
+        .likes-header {
+            margin-bottom: 24px !important;
+        }
+        
+        .likes-tabs {
+            display: flex !important;
+            gap: 24px !important;
+            border-bottom: 1px solid var(--letterboxd-border) !important;
+            margin-bottom: 24px !important;
+        }
+        
+        .likes-tab {
+            padding: 8px 0 !important;
+            color: var(--letterboxd-text-secondary) !important;
+            text-decoration: none !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            border-bottom: 2px solid transparent !important;
+            transition: all 0.2s ease !important;
+            position: relative !important;
+        }
+        
+        .likes-tab:hover {
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        .likes-tab.active {
+            color: var(--letterboxd-text-primary) !important;
+            border-bottom-color: var(--letterboxd-accent-orange) !important;
+        }
+        
+        .likes-tab-count {
+            background: var(--letterboxd-background-secondary) !important;
+            color: var(--letterboxd-text-muted) !important;
+            font-size: 11px !important;
+            padding: 2px 6px !important;
+            border-radius: 10px !important;
+            margin-left: 6px !important;
+        }
+        
+        /* Controls Bar */
+        .controls-bar {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            margin-bottom: 32px !important;
+            padding: 12px 16px !important;
+            background: var(--letterboxd-background-card) !important;
+            border-radius: 6px !important;
+        }
+        
+        .view-controls {
+            display: flex !important;
+            align-items: center !important;
+            gap: 16px !important;
+        }
+        
+        .view-toggle {
+            display: flex !important;
+            background: var(--letterboxd-background-secondary) !important;
+            border-radius: 4px !important;
+            padding: 2px !important;
+        }
+        
+        .view-btn {
+            padding: 6px 12px !important;
+            background: transparent !important;
+            border: none !important;
+            color: var(--letterboxd-text-secondary) !important;
+            font-size: 12px !important;
+            border-radius: 3px !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+        }
+        
+        .view-btn.active {
+            background: var(--letterboxd-background-card) !important;
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        .sort-dropdown {
+            background: var(--letterboxd-background-secondary) !important;
+            border: 1px solid var(--letterboxd-border) !important;
+            color: var(--letterboxd-text-primary) !important;
+            padding: 6px 12px !important;
+            border-radius: 4px !important;
+            font-size: 12px !important;
+            cursor: pointer !important;
+        }
+        
+        /* Likes Grid */
+        .likes-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)) !important;
+            gap: 12px !important;
+            margin-bottom: 32px !important;
+        }
+        
+        .liked-film {
+            aspect-ratio: 2/3 !important;
+            border-radius: 4px !important;
+            overflow: hidden !important;
+            position: relative !important;
+            transition: all 0.2s ease !important;
+            cursor: pointer !important;
+            background: var(--letterboxd-background-card) !important;
+        }
+        
+        .liked-film:hover {
+            transform: scale(1.05) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+        }
+        
+        .like-badge {
+            position: absolute !important;
+            top: 4px !important;
+            right: 4px !important;
+            background: rgba(0, 0, 0, 0.7) !important;
+            color: var(--letterboxd-accent-red) !important;
+            padding: 2px 4px !important;
+            border-radius: 2px !important;
+            font-size: 8px !important;
+            z-index: 2 !important;
+        }
+        
+        .film-overlay {
+            position: absolute !important;
+            inset: 0 !important;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%) !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: flex-end !important;
+            padding: 6px !important;
+            opacity: 0 !important;
+            transition: opacity 0.2s ease !important;
+        }
+        
+        .liked-film:hover .film-overlay {
+            opacity: 1 !important;
+        }
+        
+        .film-title {
+            color: white !important;
+            font-size: 10px !important;
+            font-weight: 600 !important;
+            margin-bottom: 1px !important;
+            line-height: 1.1 !important;
+        }
+        
+        .film-year {
+            color: rgba(255, 255, 255, 0.7) !important;
+            font-size: 8px !important;
+        }
+        
+        .film-rating {
+            margin-top: 2px !important;
+            font-size: 8px !important;
+            color: var(--letterboxd-accent-green) !important;
+        }
+        
+        /* Film Info Below Poster */
+        .film-info-below {
+            margin-top: 4px !important;
+            text-align: center !important;
+        }
+        
+        .film-rating-below {
+            font-size: 10px !important;
+            color: var(--letterboxd-accent-green) !important;
+            margin-bottom: 2px !important;
+        }
+        
+        .liked-date {
+            font-size: 9px !important;
+            color: var(--letterboxd-text-muted) !important;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 24px !important;
+        }
+        
+        .sidebar-card {
+            background-color: var(--letterboxd-background-card) !important;
+            border-radius: 8px !important;
+            padding: 20px !important;
+        }
+        
+        .sidebar-title {
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            color: var(--letterboxd-text-primary) !important;
+            margin-bottom: 16px !important;
+        }
+        
+        .filter-group {
+            margin-bottom: 16px !important;
+        }
+        
+        .filter-group:last-child {
+            margin-bottom: 0 !important;
+        }
+        
+        .filter-label {
+            font-size: 12px !important;
+            color: var(--letterboxd-text-muted) !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+            margin-bottom: 8px !important;
+            font-weight: 600 !important;
+        }
+        
+        .filter-options {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 6px !important;
+        }
+        
+        .filter-option {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            font-size: 14px !important;
+            color: var(--letterboxd-text-secondary) !important;
+            cursor: pointer !important;
+            padding: 4px 0 !important;
+            transition: color 0.2s ease !important;
+        }
+        
+        .filter-option:hover {
+            color: var(--letterboxd-text-primary) !important;
+        }
+        
+        .filter-checkbox {
+            width: 14px !important;
+            height: 14px !important;
+            border: 1px solid var(--letterboxd-border) !important;
+            border-radius: 3px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: all 0.2s ease !important;
+        }
+        
+        .filter-checkbox.checked {
+            background-color: var(--letterboxd-accent-orange) !important;
+            border-color: var(--letterboxd-accent-orange) !important;
+        }
+        
+        .stats-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 12px !important;
+        }
+        
+        .stat-row {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+        }
+        
+        .stat-label {
+            color: var(--letterboxd-text-secondary) !important;
+            font-size: 14px !important;
+        }
+        
+        .stat-value {
+            color: var(--letterboxd-text-primary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                grid-template-columns: 1fr !important;
+                gap: 24px !important;
+                padding: 20px 16px !important;
+            }
+            
+            .likes-grid {
+                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)) !important;
+                gap: 8px !important;
+            }
+            
+            .sidebar {
+                order: -1 !important;
+            }
+            
+            .controls-bar {
+                flex-direction: column !important;
+                gap: 12px !important;
+                align-items: flex-start !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div style="max-width: 1400px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between;">
+            <div class="logo-section">
+                <div class="logo-dots">
+                    <div class="dot dot-orange"></div>
+                    <div class="dot dot-green"></div>
+                    <div class="dot dot-blue"></div>
+                </div>
+                <span style="font-size: 20px; font-weight: 600; color: var(--letterboxd-text-primary);">Letterboxd</span>
+            </div>
+            <nav style="display: flex; align-items: center; gap: 32px;">
+                <a href="#" class="nav-link">Browse</a>
+                <a href="#" class="nav-link">Lists</a>
+                <a href="#" class="nav-link">Members</a>
+                <a href="#" class="nav-link">Journal</a>
+            </nav>
+            <div style="color: var(--letterboxd-text-secondary);">
+                <i data-lucide="search" style="width: 20px; height: 20px;"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Likes Section -->
+        <main>
+            <!-- Likes Header with Tabs -->
+            <div class="likes-header">
+                <div class="likes-tabs">
+                    <a href="#" class="likes-tab active">
+                        Films 
+                        <span class="likes-tab-count">8</span>
+                    </a>
+                    <a href="#" class="likes-tab">
+                        Reviews
+                        <span class="likes-tab-count">0</span>
+                    </a>
+                    <a href="#" class="likes-tab">
+                        Lists
+                        <span class="likes-tab-count">0</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Controls Bar -->
+            <div class="controls-bar">
+                <div class="view-controls">
+                    <div class="view-toggle">
+                        <button class="view-btn active">Small</button>
+                        <button class="view-btn">Large</button>
+                    </div>
+                    <span style="font-size: 12px; color: var(--letterboxd-text-muted);">8 films</span>
+                </div>
+                <select class="sort-dropdown">
+                    <option>When Liked</option>
+                    <option>Film Title (A-Z)</option>
+                    <option>Film Title (Z-A)</option>
+                    <option>Release Date (Newest)</option>
+                    <option>Release Date (Oldest)</option>
+                    <option>Your Rating</option>
+                </select>
+            </div>
+            
+            <!-- Likes Grid -->
+            <div class="likes-grid">
+                <!-- Liked Film 1 -->
+                <div class="liked-film">
+                    <div style="background: linear-gradient(to bottom, #dc2626, #991b1b); width: 100%; height: 100%; position: relative;">
+                        <div class="like-badge">
+                            <i data-lucide="heart" style="width: 8px; height: 8px; fill: currentColor;"></i>
+                        </div>
+                        <div class="film-overlay">
+                            <div class="film-title">Everything Everywhere All at Once</div>
+                            <div class="film-year">2022</div>
+                            <div class="film-rating">★★★★★</div>
+                        </div>
+                    </div>
+                    <div class="film-info-below">
+                        <div class="film-rating-below">★★★★★</div>
+                        <div class="liked-date">2 days ago</div>
+                    </div>
+                </div>
+
+                <!-- Liked Film 2 -->
+                <div class="liked-film">
+                    <div style="background: linear-gradient(to bottom, #059669, #047857); width: 100%; height: 100%; position: relative;">
+                        <div class="like-badge">
+                            <i data-lucide="heart" style="width: 8px; height: 8px; fill: currentColor;"></i>
+                        </div>
+                        <div class="film-overlay">
+                            <div class="film-title">The Banshees of Inisherin</div>
+                            <div class="film-year">2022</div>
+                            <div class="film-rating">★★★★</div>
+                        </div>
+                    </div>
+                    <div class="film-info-below">
+                        <div class="film-rating-below">★★★★</div>
+                        <div class="liked-date">1 week ago</div>
+                    </div>
+                </div>
+
+                <!-- Liked Film 3 -->
+                <div class="liked-film">
+                    <div style="background: linear-gradient(to bottom, #f59e0b, #d97706); width: 100%; height: 100%; position: relative;">
+                        <div class="like-badge">
+                            <i data-lucide="heart" style="width: 8px; height: 8px; fill: currentColor;"></i>
+                        </div>
+                        <div class="film-overlay">
+                            <div class="film-title">Triangle of Sadness</div>
+                            <div class="film-year">2022</div>
+                            <div class="film-rating">★★★★</div>
+                        </div>
+                    </div>
+                    <div class="film-info-below">
+                        <div class="film-rating-below">★★★★</div>
+                        <div class="liked-date">2 weeks ago</div>
+                    </div>
+                </div>
+
+                <!-- Liked Film 4 -->
+                <div class="liked-film">
+                    <div style="background: linear-gradient(to bottom, #7c3aed, #5b21b6); width: 100%; height: 100%; position: relative;">
+                        <div class="like-badge">
+                            <i data-lucide="heart" style="width: 8px; height: 8px; fill: currentColor;"></i>
+                        </div>
+                        <div class="film-overlay">
+                            <div class="film-title">Top Gun: Maverick</div>
+                            <div class="film-year">2022</div>
+                            <div class="film-rating">★★★★★</div>
+                        </div>
+                    </div>
+                    <div class="film-info-below">
+                        <div class="film-rating-below">★★★★★</div>
+                        <div class="liked-date">3 weeks ago</div>
+                    </div>
+                </div>
+
+                <!-- Liked Film 5 -->
+                <div class="liked-film">
+                    <div style="background: linear-gradient(to bottom, #1f2937, #111827); width: 100%; height: 100%; position: relative;">
+                        <div class="like-badge">
+                            <i data-lucide="heart" style="width: 8px; height: 8px; fill: currentColor;"></i>
+                        </div>
+                        <div class="film-overlay">
+                            <div class="film-title">Nope</div>
+                            <div class="film-year">2022</div>
+                            <div class="film-rating">★★★</div>
+                        </div>
+                    </div>
+                    <div class="film-info-below">
+                        <div class="film-rating-below">★★★</div>
+                        <div class="liked-date">1 month ago</div>
+                    </div>
+                </div>
+
+                <!-- Liked Film 6 -->
+                <div class="liked-film">
+                    <div style="background: linear-gradient(to bottom, #ea580c, #c2410c); width: 100%; height: 100%; position: relative;">
+                        <div class="like-badge">
+                            <i data-lucide="heart" style="width: 8px; height: 8px; fill: currentColor;"></i>
+                        </div>
+                        <div class="film-overlay">
+                            <div class="film-title">RRR</div>
+                            <div class="film-year">2022</div>
+                            <div class="film-rating">★★★★</div>
+                        </div>
+                    </div>
+                    <div class="film-info-below">
+                        <div class="film-rating-below">★★★★</div>
+                        <div class="liked-date">1 month ago</div>
+                    </div>
+                </div>
+
+                <!-- Liked Film 7 -->
+                <div class="liked-film">
+                    <div style="background: linear-gradient(to bottom, #be123c, #9f1239); width: 100%; height: 100%; position: relative;">
+                        <div class="like-badge">
+                            <i data-lucide="heart" style="width: 8px; height: 8px; fill: currentColor;"></i>
+                        </div>
+                        <div class="film-overlay">
+                            <div class="film-title">The Batman</div>
+                            <div class="film-year">2022</div>
+                            <div class="film-rating">★★★★</div>
+                        </div>
+                    </div>
+                    <div class="film-info-below">
+                        <div class="film-rating-below">★★★★</div>
+                        <div class="liked-date">2 months ago</div>
+                    </div>
+                </div>
+
+                <!-- Liked Film 8 -->
+                <div class="liked-film">
+                    <div style="background: linear-gradient(to bottom, #065f46, #064e3b); width: 100%; height: 100%; position: relative;">
+                        <div class="like-badge">
+                            <i data-lucide="heart" style="width: 8px; height: 8px; fill: currentColor;"></i>
+                        </div>
+                        <div class="film-overlay">
+                            <div class="film-title">Turning Red</div>
+                            <div class="film-year">2022</div>
+                            <div class="film-rating">★★★</div>
+                        </div>
+                    </div>
+                    <div class="film-info-below">
+                        <div class="film-rating-below">★★★</div>
+                        <div class="liked-date">2 months ago</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Filters -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">Filters</h3>
+                
+                <div class="filter-group">
+                    <div class="filter-label">Decade</div>
+                    <div class="filter-options">
+                        <div class="filter-option">
+                            <div class="filter-checkbox checked">
+                                <i data-lucide="check" style="width: 8px; height: 8px; color: white;"></i>
+                            </div>
+                            <span>2020s</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-checkbox">
+                            </div>
+                            <span>2010s</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-checkbox">
+                            </div>
+                            <span>2000s</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-label">Genre</div>
+                    <div class="filter-options">
+                        <div class="filter-option">
+                            <div class="filter-checkbox">
+                            </div>
+                            <span>Drama</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-checkbox">
+                            </div>
+                            <span>Comedy</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-checkbox">
+                            </div>
+                            <span>Action</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <div class="filter-label">Rating</div>
+                    <div class="filter-options">
+                        <div class="filter-option">
+                            <div class="filter-checkbox">
+                            </div>
+                            <span>★★★★★ (5 stars)</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-checkbox">
+                            </div>
+                            <span>★★★★ (4+ stars)</span>
+                        </div>
+                        <div class="filter-option">
+                            <div class="filter-checkbox">
+                            </div>
+                            <span>★★★ (3+ stars)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="sidebar-card">
+                <h3 class="sidebar-title">Likes Stats</h3>
+                <div class="stats-grid">
+                    <div class="stat-row">
+                        <span class="stat-label">Films liked</span>
+                        <span class="stat-value">8</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">This year</span>
+                        <span class="stat-value">8</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Average rating</span>
+                        <span class="stat-value">4.1 ★</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">From 2022</span>
+                        <span class="stat-value">8</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        lucide.createIcons();
+        
+        // Add interactivity
+        document.querySelectorAll('.filter-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const checkbox = option.querySelector('.filter-checkbox');
+                checkbox.classList.toggle('checked');
+                
+                if (checkbox.classList.contains('checked')) {
+                    checkbox.innerHTML = '<i data-lucide="check" style="width: 8px; height: 8px; color: white;"></i>';
+                } else {
+                    checkbox.innerHTML = '';
+                }
+                lucide.createIcons();
+            });
+        });
+
+        // Tab switching
+        document.querySelectorAll('.likes-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelectorAll('.likes-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+
+        // View toggle
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

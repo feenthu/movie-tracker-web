@@ -4,48 +4,165 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    /* Semantic Surface Tokens - Letterboxd inspired */
+    --surface-primary: 0 0% 100%;
+    --surface-secondary: 210 40% 97%;
+    --surface-tertiary: 210 40% 94%;
+    --surface-elevated: 0 0% 100%;
+    --surface-overlay: 0 0% 0% / 0.6;
+    --surface-canvas: 0 0% 100%;
+    --surface-raised: 0 0% 100%;
+    --surface-muted: 210 40% 97%;
+    --surface-hover: 210 40% 94%;
+    
+    /* Semantic Content Tokens - Better contrast */
+    --content-primary: 222 84% 11%;
+    --content-secondary: 215 16% 56%;
+    --content-tertiary: 215 14% 34%;
+    --content-inverse: 210 40% 98%;
+    --content-disabled: 215 14% 60%;
+    --content-strong: 222 84% 11%;
+    --content-muted: 215 16% 56%;
+    --content-onBrand: 210 40% 98%;
+    
+    /* Brand Tokens */
+    --brand-primary: 142 100% 42%;
+    --brand-secondary: 33 100% 50%;
+    --brand-primary-hover: 142 100% 38%;
+    --brand-secondary-hover: 33 100% 45%;
+    --brand-solid: 142 100% 42%;
+    --brand-ring: 142 100% 42%;
+    
+    /* Feedback Tokens */
+    --feedback-success: 142 71% 45%;
+    --feedback-warning: 33 100% 50%;
+    --feedback-error: 0 84% 60%;
+    --feedback-info: 217 91% 60%;
+    
+    /* Border Tokens */
+    --border-primary: 214 32% 91%;
+    --border-secondary: 214 32% 85%;
+    --border-focus: 221 83% 53%;
+    --border-error: 0 84% 60%;
+    --border-subtle: 214 32% 91%;
+    
+    /* Additional semantic tokens */
+    --danger-solid: 0 84% 60%;
+    --success-subtle: 142 71% 45%;
+    
+    /* Rating Tokens */
+    --rating-star-filled: 45 100% 51%;
+    --rating-star-empty: 215 14% 74%;
+    --rating-heart-filled: 0 84% 60%;
+    --rating-heart-empty: 215 14% 74%;
+    
+    /* Legacy Tokens for backward compatibility */
+    --background: var(--surface-primary);
+    --foreground: var(--content-primary);
+    --card: var(--surface-elevated);
+    --card-foreground: var(--content-primary);
+    --popover: var(--surface-elevated);
+    --popover-foreground: var(--content-primary);
+    --primary: var(--brand-primary);
+    --primary-foreground: var(--content-inverse);
+    --secondary: var(--surface-secondary);
+    --secondary-foreground: var(--content-primary);
+    --muted: var(--surface-secondary);
+    --muted-foreground: var(--content-secondary);
+    --accent: var(--brand-primary);
+    --accent-foreground: var(--content-inverse);
+    --destructive: var(--feedback-error);
+    --destructive-foreground: var(--content-inverse);
+    --border: var(--border-primary);
+    --input: var(--border-primary);
+    --ring: var(--border-focus);
     --radius: 0.5rem;
+    --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px; --radius-xl: 20px;
+    --icon-sm: 16px; --icon-md: 18px; --icon-lg: 20px; --icon-xl: 24px;
+    --focus-ring: 2px; --focus-offset: 2px;
+    
+    /* Shadow/Elevation tokens */
+    --elevation-hover: 0 4px 12px -2px rgb(0 0 0 / 0.08);
+    --elevation-active: 0 2px 6px -1px rgb(0 0 0 / 0.08);
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 84% 4.9%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 94.1%;
+    /* Semantic Surface Tokens - Letterboxd dark theme */
+    --surface-primary: 222 47% 9%;
+    --surface-secondary: 222 47% 14%;
+    --surface-tertiary: 222 47% 11%;
+    --surface-elevated: 222 47% 9%;
+    --surface-overlay: 0 0% 0% / 0.8;
+    --surface-canvas: 222 47% 9%;
+    --surface-raised: 222 47% 11%;
+    --surface-muted: 222 47% 14%;
+    --surface-hover: 222 47% 16%;
+    
+    /* Semantic Content Tokens */
+    --content-primary: 210 40% 98%;
+    --content-secondary: 215 20% 71%;
+    --content-tertiary: 217 10% 44%;
+    --content-inverse: 222 84% 11%;
+    --content-disabled: 217 10% 40%;
+    --content-strong: 210 40% 98%;
+    --content-muted: 215 20% 71%;
+    --content-onBrand: 210 40% 98%;
+    
+    /* Brand Tokens */
+    --brand-primary: 142 100% 42%;
+    --brand-secondary: 33 100% 50%;
+    --brand-primary-hover: 142 100% 46%;
+    --brand-secondary-hover: 33 100% 55%;
+    --brand-solid: 142 100% 42%;
+    --brand-ring: 142 100% 42%;
+    
+    /* Feedback Tokens */
+    --feedback-success: 142 71% 45%;
+    --feedback-warning: 33 100% 50%;
+    --feedback-error: 0 63% 31%;
+    --feedback-info: 217 91% 60%;
+    
+    /* Border Tokens */
+    --border-primary: 217 20% 20%;
+    --border-secondary: 217 20% 25%;
+    --border-focus: 217 91% 60%;
+    --border-error: 0 63% 31%;
+    --border-subtle: 217 20% 20%;
+    
+    /* Additional semantic tokens */
+    --danger-solid: 0 63% 31%;
+    --success-subtle: 142 71% 45%;
+    
+    /* Shadow/Elevation tokens */
+    --elevation-hover: 0 4px 12px -2px rgb(0 0 0 / 0.15);
+    --elevation-active: 0 2px 6px -1px rgb(0 0 0 / 0.15);
+    
+    /* Rating Tokens */
+    --rating-star-filled: 45 100% 51%;
+    --rating-star-empty: 217 10% 34%;
+    --rating-heart-filled: 0 84% 60%;
+    --rating-heart-empty: 217 10% 34%;
+    
+    /* Legacy mappings for backward compatibility */
+    --background: var(--surface-primary);
+    --foreground: var(--content-primary);
+    --card: var(--surface-elevated);
+    --card-foreground: var(--content-primary);
+    --popover: var(--surface-elevated);
+    --popover-foreground: var(--content-primary);
+    --primary: var(--brand-primary);
+    --primary-foreground: var(--content-inverse);
+    --secondary: var(--surface-secondary);
+    --secondary-foreground: var(--content-primary);
+    --muted: var(--surface-secondary);
+    --muted-foreground: var(--content-secondary);
+    --accent: var(--brand-primary);
+    --accent-foreground: var(--content-inverse);
+    --destructive: var(--feedback-error);
+    --destructive-foreground: var(--content-primary);
+    --border: var(--border-primary);
+    --input: var(--border-primary);
+    --ring: var(--border-focus);
   }
 }
 
@@ -56,5 +173,127 @@
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
+  }
+}
+
+@layer utilities {
+  /* Motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Shimmer animation for loading states */
+  @keyframes shimmer {
+    0% {
+      background-position: -200px 0;
+    }
+    100% {
+      background-position: calc(200px + 100%) 0;
+    }
+  }
+
+  .shimmer {
+    animation: shimmer 2s infinite ease-in-out;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--muted) / 0.6),
+      transparent
+    );
+    background-size: 200px 100%;
+  }
+
+  /* Fade-in animation */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+  }
+
+  /* Slide-up animation */
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.3s ease-out;
+  }
+
+  /* Scale-in animation */
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-scale-in {
+    animation: scale-in 0.2s ease-out;
+  }
+
+  /* Progress bar animation */
+  @keyframes progress-fill {
+    from {
+      width: 0%;
+    }
+  }
+
+  .animate-progress {
+    animation: progress-fill 0.8s ease-out;
+  }
+
+  /* Subtle lift for hover effects */
+  .hover-lift {
+    transition: all 0.2s ease-out;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  }
+
+  /* Enhanced shadow transition */
+  .shadow-lift {
+    transition: box-shadow 0.2s ease-out, transform 0.2s ease-out;
+  }
+
+  .shadow-lift:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+
+  /* Gentle glow effect */
+  .glow-hover {
+    transition: all 0.2s ease-out;
+  }
+
+  .glow-hover:hover {
+    box-shadow: 
+      0 0 0 1px hsl(var(--border)),
+      0 4px 12px rgb(0 0 0 / 0.05);
   }
 }

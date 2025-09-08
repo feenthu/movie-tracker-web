@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Films - MovieTracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    
+    <style>
+        /* Letterboxd CSS Variables */
+        :root {
+            --letterboxd-background: #1a1a1a;
+            --letterboxd-background-secondary: #2c3440;
+            --letterboxd-background-card: #1f2933;
+            --letterboxd-text-primary: #ffffff;
+            --letterboxd-text-secondary: #9aa5b1;
+            --letterboxd-text-muted: #6b7c93;
+            --letterboxd-border: #2c3440;
+            --letterboxd-accent-green: #00d735;
+            --letterboxd-accent-orange: #f77f00;
+            --letterboxd-accent-yellow: #fcbf49;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--letterboxd-background);
+            color: var(--letterboxd-text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.5;
+        }
+
+        /* Header Styles */
+        .letterboxd-header {
+            background-color: var(--letterboxd-background-secondary);
+            border-bottom: 1px solid var(--letterboxd-border);
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .letterboxd-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .letterboxd-logo-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .letterboxd-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .letterboxd-dot-orange { background-color: var(--letterboxd-accent-orange); }
+        .letterboxd-dot-green { background-color: var(--letterboxd-accent-green); }
+        .letterboxd-dot-blue { background-color: #003049; }
+
+        .letterboxd-nav-link {
+            color: var(--letterboxd-text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: color 0.2s ease;
+            padding: 8px 0;
+        }
+
+        .letterboxd-nav-link:hover {
+            color: var(--letterboxd-text-primary);
+        }
+
+        .letterboxd-nav-link.active {
+            color: var(--letterboxd-accent-orange);
+            border-bottom: 2px solid var(--letterboxd-accent-orange);
+            padding-bottom: 6px;
+        }
+
+        /* Main Content Styles */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .content-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 48px;
+            padding: 40px 0;
+        }
+
+        /* Combined Browse & Filter Section */
+        .browse-section {
+            background: var(--letterboxd-background-card);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .browse-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .browse-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--letterboxd-text-primary);
+            margin: 0;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            background: var(--letterboxd-background);
+            border: 1px solid var(--letterboxd-border);
+            border-radius: 10px;
+            padding: 14px 18px 14px 48px;
+            color: var(--letterboxd-text-primary);
+            font-size: 15px;
+            width: 320px;
+            transition: all 0.2s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--letterboxd-accent-orange);
+            box-shadow: 0 0 0 3px rgba(247, 127, 0, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--letterboxd-text-muted);
+        }
+
+        /* Filter Tabs */
+        .filter-section {
+            margin-bottom: 32px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 24px;
+            background: var(--letterboxd-background);
+            border-radius: 12px;
+            padding: 6px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            flex: 1;
+            min-width: 120px;
+            padding: 14px 20px;
+            border-radius: 8px;
+            background: transparent;
+            border: none;
+            color: var(--letterboxd-text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+        }
+
+        .filter-tab.active {
+            background: var(--letterboxd-accent-orange);
+            color: var(--letterboxd-background);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(247, 127, 0, 0.3);
+        }
+
+        .filter-tab:hover:not(.active) {
+            background: var(--letterboxd-background-secondary);
+            color: var(--letterboxd-text-primary);
+            transform: translateY(-1px);
+        }
+
+        /* Dropdown Filters */
+        .dropdown-filters {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-dropdown {
+            background: var(--letterboxd-background);
+            border: 1px solid var(--letterboxd-border);
+            border-radius: 10px;
+            padding: 14px 18px;
+            color: var(--letterboxd-text-primary);
+            font-size: 14px;
+            cursor: pointer;
+            min-width: 160px;
+            transition: all 0.2s ease;
+        }
+
+        .filter-dropdown:hover {
+            border-color: var(--letterboxd-accent-orange);
+        }
+
+        .filter-dropdown:focus {
+            outline: none;
+            border-color: var(--letterboxd-accent-orange);
+            box-shadow: 0 0 0 3px rgba(247, 127, 0, 0.1);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .sidebar-section {
+            background: var(--letterboxd-background-card);
+            border-radius: 16px;
+            padding: 32px;
+        }
+
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Popular Carousel */
+        .popular-carousel {
+            position: relative;
+        }
+
+        .carousel-container {
+            overflow: hidden;
+            border-radius: 10px;
+            margin: 0 -8px;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            gap: 16px;
+            padding: 0 8px;
+        }
+
+        .carousel-item {
+            flex: 0 0 calc(25% - 12px);
+            aspect-ratio: 2/3;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .carousel-btn:hover {
+            background: var(--letterboxd-accent-orange);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-btn.prev {
+            left: -18px;
+        }
+
+        .carousel-btn.next {
+            right: -18px;
+        }
+
+        .carousel-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: translateY(-50%) scale(0.9);
+        }
+
+        .carousel-btn:disabled:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: translateY(-50%) scale(0.9);
+        }
+
+        /* Review Cards */
+        .review-card {
+            display: flex;
+            gap: 16px;
+            padding: 20px;
+            background: var(--letterboxd-background);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .review-card:hover {
+            background: var(--letterboxd-background-secondary);
+        }
+
+        .reviewer-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--letterboxd-accent-green);
+            flex-shrink: 0;
+        }
+
+        .review-content {
+            flex: 1;
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .rating-stars {
+            display: flex;
+            gap: 3px;
+            margin-bottom: 6px;
+        }
+
+        .rating-star {
+            width: 14px;
+            height: 14px;
+            color: var(--letterboxd-accent-orange);
+        }
+
+        .review-text {
+            font-size: 13px;
+            color: var(--letterboxd-text-muted);
+            line-height: 1.5;
+        }
+
+        /* Popular Reviewers */
+        .reviewer-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s ease;
+            cursor: pointer;
+        }
+
+        .reviewer-item:hover {
+            background: var(--letterboxd-background);
+        }
+
+        .reviewer-stats {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 2px;
+        }
+
+        .reviewer-count {
+            font-size: 13px;
+            color: var(--letterboxd-text-muted);
+        }
+
+        /* Crew Picks */
+        .crew-pick {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .crew-poster {
+            width: 80px;
+            aspect-ratio: 2/3;
+            border-radius: 8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .crew-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .crew-content h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .crew-description {
+            font-size: 13px;
+            color: var(--letterboxd-text-muted);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .crew-curator {
+            font-size: 11px;
+            background: var(--letterboxd-background);
+            padding: 4px 10px;
+            border-radius: 6px;
+            color: var(--letterboxd-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            
+            .sidebar {
+                order: -1;
+            }
+
+            .browse-section {
+                padding: 32px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 0 16px;
+            }
+            
+            .content-wrapper {
+                padding: 32px 0;
+                gap: 24px;
+            }
+
+            .browse-section {
+                padding: 24px;
+                margin-bottom: 32px;
+            }
+
+            .browse-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .browse-title {
+                font-size: 24px;
+            }
+
+            .search-container {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .filter-tabs {
+                flex-direction: column;
+            }
+
+            .filter-tab {
+                min-width: auto;
+            }
+
+            .dropdown-filters {
+                flex-direction: column;
+            }
+
+            .filter-dropdown {
+                min-width: 100%;
+            }
+
+            .carousel-item {
+                flex: 0 0 calc(50% - 8px);
+            }
+
+            .sidebar-section {
+                padding: 24px;
+            }
+        }
+
+        /* Animation Keyframes */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header (matching existing design) -->
+    <header class="letterboxd-header">
+        <div class="main-container">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                <!-- Logo -->
+                <a href="/dashboard" class="letterboxd-logo">
+                    <div class="letterboxd-logo-dots">
+                        <div class="letterboxd-dot letterboxd-dot-orange"></div>
+                        <div class="letterboxd-dot letterboxd-dot-green"></div>
+                        <div class="letterboxd-dot letterboxd-dot-blue"></div>
+                    </div>
+                    <span style="font-size: 20px; font-weight: 600; color: var(--letterboxd-text-primary);">MovieTracker</span>
+                </a>
+                
+                <!-- Navigation -->
+                <nav style="display: flex; align-items: center; gap: 32px;">
+                    <a href="#" class="letterboxd-nav-link active">Films</a>
+                    <a href="#" class="letterboxd-nav-link">Lists</a>
+                    <a href="#" class="letterboxd-nav-link">Members</a>
+                    <a href="#" class="letterboxd-nav-link">Journal</a>
+                    <a href="/" class="letterboxd-nav-link">Sign In</a>
+                    <a href="/signup" class="letterboxd-nav-link">Create Account</a>
+                </nav>
+                
+                <!-- Search Button -->
+                <button style="background: transparent; border: none; color: var(--letterboxd-text-secondary); padding: 8px; cursor: pointer;">
+                    <i data-lucide="search" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Combined Browse & Filter Section -->
+        <section class="browse-section fade-in">
+            <!-- Header with Title and Search -->
+            <div class="browse-header">
+                <h1 class="browse-title">Browse Films</h1>
+                <div class="search-container">
+                    <div class="search-box">
+                        <i data-lucide="search" class="search-icon" style="width: 20px; height: 20px;"></i>
+                        <input type="search" class="search-input" placeholder="Search for a film, director, genre...">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-section">
+                <div class="filter-tabs">
+                    <button class="filter-tab active">Popular</button>
+                    <button class="filter-tab">New</button>
+                    <button class="filter-tab">Top Rated</button>
+                    <button class="filter-tab">Most Watched</button>
+                    <button class="filter-tab">Highly Rated</button>
+                    <button class="filter-tab">Recently Reviewed</button>
+                </div>
+                
+                <!-- Dropdown Filters -->
+                <div class="dropdown-filters">
+                    <select class="filter-dropdown">
+                        <option>All Genres</option>
+                        <option>Action</option>
+                        <option>Comedy</option>
+                        <option>Drama</option>
+                        <option>Horror</option>
+                        <option>Sci-Fi</option>
+                        <option>Thriller</option>
+                        <option>Romance</option>
+                        <option>Documentary</option>
+                        <option>Animation</option>
+                        <option>Crime</option>
+                        <option>Fantasy</option>
+                    </select>
+                    
+                    <select class="filter-dropdown">
+                        <option>All Years</option>
+                        <option>2024</option>
+                        <option>2023</option>
+                        <option>2022</option>
+                        <option>2021</option>
+                        <option>2020</option>
+                        <option>2010s</option>
+                        <option>2000s</option>
+                        <option>1990s</option>
+                        <option>1980s</option>
+                    </select>
+                    
+                    <select class="filter-dropdown">
+                        <option>All Services</option>
+                        <option>Netflix</option>
+                        <option>Prime Video</option>
+                        <option>Hulu</option>
+                        <option>Disney+</option>
+                        <option>HBO Max</option>
+                        <option>Apple TV+</option>
+                        <option>Paramount+</option>
+                    </select>
+                    
+                    <select class="filter-dropdown">
+                        <option>All Ratings</option>
+                        <option>★★★★★ 5 stars</option>
+                        <option>★★★★☆ 4+ stars</option>
+                        <option>★★★☆☆ 3+ stars</option>
+                        <option>★★☆☆☆ 2+ stars</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <div class="content-wrapper">
+            <!-- Main Content Area -->
+            <main>
+                <!-- This space will be populated with film results when search/filters are applied -->
+            </main>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Popular This Week with Carousel -->
+                <section class="sidebar-section fade-in">
+                    <h2 class="sidebar-title">
+                        <i data-lucide="trending-up" style="width: 20px; height: 20px; color: var(--letterboxd-accent-orange);"></i>
+                        Popular This Week
+                    </h2>
+                    <div class="popular-carousel">
+                        <button class="carousel-btn prev" id="prevBtn">
+                            <i data-lucide="chevron-left" style="width: 18px; height: 18px;"></i>
+                        </button>
+                        <div class="carousel-container">
+                            <div class="carousel-track" id="carouselTrack">
+                                <div class="carousel-item">
+                                    <img src="https://images.unsplash.com/photo-1489599316546-1c5d1b4b5c9e?w=200&h=300&fit=crop" alt="Dune: Part Two">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=200&h=300&fit=crop" alt="Oppenheimer">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=200&h=300&fit=crop" alt="The Batman">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=200&h=300&fit=crop" alt="Barbie">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?w=200&h=300&fit=crop" alt="Killers of the Flower Moon">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=200&h=300&fit=crop" alt="Spider-Man">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=200&h=300&fit=crop" alt="John Wick 4">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=200&h=300&fit=crop" alt="The Menu">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="carousel-btn next" id="nextBtn">
+                            <i data-lucide="chevron-right" style="width: 18px; height: 18px;"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Recently Reviewed -->
+                <section class="sidebar-section fade-in">
+                    <h2 class="sidebar-title">
+                        <i data-lucide="message-square" style="width: 20px; height: 20px; color: var(--letterboxd-accent-green);"></i>
+                        Recently Reviewed
+                    </h2>
+                    
+                    <div class="review-card">
+                        <div class="reviewer-avatar"></div>
+                        <div class="review-content">
+                            <div class="reviewer-name">Sarah M.</div>
+                            <div class="rating-stars">
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                            </div>
+                            <p class="review-text">Loved the visuals in Dune: Part Two. Denis Villeneuve continues to impress with his masterful direction.</p>
+                        </div>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="reviewer-avatar" style="background: var(--letterboxd-accent-orange);"></div>
+                        <div class="review-content">
+                            <div class="reviewer-name">Mike T.</div>
+                            <div class="rating-stars">
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                            </div>
+                            <p class="review-text">Oppenheimer is a masterpiece. Nolan's best work to date, combining stunning visuals with powerful storytelling.</p>
+                        </div>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="reviewer-avatar" style="background: #9333ea;"></div>
+                        <div class="review-content">
+                            <div class="reviewer-name">Alex R.</div>
+                            <div class="rating-stars">
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: currentColor;"></i>
+                                <i data-lucide="star" class="rating-star" style="fill: none;"></i>
+                            </div>
+                            <p class="review-text">The Batman brings a fresh noir approach to the character. Pattinson delivers a compelling performance.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Crew Picks -->
+                <section class="sidebar-section fade-in">
+                    <h2 class="sidebar-title">
+                        <i data-lucide="award" style="width: 20px; height: 20px; color: var(--letterboxd-accent-orange);"></i>
+                        Crew Picks
+                    </h2>
+                    <div class="crew-pick">
+                        <div class="crew-poster">
+                            <img src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?w=200&h=300&fit=crop" alt="Crew Pick">
+                        </div>
+                        <div class="crew-content">
+                            <h3>Killers of the Flower Moon</h3>
+                            <p class="crew-description">Scorsese's latest epic explores a dark chapter of American history with his signature style and meticulous attention to detail.</p>
+                            <span class="crew-curator">CURATOR: JAMES</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Popular Reviewers -->
+                <section class="sidebar-section fade-in">
+                    <h2 class="sidebar-title">
+                        <i data-lucide="users" style="width: 20px; height: 20px; color: var(--letterboxd-accent-green);"></i>
+                        Popular Reviewers
+                    </h2>
+                    
+                    <div class="reviewer-item">
+                        <div class="reviewer-avatar"></div>
+                        <div>
+                            <div class="reviewer-stats">FilmCritic2024</div>
+                            <div class="reviewer-count">247 films this year</div>
+                        </div>
+                    </div>
+                    
+                    <div class="reviewer-item">
+                        <div class="reviewer-avatar" style="background: var(--letterboxd-accent-orange);"></div>
+                        <div>
+                            <div class="reviewer-stats">CinemaLover</div>
+                            <div class="reviewer-count">189 films this year</div>
+                        </div>
+                    </div>
+                    
+                    <div class="reviewer-item">
+                        <div class="reviewer-avatar" style="background: #9333ea;"></div>
+                        <div>
+                            <div class="reviewer-stats">MovieMaven</div>
+                            <div class="reviewer-count">156 films this year</div>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+        
+        // Interactive functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter tab switching
+            const filterTabs = document.querySelectorAll('.filter-tab');
+            filterTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    filterTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Carousel functionality
+            const track = document.getElementById('carouselTrack');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const items = document.querySelectorAll('.carousel-item');
+            
+            let currentIndex = 0;
+            const itemsToShow = window.innerWidth <= 768 ? 2 : 4;
+            const maxIndex = Math.max(0, items.length - itemsToShow);
+            
+            function updateCarousel() {
+                const translateX = -(currentIndex * (100 / itemsToShow));
+                track.style.transform = `translateX(${translateX}%)`;
+                
+                prevBtn.disabled = currentIndex === 0;
+                nextBtn.disabled = currentIndex >= maxIndex;
+            }
+            
+            prevBtn.addEventListener('click', function() {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateCarousel();
+                }
+            });
+            
+            nextBtn.addEventListener('click', function() {
+                if (currentIndex < maxIndex) {
+                    currentIndex++;
+                    updateCarousel();
+                }
+            });
+            
+            // Initialize carousel
+            updateCarousel();
+            
+            // Update carousel on window resize
+            window.addEventListener('resize', function() {
+                const newItemsToShow = window.innerWidth <= 768 ? 2 : 4;
+                const newMaxIndex = Math.max(0, items.length - newItemsToShow);
+                if (currentIndex > newMaxIndex) {
+                    currentIndex = newMaxIndex;
+                }
+                updateCarousel();
+            });
+            
+            // Search functionality
+            const searchInput = document.querySelector('.search-input');
+            searchInput.addEventListener('input', function() {
+                // Add search logic here when implementing React components
+                console.log('Searching for:', this.value);
+            });
+        });
+    </script>
+</body>
+</html>
