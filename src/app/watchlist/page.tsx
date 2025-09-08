@@ -42,7 +42,7 @@ export default function WatchlistPage() {
                 </Button>
               </Link>
               <Link href="/dashboard">
-                <Button variant="outline">
+                <Button variant="secondary">
                   ← Back to Dashboard
                 </Button>
               </Link>

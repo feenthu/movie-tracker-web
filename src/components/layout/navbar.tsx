@@ -31,14 +31,14 @@ export function Navbar() {
               <span className="text-sm text-muted-foreground">
                 Welcome, {user?.username}
               </span>
-              <Button variant="outline" size="sm" onClick={logout}>
+              <Button variant="secondary" size="sm" onClick={logout}>
                 Logout
               </Button>
             </div>
           ) : (
             <div className="flex items-center space-x-4">
               <Link href="/login">
-                <Button variant="outline" size="sm">
+                <Button variant="secondary" size="sm">
                   Login
                 </Button>
               </Link>

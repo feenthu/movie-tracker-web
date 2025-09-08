@@ -12,10 +12,10 @@ export function ProfileSection() {
 
         <div className="flex items-center gap-4">
           <h1 className="text-2xl font-bold text-white">tyshaneoneill</h1>
-          <Button variant="outline" className="border-slate-600 text-gray-300 hover:bg-slate-700 bg-transparent">
+          <Button variant="secondary" className="border-slate-600 text-gray-300 hover:bg-slate-700 bg-transparent">
             EDIT PROFILE
           </Button>
-          <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white">
+          <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white">
             <MoreHorizontal className="h-5 w-5" />
           </Button>
         </div>

@@ -91,8 +91,8 @@ Usage Examples:
 
 // Genre badges
 <div className="flex gap-1">
-  <Badge variant="neutral-soft">Action</Badge>
-  <Badge variant="neutral-soft">Thriller</Badge>
-  <Badge variant="neutral-soft">Sci-Fi</Badge>
+  <Badge variant="secondary">Action</Badge>
+  <Badge variant="secondary">Thriller</Badge>
+  <Badge variant="secondary">Sci-Fi</Badge>
 </div>
 */

@@ -192,12 +192,12 @@ export default function OAuth2DebugPage() {
               </Button>
               <Button 
                 onClick={testNewFlow}
-                variant="outline"
+                variant="secondary"
                 className="border-green-500 text-green-600 hover:bg-green-50"
               >
                 Test New PKCE Flow Directly
               </Button>
-              <Button onClick={clearResults} variant="outline">
+              <Button onClick={clearResults} variant="secondary">
                 Clear Results
               </Button>
             </div>

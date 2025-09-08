@@ -203,7 +203,7 @@ export {
 Usage Example:
 <DropdownMenu>
   <DropdownMenuTrigger asChild>
-    <Button variant="outline">
+    <Button variant="secondary">
       <MoreHorizontal className="h-4 w-4" />
     </Button>
   </DropdownMenuTrigger>

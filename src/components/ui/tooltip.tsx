@@ -32,7 +32,7 @@ Usage Example:
 <TooltipProvider>
   <Tooltip>
     <TooltipTrigger asChild>
-      <Button variant="outline">Hover me</Button>
+      <Button variant="secondary">Hover me</Button>
     </TooltipTrigger>
     <TooltipContent>
       <p>This is a helpful tooltip message</p>
@@ -45,7 +45,7 @@ Usage Example:
   <div>
     <Tooltip>
       <TooltipTrigger asChild>
-        <Button size="icon" variant="ghost">
+        <Button size="sm" variant="ghost">
           <Star className="h-4 w-4" />
         </Button>
       </TooltipTrigger>

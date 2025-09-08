@@ -341,8 +341,8 @@ export function MovieTrackerSignupForm() {
               color: 'var(--movietracker-accent-orange)', 
               textDecoration: 'none' 
             }}
-            onMouseOver={(e) => e.target.style.textDecoration = 'underline'}
-            onMouseOut={(e) => e.target.style.textDecoration = 'none'}
+            onMouseOver={(e) => (e.target as HTMLElement).style.textDecoration = 'underline'}
+            onMouseOut={(e) => (e.target as HTMLElement).style.textDecoration = 'none'}
           >
             Terms of Service
           </a>{' '}
@@ -353,8 +353,8 @@ export function MovieTrackerSignupForm() {
               color: 'var(--movietracker-accent-orange)', 
               textDecoration: 'none' 
             }}
-            onMouseOver={(e) => e.target.style.textDecoration = 'underline'}
-            onMouseOut={(e) => e.target.style.textDecoration = 'none'}
+            onMouseOver={(e) => (e.target as HTMLElement).style.textDecoration = 'underline'}
+            onMouseOut={(e) => (e.target as HTMLElement).style.textDecoration = 'none'}
           >
             Privacy Policy
           </a>

@@ -35,7 +35,7 @@ export function Header() {
 
           {/* Right side */}
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" className="text-gray-300 hover:text-white">
+            <Button variant="ghost" size="sm" className="text-gray-300 hover:text-white">
               <Search className="h-5 w-5" />
             </Button>
 
