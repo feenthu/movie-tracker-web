@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardSubtitle } from '@/components/ui/card'
@@ -60,7 +60,7 @@ export const MovieDashboard: Story = {
           <div className="space-y-2">
             <h2 className="text-3xl font-bold text-[hsl(var(--content-primary))]">Welcome back, Ty</h2>
             <p className="text-[hsl(var(--content-secondary))] text-lg">
-              You've watched <span className="font-semibold text-[hsl(var(--brand-solid))]">127 movies</span> this year
+              You&apos;ve watched <span className="font-semibold text-[hsl(var(--brand-solid))]">127 movies</span> this year
             </p>
           </div>
 

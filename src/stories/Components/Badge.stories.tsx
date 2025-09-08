@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Check, Clock, Star, AlertCircle, Info } from 'lucide-react'
@@ -355,7 +355,7 @@ export const WithIcons: Story = {
             <div className="flex items-center gap-3">
               <Badge variant="brand-outline">
                 <Star className="w-3 h-3 mr-1" />
-                Critic's Choice
+                Critic&apos;s Choice
               </Badge>
               <span className="text-sm text-slate-600">Highly rated</span>
             </div>

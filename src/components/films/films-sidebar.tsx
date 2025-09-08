@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { TrendingUp, MessageSquare, Award, Users, ChevronLeft, ChevronRight, Star } from 'lucide-react'
 
 export function FilmsSidebar() {
@@ -135,9 +136,11 @@ function PopularThisWeekCarousel() {
                   e.currentTarget.style.boxShadow = 'none'
                 }}
               >
-                <img
+                <Image
                   src={film.src}
                   alt={film.alt}
+                  width={200}
+                  height={300}
                   style={{
                     width: '100%',
                     height: '100%',
@@ -341,9 +344,11 @@ function CrewPicksSection() {
           overflow: 'hidden',
           flexShrink: 0
         }}>
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1542204165-65bf26472b9b?w=200&h=300&fit=crop"
             alt="Crew Pick"
+            width={200}
+            height={300}
             style={{
               width: '100%',
               height: '100%',
@@ -368,7 +373,7 @@ function CrewPicksSection() {
             marginBottom: '12px',
             margin: '0 0 12px 0'
           }}>
-            Scorsese's latest epic explores a dark chapter of American history with his signature style and meticulous attention to detail.
+            Scorsese&apos;s latest epic explores a dark chapter of American history with his signature style and meticulous attention to detail.
           </p>
           <span style={{
             fontSize: '11px',

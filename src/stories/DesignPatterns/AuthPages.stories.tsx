@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -128,7 +128,7 @@ export const LoginPage: Story = {
 
               {/* Sign Up Link */}
               <p className="text-center text-sm text-[hsl(var(--content-secondary))]">
-                Don't have an account?{' '}
+                Don&apos;t have an account?{' '}
                 <a href="#" className="text-[hsl(var(--brand-solid))] hover:underline font-medium">
                   Sign up for free
                 </a>
