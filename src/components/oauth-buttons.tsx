@@ -111,7 +111,7 @@ export function OAuth2Buttons({ className }: OAuth2ButtonsProps) {
           <Button
             key={provider}
             type="button"
-            variant="outline"
+            variant="secondary"
             className={`w-full text-white ${config.bgColor}`}
             onClick={() => handleOAuth2Login(provider as OAuth2Provider)}
             disabled={loadingProvider !== null}

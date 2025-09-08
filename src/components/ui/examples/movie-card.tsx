@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Star, Heart, Eye, Clock } from "lucide-react"
 import { cn } from "@/lib/utils"
+import Image from "next/image"
 
 interface MovieCardProps {
   title: string
@@ -37,26 +38,28 @@ export function MovieCard({
     >
       {/* Poster Container */}
       <div className="relative aspect-poster bg-surface-secondary">
-        <img
+        <Image
           src={posterUrl}
           alt={`${title} (${year}) poster`}
+          width={300}
+          height={450}
           className="h-full w-full object-cover transition-opacity group-hover:opacity-90"
         />
         
         {/* Status Badges */}
         <div className="absolute top-2 right-2 flex flex-col gap-1">
           {isWatched && (
-            <Badge variant="secondary" size="sm" className="bg-surface-overlay text-content-inverse">
+            <Badge variant="neutral-soft" size="sm" className="bg-surface-overlay text-content-inverse">
               <Eye className="w-3 h-3" />
             </Badge>
           )}
           {isFavorite && (
-            <Badge variant="secondary" size="sm" className="bg-surface-overlay text-rating-heart-filled">
+            <Badge variant="neutral-soft" size="sm" className="bg-surface-overlay text-rating-heart-filled">
               <Heart className="w-3 h-3 fill-current" />
             </Badge>
           )}
           {isWatchlisted && (
-            <Badge variant="secondary" size="sm" className="bg-surface-overlay text-content-inverse">
+            <Badge variant="neutral-soft" size="sm" className="bg-surface-overlay text-content-inverse">
               <Clock className="w-3 h-3" />
             </Badge>
           )}
@@ -69,7 +72,7 @@ export function MovieCard({
               <Eye className="w-4 h-4 mr-1" />
               Watch
             </Button>
-            <Button size="sm" variant="outline" className="bg-surface-elevated/90 backdrop-blur-sm">
+            <Button size="sm" variant="secondary" className="bg-surface-elevated/90 backdrop-blur-sm">
               <Heart className="w-4 h-4" />
             </Button>
           </div>

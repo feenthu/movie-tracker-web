@@ -67,7 +67,7 @@ export function ModalHeader({ title, onClose, className }: ModalHeaderProps) {
     <div className={cn('flex items-center justify-between pb-4', className)}>
       <h2 className="text-lg font-semibold">{title}</h2>
       {onClose && (
-        <Button variant="ghost" size="icon" onClick={onClose}>
+        <Button variant="ghost" size="sm" onClick={onClose}>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
             <path d="M2 14L14 2M2 2L14 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
           </svg>

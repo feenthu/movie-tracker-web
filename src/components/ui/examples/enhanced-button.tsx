@@ -30,17 +30,17 @@ export function EnhancedButtons() {
       <div>
         <h3 className="text-lg font-semibold text-content-primary mb-4">Secondary Actions</h3>
         <div className="flex flex-wrap gap-3">
-          <Button variant="outline" className="border-border-primary hover:bg-surface-secondary">
+          <Button variant="secondary" className="border-border-primary hover:bg-surface-secondary">
             <Star className="w-4 h-4 mr-2" />
             Rate
           </Button>
           
-          <Button variant="outline" className="border-border-primary hover:bg-surface-secondary">
+          <Button variant="secondary" className="border-border-primary hover:bg-surface-secondary">
             <Share className="w-4 h-4 mr-2" />
             Share
           </Button>
           
-          <Button variant="outline" className="border-border-primary hover:bg-surface-secondary">
+          <Button variant="secondary" className="border-border-primary hover:bg-surface-secondary">
             <Download className="w-4 h-4 mr-2" />
             Download
           </Button>
@@ -105,7 +105,7 @@ export function EnhancedButtons() {
           </Badge>
           
           <Badge 
-            variant="outline" 
+            variant="neutral-soft" 
             className="border-border-primary text-content-secondary"
           >
             Not Rated
@@ -120,7 +120,7 @@ export function EnhancedButtons() {
             Small
           </Button>
           
-          <Button size="default" className="bg-brand-primary hover:bg-brand-primary-hover">
+          <Button size="md" className="bg-brand-primary hover:bg-brand-primary-hover">
             Default
           </Button>
           
@@ -139,7 +139,7 @@ export function EnhancedButtons() {
           </Button>
           
           <Button 
-            variant="outline" 
+            variant="secondary" 
             disabled 
             className="border-border-primary text-content-disabled"
           >

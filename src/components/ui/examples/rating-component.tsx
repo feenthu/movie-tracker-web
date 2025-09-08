@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Star, Heart } from "lucide-react"
+import { Star, Heart, Eye, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
@@ -122,7 +122,7 @@ export function WatchStatus({
   return (
     <div className="flex items-center gap-2">
       <Button
-        variant={isWatched ? "default" : "outline"}
+        variant={isWatched ? "primary" : "secondary"}
         size="sm"
         className={cn(
           sizeClasses[size],
@@ -135,7 +135,7 @@ export function WatchStatus({
       </Button>
 
       <Button
-        variant={isFavorite ? "default" : "outline"}
+        variant={isFavorite ? "primary" : "secondary"}
         size="sm"
         className={cn(
           sizeClasses[size],
@@ -154,7 +154,7 @@ export function WatchStatus({
       </Button>
 
       <Button
-        variant={isWatchlisted ? "secondary" : "outline"}
+        variant={isWatchlisted ? "secondary" : "secondary"}
         size="sm"
         className={cn(
           sizeClasses[size],

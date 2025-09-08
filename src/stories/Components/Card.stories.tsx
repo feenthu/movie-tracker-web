@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react'
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardSubtitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -116,7 +116,7 @@ export const MovieCard: Story = {
               <AvatarFallback>T</AvatarFallback>
             </Avatar>
             <div className="flex-1">
-              <p className="text-sm font-medium">Rated "Oppenheimer"</p>
+              <p className="text-sm font-medium">Rated &quot;Oppenheimer&quot;</p>
               <div className="flex items-center gap-2">
                 <RatingStars value={5} size="sm" readOnly />
                 <span className="text-xs text-[hsl(var(--content-secondary))]">2 hours ago</span>
@@ -129,7 +129,7 @@ export const MovieCard: Story = {
             </Avatar>
             <div className="flex-1">
               <p className="text-sm font-medium">Added to watchlist</p>
-              <p className="text-xs text-[hsl(var(--content-secondary))]">"Poor Things" • 5 hours ago</p>
+              <p className="text-xs text-[hsl(var(--content-secondary))]">&quot;Poor Things&quot; • 5 hours ago</p>
             </div>
           </div>
         </CardContent>

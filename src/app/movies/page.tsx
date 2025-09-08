@@ -37,7 +37,7 @@ export default function MoviesPage() {
             </ul>
             <div className="pt-4">
               <Link href="/dashboard">
-                <Button variant="outline">
+                <Button variant="secondary">
                   ← Back to Dashboard
                 </Button>
               </Link>

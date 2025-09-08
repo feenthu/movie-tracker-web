@@ -102,7 +102,7 @@ function AuthCallbackContent() {
     }
 
     handleCallback()
-  }, []) // Empty dependency array since we use hasRunRef to prevent multiple runs
+  }, [login, router, searchParams]) // Include all dependencies
 
   if (status === 'loading') {
     return (
